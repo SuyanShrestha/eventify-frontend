@@ -1,10 +1,26 @@
-import React from 'react'
+import type React from "react";
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const App = () => {
+import AdminLayout from "./layouts/AdminLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import UserLayout from "./layouts/UserLayout";
+
+const App: React.FC = () => {
+  const [isAuthRoute, setIsAuthRoute] = useState(false);
+  const [isAdminRoute, setIsAdminRoute] = useState(false);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-blue-600 text-white">
-      <h1 className="text-4xl font-bold">Hello, Tailwind with Vite!</h1>
-    </div>
+    <Router>
+      {/* Conditional layout rendering based on the route states */}
+      {isAuthRoute ? (
+        <AuthLayout />
+      ) : isAdminRoute ? (
+        <AdminLayout />
+      ) : (
+        <UserLayout />
+      )}
+    </Router>
   );
 };
 
