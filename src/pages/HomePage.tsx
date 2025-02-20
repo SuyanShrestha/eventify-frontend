@@ -1,9 +1,20 @@
-import React from 'react'
+import IntroSection from "../components/home/IntroSection";
+import PreLoader from "../components/ui/Preloader";
+
+let page_load = sessionStorage.getItem("page_load") === "true" ? true : false;
 
 const HomePage = () => {
-  return (
-    <div>HomePage</div>
-  )
-}
+  // useEffect(() => {
+  //   !page_load ? sessionStorage.setItem("page_load", "true") : "";
+  // }, []);
 
-export default HomePage
+  return (
+    <div>
+      {!page_load ? <PreLoader /> : ""}
+
+      <IntroSection />
+    </div>
+  );
+};
+
+export default HomePage;

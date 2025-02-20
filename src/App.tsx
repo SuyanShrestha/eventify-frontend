@@ -12,7 +12,6 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      {/* Conditional layout rendering based on the route states */}
       {isAuthRoute ? (
         <AuthLayout />
       ) : isAdminRoute ? (
