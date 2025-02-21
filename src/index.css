@@ -3,6 +3,16 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"); */
 
+@theme {
+  --color-primary-500: #f5e6d3;
+  --color-secondary-500: #d96941;
+  --color-accent-500: #8e3b46;
+
+  /* --color-primary-500: #F9F5F0;
+  --color-secondary-500: #E6D2AA;
+  --color-accent-500: #C06D59; */
+}
+
 body {
   font-family: "Inter", sans-serif;
 }
@@ -10,9 +20,9 @@ body {
 .preloader {
   height: 100vh;
   width: 100%;
-  background: #F5E6D3;
+  /* background: #F5E6D3; */
   opacity: 0.94;
-  color: #D96941;
+  color: #d96941;
   position: fixed;
   bottom: 0;
   left: 0;

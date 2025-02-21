@@ -17,6 +17,7 @@ const StyledCard = styled.div`
   width: 14rem;
   aspect-ratio: 9/16;
   border-radius: 20px;
+  cursor: pointer;
 
   @media (min-width: 1024px) {
     width: 24rem;

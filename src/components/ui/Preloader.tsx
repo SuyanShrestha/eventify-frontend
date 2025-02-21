@@ -9,7 +9,7 @@ const PreLoader = () => {
   }, []);
 
   return (
-    <div className="preloader">
+    <div className="preloader bg-primary-500">
       <div className="text-container">
         <span>Welcome to Eventify! 🎉 </span>
       </div>

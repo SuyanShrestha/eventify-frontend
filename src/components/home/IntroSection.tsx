@@ -16,12 +16,15 @@ const IntroSection: React.FC = () => {
   }));
 
   return (
-    <section className="flex flex-col items-center lg:flex-row lg:justify-evenly min-h-[calc(100vh-4rem)] w-full bg-[#F5E6D3] p-8">
+    <section
+      className="flex flex-col items-center lg:flex-row lg:justify-evenly min-h-[calc(100vh-4rem)] w-full bg-primary-500 p-8  bg-center bg-fixed bg-cover bg-no-repeat"
+      style={{ backgroundImage: `url("bg.jpg")` }}
+    >
       <div className="text-center lg:text-left mb-8 lg:mb-0 lg:pr-8 lg:pl-8">
-        <h1 className="font-['Playfair_Display'] text-4xl lg:text-5xl text-[#8E3B46] mb-4">
+        <h1 className="font-['Playfair_Display'] text-4xl lg:text-5xl text-accent-500 mb-4">
           Find. Book. Enjoy.
         </h1>
-        <p className="text-[#D96941] text-lg lg:text-xl max-w-md mx-auto lg:mx-0">
+        <p className="text-secondary-500 text-lg lg:text-xl max-w-md mx-auto lg:mx-0">
           From concerts to conferences, find the perfect event for you.
         </p>
       </div>
