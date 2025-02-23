@@ -7,13 +7,13 @@ const Navbar: React.FC = () => {
   const location = useLocation();
 
   return (
-    <nav className="bg-secondary-500 shadow-md">
+    <header className="bg-secondary-500 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link
               to={RoutingLinks.Home}
-              className="text-accent-text-500 text-3xl font-extrabold font-['Playfair_Display']"
+              className="text-accent-text-500 text-3xl font-extrabold "
             >
               Eventify
             </Link>
@@ -40,19 +40,20 @@ const Navbar: React.FC = () => {
               >
                 Explore
               </Link>
+              
             </div>
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
               <Link
                 to={RoutingLinks.Login}
-                className="bg-[var(--color-accent-400)] text-white hover:bg-[var(--color-primary-400)] px-4 py-2 rounded-md text-lg font-medium mr-2 transition-colors duration-300"
+                className="bg-[var(--color-accent-300)] text-white hover:bg-[var(--color-accent-500)] px-4 py-2 rounded-md text-lg font-medium mr-2 transition-colors duration-300"
               >
                 Login
               </Link>
               <Link
                 to={RoutingLinks.Signup}
-                className="bg-[var(--color-primary-400)] text-white hover:bg-[var(--color-accent-400)] px-4 py-2 rounded-md text-lg font-medium transition-colors duration-300"
+                className="bg-[var(--color-accent-500)] text-white hover:bg-[var(--color-accent-300)] px-4 py-2 rounded-md text-lg font-medium transition-colors duration-300"
               >
                 Sign Up
               </Link>
@@ -60,7 +61,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
 

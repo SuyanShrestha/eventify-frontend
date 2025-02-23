@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import IntroSection from "../components/home/IntroSection";
 import PreLoader from "../components/ui/Preloader";
+import Footer from "../components/Footer";
 
 let page_load = sessionStorage.getItem("page_load") === "true" ? true : false;
 
@@ -14,6 +15,10 @@ const HomePage = () => {
       {!page_load ? <PreLoader /> : ""}
 
       <IntroSection />
+      <IntroSection />
+      <IntroSection />
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

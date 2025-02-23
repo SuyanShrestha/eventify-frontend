@@ -1,2 +1,2 @@
 export { RoutingLinks } from "./routes";
-export { Gallery } from "./data";
+export { Gallery, eventsData } from "./data";

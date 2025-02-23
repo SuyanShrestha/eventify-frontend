@@ -17,7 +17,7 @@ const IntroSection: React.FC = () => {
 
   return (
     <section
-      className="flex flex-col items-center lg:flex-row lg:justify-evenly min-h-[calc(100vh-4rem)] w-full bg-primary-400 p-8  bg-center bg-fixed bg-cover bg-no-repeat"
+      className="flex flex-col items-center lg:flex-row lg:justify-evenly min-h-[calc(100vh-4rem)] w-full bg-primary-500 p-8  bg-center bg-fixed bg-cover bg-no-repeat"
     >
       <div className="text-center lg:text-left mb-8 lg:mb-0 lg:pr-8 lg:pl-8">
         <h1 className="font-['Playfair_Display'] text-4xl lg:text-5xl text-accent-500 mb-4">

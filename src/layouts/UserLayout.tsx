@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom"
 
 // Pages or Components for Routes
 import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
 import HomePage from "../pages/HomePage"
 import ExplorePage from "../pages/ExplorePage"
 import EventDetail from "../pages/EventDetail"
@@ -25,9 +24,6 @@ const UserLayout: React.FC = () => {
           <Route path="/explore/events/:id" element={<UserProfile />} />
         </Routes>
       </main>
-
-      {/* Footer */}
-      <Footer />
     </div>
   )
 }
