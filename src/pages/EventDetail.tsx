@@ -1,9 +1,173 @@
-import React from 'react'
+import type React from "react";
+import { useParams } from "react-router-dom";
+import { eventsData } from "../constants";
+import {
+  Calendar,
+  Info,
+  MapPin,
+  Share2,
+  ShoppingCart,
+  Tag,
+  User,
+} from "lucide-react";
+import { formatDateTime } from "../helpers";
+import { Button } from "../components/ui";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
-const EventDetail = () => {
+const EventDetail: React.FC = () => {
+  const { eventId } = useParams();
+
+  const eventItem = eventsData.find((e) => e.id.toString() === eventId);
+
+  if (!eventItem) {
+    return (
+      <div className="text-center mt-10 text-xl text-red-500">
+        Event not found!
+      </div>
+    );
+  }
+
+  const { date: formattedStartDate, time: formattedStartTime } = formatDateTime(
+    eventItem.startDate
+  );
+  const { date: formattedEndDate, time: formattedEndTime } = formatDateTime(
+    eventItem.endDate
+  );
+
   return (
-    <div>EventDetail</div>
-  )
-}
+    <div
+      className="mt-[4rem] flex flex-col  bg-primary-500 min-h-[calc(100vh-4rem)]
+    "
+    >
+      {/* heading */}
+      <div
+        className="bg-secondary-500 py-12 px-4 sm:px-6 lg:px-8 z-5"
+        style={{ boxShadow: "0 0 10px rgba(85, 60, 154, 0.25)" }}
+      >
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:justify-between sm:items-end gap-8">
+          <div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-secondary-text-500 mb-2">
+              {eventItem.title}
+            </h1>
+            <p className="text-xl sm:text-2xl text-secondary-text-400 mb-4">
+              {eventItem.subtitle}
+            </p>
+            <div className="text-lg flex items-center text-[#423e33] mb-2">
+              <Calendar className="w-5 h-5 mr-2" />
+              {formattedStartDate === formattedEndDate ? (
+                // Single-day event
+                <>
+                  <span className="mr-2">{formattedStartDate}</span>
+                  <span className="mr-2">
+                    {formattedStartTime} - {formattedEndTime}
+                  </span>
+                </>
+              ) : (
+                // Multi-day event
+                <>
+                  <span className="mr-2">
+                    {formattedStartDate} ({formattedStartTime})
+                  </span>
+                  <span className="mr-2">—</span>
+                  <span>
+                    {formattedEndDate} ({formattedEndTime})
+                  </span>
+                </>
+              )}
+            </div>
+            <div className="text-lg flex items-center text-[#423e33]">
+              <MapPin className="w-5 h-5 mr-2" />
+              <span>{eventItem.venue}</span>
+            </div>
+          </div>
 
-export default EventDetail
+          <div>
+            <Button className="max-w-32 h-12 flex-1 text-secondary-text-500 border-secondary-text-400 flex justify-between">
+              <Share2 className="h-4 w-4 mr-2" />
+              Share
+            </Button>
+          </div>
+        </div>
+      </div>
+      {/* content */}
+      <div className="bg-primary-500 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Left Column */}
+            <div className="md:col-span-2">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-semibold text-secondary-text-500 mb-4">
+                  Event Details
+                </h2>
+                <div className="prose text-primary-text-500 mb-6">
+                  <Markdown remarkPlugins={[remarkGfm]}>
+                    {eventItem.details}
+                  </Markdown>
+                </div>
+              </div>
+
+              <div className="w-full py-4 border-t border-secondary-text-400">
+                <h3 className="text-xl sm:text-2xl font-semibold text-secondary-text-500 mb-3">
+                  Event Information
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex items-center">
+                    <User className="w-5 h-5 mr-3 text-accent-text-500" />
+                    <span className="text-primary-text-500">
+                      Hosted by : {eventItem.hostname}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <Tag className="w-5 h-5 mr-3 text-accent-text-500" />
+                    <span className="text-primary-text-500 capitalize">
+                      {eventItem.eventType} Event
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div>
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
+                  Ticket Information
+                </h3>
+
+                {eventItem.ticketPrice === 0 ? (
+                  <p className="text-2xl font-bold text-accent-text-500 mb-4">
+                    FREE
+                  </p>
+                ) : (
+                  <p className="text-2xl font-bold text-accent-text-500 mb-4">
+                    Rs {eventItem.ticketPrice.toFixed(2)}
+                  </p>
+                )}
+                <Button
+                  bgColor="bg-accent-500"
+                  textColor="text-accent-btn-text"
+                  className="w-full bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300"
+                >
+                  Buy Ticket
+                  <ShoppingCart className="w-5 h-5 ml-2" />
+                </Button>
+              </div>
+              <div className="mt-6 bg-[rgba(255,132,0,0.2)] p-4 rounded-lg">
+                <div className="flex items-start">
+                  <Info className="w-5 h-5 mr-2 text-accent-text-500 mt-1" />
+                  <p className="text-sm text-[#7c6f50]">
+                    Please note that tickets are non-refundable. Make sure to
+                    review all event details before purchasing.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EventDetail;

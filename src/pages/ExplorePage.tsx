@@ -37,10 +37,11 @@ const ExplorePage: React.FC = () => {
           <h2 className="text-2xl mb-6 font-semibold text-secondary-text-500">
             Events
           </h2>
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 xl:gap-4 justify-center">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 xl:gap-6 justify-center">
             {filteredEvents.map((event) => (
               <EventCard
                 key={event.id}
+                eventId={event.id.toString()}
                 title={event.title}
                 subtitle={event.subtitle}
                 startDate={event.startDate}

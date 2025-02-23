@@ -1,18 +1,12 @@
 import type { FC } from "react";
-import { format } from "date-fns";
-import {
-  MapPin,
-  Calendar,
-  Clock,
-  Share2,
-  Info,
-  LibraryBig,
-  Library,
-  SquareLibrary,
-} from "lucide-react";
+import { MapPin, Calendar, Clock, Share2, Library } from "lucide-react";
 import { Badge, Button } from "../ui";
+import { useNavigate } from "react-router-dom";
+import { getEventDetailRoute } from "../../constants";
+import { formatDateTime } from "../../helpers";
 
 interface EventCardProps {
+  eventId: string;
   title: string;
   subtitle: string;
   startDate: string;
@@ -22,6 +16,7 @@ interface EventCardProps {
 }
 
 export const EventCard: FC<EventCardProps> = ({
+  eventId,
   title,
   subtitle,
   startDate,
@@ -29,8 +24,14 @@ export const EventCard: FC<EventCardProps> = ({
   eventType,
   venue,
 }) => {
-  const formattedDate = format(new Date(startDate), "MMM d, yyyy");
-  const formattedTime = format(new Date(startDate), "h:mm a");
+  const navigate = useNavigate();
+
+  const { date: formattedStartDate, time: formattedStartTime } =
+    formatDateTime(startDate);
+
+  const handleDetailsClick = () => {
+    navigate(getEventDetailRoute(eventId));
+  };
 
   return (
     <div
@@ -53,11 +54,11 @@ export const EventCard: FC<EventCardProps> = ({
           <div className="flex flex-row gap-8 text-sm items-center">
             <span className="flex items-center space-x-2">
               <Calendar className="h-4 w-4 mr-2" />
-              <span className="flex items-center">{formattedDate}</span>
+              <span className="flex items-center">{formattedStartDate}</span>
             </span>
             <span className="flex items-center space-x-2">
               <Clock className="h-4 w-4 mr-2" />
-              <span className="flex items-center">{formattedTime}</span>
+              <span className="flex items-center">{formattedStartTime}</span>
             </span>
           </div>
         </div>
@@ -77,8 +78,10 @@ export const EventCard: FC<EventCardProps> = ({
 
         {/* Bottom Section: Buttons */}
         <div className="flex flex-col xl:flex-row gap-4">
-          <Button className="w-full lg:w-auto flex-1 text-secondary-text-500 border-secondary-text-400">
-            {/* <Info className="h-4 w-4 mr-2" /> */}
+          <Button
+            className="w-full lg:w-auto flex-1 text-secondary-text-500 border-secondary-text-400"
+            onClick={handleDetailsClick}
+          >
             <Library className="h-4 w-4 mr-2" />
             Details
           </Button>

@@ -6,6 +6,7 @@ interface ButtonProps {
   bgColor?: string;
   textColor?: string;
   className?: string;
+  onClick?: () => void;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -13,6 +14,7 @@ export const Button: FC<ButtonProps> = ({
   bgColor = "bg-transparent",
   textColor = "text-primary-text-500",
   className,
+  onClick,
 }) => {
   return (
     <button
@@ -20,10 +22,12 @@ export const Button: FC<ButtonProps> = ({
         "px-4 py-2 rounded-lg font-medium flex items-center justify-center transition hover:opacity-80",
         " border border-gray-400 rounded-lg cursor-pointer",
         "hover:shadow-md transition-shadow duration-300",
+        
         bgColor,
         textColor,
         className
       )}
+      onClick={onClick}
     >
       {children}
     </button>

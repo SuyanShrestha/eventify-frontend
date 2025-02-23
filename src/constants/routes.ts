@@ -1,7 +1,9 @@
 export const enum RoutingLinks {
   Home = "/",
-  Explore = "/explore",
-  EventPage = "/eventPage",
+  Events = "/events",
   Login = "/login",
-  Signup = "/signup"
+  Signup = "/signup",
 }
+
+export const getEventDetailRoute = (eventId: string | number) =>
+  `/events/${eventId}`;

@@ -19,15 +19,48 @@ export const eventsData = [
     hostname: "Tech Global",
     startDate: "March 15 2025 10:00:00 GMT+0545 (Nepal Time)",
     endDate: "March 15 2025 18:00:00 GMT+0545 (Nepal Time)",
-    details:
-      "Join industry leaders in this annual tech conference where the latest advancements in AI, blockchain, and cybersecurity will be discussed. The event will feature keynote speakers, panel discussions, and networking opportunities with professionals from around the world.",
+    details: `
+  ## Event Overview
+  Join us for the Tech Conference 2025, an exclusive event that brings together the brightest minds in the fields of **Artificial Intelligence**, **Blockchain**, and **Cybersecurity**. This year's theme, *Innovations in AI and Blockchain*, focuses on how these technologies are reshaping industries and transforming the world. 
+
+  ## Speakers & Sessions
+  The conference will feature renowned keynote speakers who are pioneers in their fields, including:
+  - **Dr. Jane Doe**, AI Specialist at GlobalTech Inc.
+  - **John Smith**, Blockchain Expert at BlockChainX
+  - **Sarah Lee**, Cybersecurity Researcher at SecuTech
+
+  Additionally, we'll have a range of thought-provoking **panel discussions**, **workshops**, and **breakout sessions** to dive deeper into topics such as:
+  - The future of AI in healthcare and finance
+  - Blockchain’s impact on supply chain management
+  - Building secure and scalable systems in the age of cyber threats
+
+  ## Networking Opportunities
+  Connect with like-minded professionals, researchers, and industry leaders. Attendees will have the chance to interact during coffee breaks, networking lunches, and a **VIP evening mixer**. This is a great opportunity to expand your network and discover potential collaborations.
+
+  ## Event Details
+  - **Date**: March 15, 2025
+  - **Time**: 10:00 AM to 6:00 PM (Nepal Time)
+  - **Venue**: Kathmandu Convention Hall, Kathmandu, Nepal
+
+  ## Tickets
+  Early bird tickets are now available for **$199.99**. Don't miss out on this opportunity to be part of one of the most anticipated tech events of the year! Secure your spot today!
+
+  **Note**: Limited seats available, so be sure to register early!
+
+  ## Contact
+  For more information, please contact our event team at: [contact@techglobal.com](mailto:contact@techglobal.com).
+
+  **Follow us on social media for updates**:  
+  - Twitter: [@TechGlobal](https://twitter.com/TechGlobal)  
+  - Facebook: [Tech Global](https://facebook.com/TechGlobal)
+  `,
     ticketPrice: 199.99,
     eventType: "physical",
     venue: "Kathmandu Convention Hall",
   },
   {
     id: 2,
-    title: "Entrepreneurship Summit",
+    title: "Enterpreneurs Summit",
     subtitle: "Scaling Startups Successfully",
     hostname: "Startup Nepal",
     startDate: "April 10 2025 17:00:00 GMT+0545 (Nepal Time)",

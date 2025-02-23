@@ -1,5 +1,4 @@
 import type React from "react";
-import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { RoutingLinks } from "../constants";
 
@@ -8,8 +7,8 @@ const Navbar: React.FC = () => {
 
   return (
     <header className="bg-secondary-500 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link
               to={RoutingLinks.Home}
@@ -31,16 +30,15 @@ const Navbar: React.FC = () => {
                 Home
               </Link>
               <Link
-                to={RoutingLinks.Explore}
+                to={RoutingLinks.Events}
                 className={`px-3 py-2 text-lg transition-colors duration-300 ${
-                  location.pathname === RoutingLinks.Explore
+                  location.pathname === RoutingLinks.Events
                     ? "text-accent-500"
                     : "text-primary-text-500 hover:text-secondary-text-500"
                 }`}
               >
                 Explore
               </Link>
-              
             </div>
           </div>
           <div className="hidden md:block">
