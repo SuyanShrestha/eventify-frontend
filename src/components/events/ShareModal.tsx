@@ -13,7 +13,10 @@ import {
   FaWhatsapp,
   FaXTwitter,
   CircleX,
+  Clipboard,
+  ClipboardCheck,
 } from "../../assets/icons";
+import { useState } from "react";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -60,6 +63,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
       <div
         className="bg-white p-6 rounded-lg shadow-lg w-96 relative"
         style={{ boxShadow: "0 0 4px rgba(85, 60, 154, 0.25)" }}
+        onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-semibold text-center mb-4 text-secondary-text-500">
           Share this Event
@@ -76,49 +80,80 @@ const ShareModal: React.FC<ShareModalProps> = ({
   );
 };
 
-const ShareOptions = ({ shareUrl }: { shareUrl: string }) => (
-  <div>
-    <div>
-      <FacebookShareButton
-        url={shareUrl}
-        className="w-full flex justify-start gap-4"
-      >
-        <FaFacebookF className="w-5 h-5 mr-2 text-secondary-text-500 " /> Share
-        on Facebook
-      </FacebookShareButton>
-      <hr className="border-t border-gray-300 my-4" />
-    </div>
+const ShareOptions = ({ shareUrl }: { shareUrl: string }) => {
+  const [copied, setCopied] = useState(false);
 
-    <div>
-      <LinkedinShareButton
-        url={shareUrl}
-        className="w-full flex justify-start gap-4 "
-      >
-        <FaLinkedinIn className="w-5 h-5 mr-2 text-secondary-text-500" />
-        <span>Share on LinkedIn</span>
-      </LinkedinShareButton>
-      <hr className="border-t border-gray-300 my-4" />
-    </div>
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
+  return (
     <div>
-      <TwitterShareButton
-        url={shareUrl}
-        className="w-full flex justify-start gap-4 "
-      >
-        <FaXTwitter className="w-5 h-5 mr-2 text-secondary-text-500" /> Share on
-        Twitter
-      </TwitterShareButton>
-      <hr className="border-t border-gray-300 my-4" />
-    </div>
+      <div>
+        <FacebookShareButton
+          url={shareUrl}
+          className="w-full flex justify-start gap-4"
+        >
+          <FaFacebookF className="w-5 h-5 mr-2 text-secondary-text-500 " />{" "}
+          Share on Facebook
+        </FacebookShareButton>
+        <hr className="border-t border-gray-300 my-4" />
+      </div>
 
-    <WhatsappShareButton
-      url={shareUrl}
-      className="w-full flex justify-start gap-4 "
-    >
-      <FaWhatsapp className="w-5 h-5 mr-2 text-secondary-text-500" /> Share on
-      WhatsApp
-    </WhatsappShareButton>
-  </div>
-);
+      <div>
+        <LinkedinShareButton
+          url={shareUrl}
+          className="w-full flex justify-start gap-4 "
+        >
+          <FaLinkedinIn className="w-5 h-5 mr-2 text-secondary-text-500" />
+          <span>Share on LinkedIn</span>
+        </LinkedinShareButton>
+        <hr className="border-t border-gray-300 my-4" />
+      </div>
+
+      <div>
+        <TwitterShareButton
+          url={shareUrl}
+          className="w-full flex justify-start gap-4 "
+        >
+          <FaXTwitter className="w-5 h-5 mr-2 text-secondary-text-500" /> Share
+          on Twitter
+        </TwitterShareButton>
+        <hr className="border-t border-gray-300 my-4" />
+      </div>
+
+      <div>
+        <WhatsappShareButton
+          url={shareUrl}
+          className="w-full flex justify-start gap-4"
+        >
+          <FaWhatsapp className="w-5 h-5 mr-2 text-secondary-text-500" /> Share
+          on WhatsApp
+        </WhatsappShareButton>
+        <hr className="border-t border-gray-300 my-4" />
+      </div>
+
+      <div
+        className="w-full flex justify-start gap-4 items-center cursor-pointer"
+        onClick={copyToClipboard}
+      >
+        {copied ? (
+          <div className="w-full flex justify-start gap-4">
+            <Clipboard className="w-5 h-5 mr-2 text-secondary-text-500" />
+            <span>Copied!</span>
+          </div>
+        ) : (
+          <div className="w-full flex justify-start gap-4">
+            <ClipboardCheck className="w-5 h-5 mr-2 text-secondary-text-500" />
+            <span>Copy to Clipboard</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default ShareModal;

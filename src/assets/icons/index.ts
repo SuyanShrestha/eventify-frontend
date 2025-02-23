@@ -13,6 +13,8 @@ import {
   ShoppingCart,
   Tag,
   User,
+  Clipboard,
+  ClipboardCheck
 } from "lucide-react";
 
 export {
@@ -30,4 +32,7 @@ export {
   ShoppingCart,
   Tag,
   User,
+  Clipboard,
+  ClipboardCheck
 };
+
