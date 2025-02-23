@@ -4,13 +4,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"); */
 
 @theme {
-  --color-primary-500: #f5e6d3;
+  /* --color-primary-500: #f5e6d3;
   --color-secondary-500: #d96941;
-  --color-accent-500: #8e3b46;
+  --color-accent-500: #8e3b46; */
 
-  /* --color-primary-500: #F9F5F0;
-  --color-secondary-500: #E6D2AA;
-  --color-accent-500: #C06D59; */
+  --color-primary-500: #faf9f6;
+  --color-primary-400: rgba(255, 132, 0, 0.2);
+
+  --color-secondary-500: #ffffff;
+  --color-secondary-400: #fff5d6;
+
+  --color-accent-500: #cf4307;
+  --color-accent-400: #7c6f50;
+  --color-accent-300: #ff8400;
+
+  --color-primary-text-500: #130e01; /* Descriptions black */
+  --color-secondary-text-500: #553c9a; /* Headings blue*/
+  --color-accent-text-500: #cf4307; /* Links orange*/
+  --color-accent-btn-text: #fffaeb;
 }
 
 body {
