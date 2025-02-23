@@ -1,6 +1,15 @@
 import type { FC } from "react";
 import { format } from "date-fns";
-import { MapPin, Calendar, Clock, Share2, Info, LibraryBig, Library, SquareLibrary } from "lucide-react";
+import {
+  MapPin,
+  Calendar,
+  Clock,
+  Share2,
+  Info,
+  LibraryBig,
+  Library,
+  SquareLibrary,
+} from "lucide-react";
 import { Badge, Button } from "../ui";
 
 interface EventCardProps {
@@ -25,7 +34,7 @@ export const EventCard: FC<EventCardProps> = ({
 
   return (
     <div
-      className="p-4 border border-secondary-text-400 rounded-lg w-full lg:w-1/2 xl:w-[calc(50%-0.5rem)] flex flex-col xl:flex-row xl:justify-between xl:items-center gap-8 xl:gap-16"
+      className="p-4 border border-secondary-text-400 rounded-lg w-full xl:w-full flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4 xl:gap-8"
       style={{ boxShadow: "0 0 4px rgba(85, 60, 154, 0.25)" }}
     >
       <div className="flex flex-col gap-2 xl:gap-3">
@@ -70,7 +79,7 @@ export const EventCard: FC<EventCardProps> = ({
         <div className="flex flex-col xl:flex-row gap-4">
           <Button className="w-full lg:w-auto flex-1 text-secondary-text-500 border-secondary-text-400">
             {/* <Info className="h-4 w-4 mr-2" /> */}
-            <Library className="h-4 w-4 mr-2"  />
+            <Library className="h-4 w-4 mr-2" />
             Details
           </Button>
           <Button className="w-full lg:w-auto flex-1 text-secondary-text-500 border-secondary-text-400">
