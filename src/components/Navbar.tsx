@@ -32,7 +32,11 @@ const Navbar: React.FC = () => {
               </Link>
               <Link
                 to={RoutingLinks.Explore}
-                className="text-primary-text-500 hover:text-secondary-text-500 px-3 py-2 text-lg transition-colors duration-300"
+                className={`px-3 py-2 text-lg transition-colors duration-300 ${
+                  location.pathname === RoutingLinks.Explore
+                    ? "text-accent-500"
+                    : "text-primary-text-500 hover:text-secondary-text-500"
+                }`}
               >
                 Explore
               </Link>
