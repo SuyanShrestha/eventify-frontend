@@ -1,4 +1,5 @@
 import type React from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { eventsData } from "../constants";
 import {
@@ -9,14 +10,16 @@ import {
   ShoppingCart,
   Tag,
   User,
-} from "lucide-react";
+} from "../assets/icons";
 import { formatDateTime } from "../helpers";
 import { Button } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import ShareModal from "../components/events/ShareModal";
 
 const EventDetail: React.FC = () => {
   const { eventId } = useParams();
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const eventItem = eventsData.find((e) => e.id.toString() === eventId);
 
@@ -83,10 +86,20 @@ const EventDetail: React.FC = () => {
           </div>
 
           <div>
-            <Button className="max-w-32 h-12 flex-1 text-secondary-text-500 border-secondary-text-400 flex justify-between">
+            <Button
+              className="max-w-32 h-12 flex-1 text-secondary-text-500 border-secondary-text-400 flex justify-between"
+              onClick={() => setIsShareModalOpen(true)}
+            >
               <Share2 className="h-4 w-4 mr-2" />
               Share
             </Button>
+
+            <ShareModal
+              isOpen={isShareModalOpen}
+              onClose={() => setIsShareModalOpen(false)}
+              shareUrl={window.location.href}
+              // shareUrl="https://lucide.dev/icons/circle-x"
+            />
           </div>
         </div>
       </div>
@@ -98,9 +111,9 @@ const EventDetail: React.FC = () => {
             <div className="md:col-span-2">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-semibold text-secondary-text-500 mb-4">
-                  Event Details
+                  Event Overview
                 </h2>
-                <div className="prose text-primary-text-500 mb-6">
+                <div className="prose text-primary-text-400 mb-6">
                   <Markdown remarkPlugins={[remarkGfm]}>
                     {eventItem.details}
                   </Markdown>
@@ -149,7 +162,7 @@ const EventDetail: React.FC = () => {
                   textColor="text-accent-btn-text"
                   className="w-full bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300"
                 >
-                  Buy Ticket
+                  {eventItem.ticketPrice === 0 ? "Get Ticket" : "Buy Ticket"}
                   <ShoppingCart className="w-5 h-5 ml-2" />
                 </Button>
               </div>

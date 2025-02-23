@@ -1,9 +1,10 @@
-import type { FC } from "react";
-import { MapPin, Calendar, Clock, Share2, Library } from "lucide-react";
+import { useState, type FC } from "react";
+import { MapPin, Calendar, Clock, Share2, Library } from "../../assets/icons";
 import { Badge, Button } from "../ui";
 import { useNavigate } from "react-router-dom";
 import { getEventDetailRoute } from "../../constants";
 import { formatDateTime } from "../../helpers";
+import ShareModal from "./ShareModal";
 
 interface EventCardProps {
   eventId: string;
@@ -24,6 +25,7 @@ export const EventCard: FC<EventCardProps> = ({
   eventType,
   venue,
 }) => {
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const { date: formattedStartDate, time: formattedStartTime } =
@@ -85,10 +87,20 @@ export const EventCard: FC<EventCardProps> = ({
             <Library className="h-4 w-4 mr-2" />
             Details
           </Button>
-          <Button className="w-full lg:w-auto flex-1 text-secondary-text-500 border-secondary-text-400">
+          <Button
+            className="w-full lg:w-auto flex-1 text-secondary-text-500 border-secondary-text-400"
+            onClick={() => setIsShareModalOpen(true)}
+          >
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
+
+          <ShareModal
+            isOpen={isShareModalOpen}
+            onClose={() => setIsShareModalOpen(false)}
+            shareUrl={`${window.location.href}/${eventId}`}
+            // shareUrl="https://lucide.dev/icons/circle-x"
+          />
         </div>
       </div>
     </div>

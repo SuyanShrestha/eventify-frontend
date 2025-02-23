@@ -6,7 +6,6 @@ import { Search } from "lucide-react";
 
 const ExplorePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-
   const debouncedSearchTerm = useDebounce<string>(searchTerm, 300);
 
   const filteredEvents = eventsData.filter((event) =>
