@@ -14,7 +14,8 @@ import {
   Tag,
   User,
   Clipboard,
-  ClipboardCheck
+  ClipboardCheck,
+  FileClock
 } from "lucide-react";
 
 export {
@@ -33,6 +34,7 @@ export {
   Tag,
   User,
   Clipboard,
-  ClipboardCheck
+  ClipboardCheck,
+  FileClock
 };
 
