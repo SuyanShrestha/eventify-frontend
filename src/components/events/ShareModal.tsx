@@ -55,7 +55,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
   ) : (
     // Centered Modal for larger screens
     <div
-      className={`fixed inset-0 flex items-center justify-center bg-secondary-text-400/30 z-25 ${
+      className={`fixed inset-0 flex items-center justify-center bg-gray-500/30 z-25 ${
         isOpen ? "visible" : "hidden"
       }`}
       onClick={onClose}
@@ -142,12 +142,12 @@ const ShareOptions = ({ shareUrl }: { shareUrl: string }) => {
       >
         {copied ? (
           <div className="w-full flex justify-start gap-4">
-            <Clipboard className="w-5 h-5 mr-2 text-secondary-text-500" />
+            <ClipboardCheck className="w-5 h-5 mr-2 text-secondary-text-500" />
             <span>Copied!</span>
           </div>
         ) : (
           <div className="w-full flex justify-start gap-4">
-            <ClipboardCheck className="w-5 h-5 mr-2 text-secondary-text-500" />
+            <Clipboard className="w-5 h-5 mr-2 text-secondary-text-500" />
             <span>Copy to Clipboard</span>
           </div>
         )}
