@@ -39,6 +39,17 @@ const Navbar: React.FC = () => {
               >
                 Explore
               </Link>
+
+              <Link
+                to={RoutingLinks.CreateEvent}
+                className={`px-3 py-2 text-lg transition-colors duration-300 ${
+                  location.pathname === RoutingLinks.CreateEvent
+                    ? "text-accent-500"
+                    : "text-primary-text-500 hover:text-secondary-text-500"
+                }`}
+              >
+                Create
+              </Link>
             </div>
           </div>
           <div className="hidden md:block">
