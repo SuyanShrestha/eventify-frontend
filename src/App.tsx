@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminLayout from "./layouts/AdminLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import UserLayout from "./layouts/UserLayout";
+import { ToastContainer } from "react-toastify";
 
 const App: React.FC = () => {
   const [isAuthRoute, setIsAuthRoute] = useState(false);
@@ -12,6 +13,8 @@ const App: React.FC = () => {
 
   return (
     <Router>
+      <ToastContainer />
+
       {isAuthRoute ? (
         <AuthLayout />
       ) : isAdminRoute ? (

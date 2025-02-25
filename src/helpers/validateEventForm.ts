@@ -1,0 +1,50 @@
+// Define Event type
+export interface EventForm {
+  title: string;
+  subtitle: string;
+  startDate?: string;
+  endDate?: string;
+  venue: string;
+  ticketPrice: number;
+}
+
+// Validation Helper Function
+export const validateEventForm = (event: EventForm): string[] => {
+  let errors: string[] = [];
+
+  if (!event.title.trim()) {
+    errors.push("Title is required!");
+  } else if (event.title.length > 100) {
+    errors.push("Title must be less than 100 characters!");
+  }
+
+  if (event.subtitle && event.subtitle.length > 100) {
+    errors.push("Subtitle must be less than 100 characters!");
+  }
+
+  if (!event.startDate) {
+    errors.push("Start Date is required!");
+  }
+
+  if (!event.endDate) {
+    errors.push("End Date is required!");
+  }
+
+  if (
+    event.startDate &&
+    event.endDate &&
+    new Date(event.startDate) >= new Date(event.endDate)
+  ) {
+    errors.push("End Date must be after Start Date!");
+  }
+
+  if (!event.venue.trim()) {
+    errors.push("Venue is required!");
+  }
+
+  if (event.ticketPrice < 0) {
+    errors.push("Ticket Price cannot be negative!");
+  }
+
+  return errors;
+};

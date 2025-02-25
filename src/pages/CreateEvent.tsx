@@ -1,6 +1,8 @@
 import type React from "react";
 import { useState } from "react";
 import { Calendar, FileClock, MapPin, Tag } from "../assets/icons";
+import { useToast } from "../hooks";
+import { validateEventForm } from "../helpers";
 
 const CreateEvent: React.FC = () => {
   const [event, setEvent] = useState({
@@ -10,9 +12,11 @@ const CreateEvent: React.FC = () => {
     endDate: "",
     eventType: "physical",
     venue: "",
-    ticketPrice: "",
+    ticketPrice: 0,
     details: "",
   });
+
+  const { showToast } = useToast();
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -25,6 +29,14 @@ const CreateEvent: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const errors = validateEventForm(event);
+
+    if (errors.length > 0) {
+      showToast(errors, "error");
+      return;
+    }
+
     console.log("Form submitted:", event);
 
     setEvent({
@@ -34,13 +46,15 @@ const CreateEvent: React.FC = () => {
       endDate: "",
       eventType: "physical",
       venue: "",
-      ticketPrice: "",
+      ticketPrice: 0,
       details: "",
     });
+
+    showToast(["Event submitted successfully!"], "success");
   };
 
   return (
-    <div className="bg-primary-500 min-h-screen z-20">
+    <div className="bg-primary-500 min-h-[calc(100vh-4rem)] z-20">
       {/* HEADER */}
       <div className="mt-16 bg-secondary-500 py-6 px-4 sm:px-6 lg:px-8 shadow-md z-5 ">
         <div className="max-w-7xl mx-auto flex justify-between items-center h-full gap-32 py-4">
@@ -72,7 +86,7 @@ const CreateEvent: React.FC = () => {
               <div className="col-span-full">
                 <label
                   htmlFor="title"
-                  className="block text-sm font-medium text-primary-text-500 mb-1"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
                 >
                   Title
                 </label>
@@ -82,11 +96,20 @@ const CreateEvent: React.FC = () => {
                   name="title"
                   value={event.title}
                   onChange={handleInputChange}
-                  maxLength={100}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
+                  className={`w-full px-3 py-2 border ${
+                    event.title.length > 100
+                      ? "border-accent-400"
+                      : "border-gray-300"
+                  } rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400`}
                   required
                 />
-                <p className="text-xs text-primary-text-400 mt-1">
+                <p
+                  className={` ${
+                    event.title.length > 100
+                      ? "text-accent-text-500 font-bold text-xs mt-2"
+                      : "text-primary-text-400 text-xs mt-1"
+                  }`}
+                >
                   {event.title.length}/100 characters
                 </p>
               </div>
@@ -95,7 +118,7 @@ const CreateEvent: React.FC = () => {
               <div className="col-span-full">
                 <label
                   htmlFor="subtitle"
-                  className="block text-sm font-medium text-primary-text-500 mb-1"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
                 >
                   Subtitle
                 </label>
@@ -105,10 +128,19 @@ const CreateEvent: React.FC = () => {
                   name="subtitle"
                   value={event.subtitle}
                   onChange={handleInputChange}
-                  maxLength={100}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
+                  className={`w-full px-3 py-2 border ${
+                    event.title.length > 100
+                      ? "border-accent-400"
+                      : "border-gray-300"
+                  } rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400`}
                 />
-                <p className="text-xs text-primary-text-400 mt-1">
+                <p
+                  className={` ${
+                    event.subtitle.length > 100
+                      ? "text-accent-text-500 font-bold text-xs mt-2"
+                      : "text-primary-text-400 text-xs mt-1"
+                  }`}
+                >
                   {event.subtitle.length}/100 characters
                 </p>
               </div>
@@ -117,7 +149,7 @@ const CreateEvent: React.FC = () => {
               <div>
                 <label
                   htmlFor="startDate"
-                  className="block text-sm font-medium text-primary-text-500 mb-1"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
                 >
                   Start Date
                 </label>
@@ -142,7 +174,7 @@ const CreateEvent: React.FC = () => {
               <div>
                 <label
                   htmlFor="endDate"
-                  className="block text-sm font-medium text-primary-text-500 mb-1"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
                 >
                   End Date
                 </label>
@@ -167,7 +199,7 @@ const CreateEvent: React.FC = () => {
               <div>
                 <label
                   htmlFor="eventType"
-                  className="block text-sm font-medium text-primary-text-500 mb-1"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
                 >
                   Event Type
                 </label>
@@ -194,7 +226,7 @@ const CreateEvent: React.FC = () => {
               <div>
                 <label
                   htmlFor="venue"
-                  className="block text-sm font-medium text-primary-text-500 mb-1"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
                 >
                   Venue
                 </label>
@@ -219,7 +251,7 @@ const CreateEvent: React.FC = () => {
               <div>
                 <label
                   htmlFor="ticketPrice"
-                  className="block text-sm font-medium text-primary-text-500 mb-1"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
                 >
                   Ticket Price
                 </label>
@@ -228,13 +260,11 @@ const CreateEvent: React.FC = () => {
                     Rs
                   </span>
                   <input
-                    type="number"
+                    type="text"
                     id="ticketPrice"
                     name="ticketPrice"
                     value={event.ticketPrice}
                     onChange={handleInputChange}
-                    min="0"
-                    step="10"
                     className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
                     placeholder="0 for free event"
                     required
