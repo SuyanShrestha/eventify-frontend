@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { eventsData } from "../constants";
-import { EventCard } from "../components/events/EventCard";
 import { useDebounce } from "../hooks";
 import { Search } from "lucide-react";
+import { EventCard, Sidebar } from "../components/events";
 
 const ExplorePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -15,9 +15,7 @@ const ExplorePage: React.FC = () => {
   return (
     <div className="flex mt-[4rem]">
       {/* Sidebar Section */}
-      <div className="w-[20vw] h-full bg-gray-800 text-white fixed left-0 top-16 bottom-16">
-        <h1 className="text-2xl p-4">Explore Sidebar</h1>
-      </div>
+      <Sidebar />
 
       {/* Right Section */}
       <div className="ml-[20vw] flex-grow h-full flex flex-col">
