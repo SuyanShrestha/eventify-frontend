@@ -24,6 +24,12 @@ export const validateEventForm = (event: EventForm): string[] => {
 
   if (!event.startDate) {
     errors.push("Start Date is required!");
+  } else {
+    const currentDate = new Date();
+    const startDate = new Date(event.startDate);
+    if (startDate < currentDate) {
+      errors.push("Start Date cannot be earlier than the current date!");
+    }
   }
 
   if (!event.endDate) {
