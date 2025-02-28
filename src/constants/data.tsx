@@ -57,6 +57,7 @@ export const eventsData = [
     ticketPrice: 199.99,
     eventType: "physical",
     venue: "Kathmandu Convention Hall",
+    imgSrc: "/gallery/1.jpg",
   },
   {
     id: 2,
@@ -70,11 +71,12 @@ export const eventsData = [
     ticketPrice: 99.99,
     eventType: "remote",
     venue: "Google Meet",
+    imgSrc: "/gallery/2.jpg",
   },
   {
     id: 3,
     title: "Digital Marketing Workshop",
-    subtitle: "Master SEO & Social Media Strategies",
+    subtitle: "Master SEO & Social Media Strategies in Nepal",
     hostname: "Marketing Pro",
     startDate: "May 5 2025 14:00:00 GMT+0545 (Nepal Time)",
     endDate: "May 5 2025 16:00:00 GMT+0545 (Nepal Time)",
@@ -83,6 +85,7 @@ export const eventsData = [
     ticketPrice: 49.99,
     eventType: "remote",
     venue: "Google Meet",
+    imgSrc: "/gallery/3.jpg",
   },
   {
     id: 4,
@@ -96,6 +99,7 @@ export const eventsData = [
     ticketPrice: 29.99,
     eventType: "physical",
     venue: "Tundikhel Grounds, Kathmandu",
+    imgSrc: "/gallery/DummyImage2.jpg",
   },
   {
     id: 5,
@@ -109,6 +113,7 @@ export const eventsData = [
     ticketPrice: 0,
     eventType: "remote",
     venue: "Google Meet",
+    imgSrc: "/gallery/DummyConcert.png",
   },
   {
     id: 6,
@@ -122,6 +127,7 @@ export const eventsData = [
     ticketPrice: 79.99,
     eventType: "physical",
     venue: "Art & Creativity Center, Lalitpur",
+    imgSrc: "/gallery/1.jpg",
   },
   {
     id: 7,
@@ -135,6 +141,7 @@ export const eventsData = [
     ticketPrice: 49.99,
     eventType: "physical",
     venue: "Nagarkot Hill Resort",
+    imgSrc: "/gallery/2.jpg",
   },
   {
     id: 8,
@@ -148,5 +155,6 @@ export const eventsData = [
     ticketPrice: 149.99,
     eventType: "remote",
     venue: "Google Meet",
+    imgSrc: "/gallery/3.jpg",
   },
 ];

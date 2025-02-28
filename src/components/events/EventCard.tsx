@@ -1,9 +1,17 @@
 import { useState, type FC } from "react";
-import { MapPin, Calendar, Clock, Share2, Library } from "../../assets/icons";
-import { Badge, Button } from "../ui";
+import {
+  MapPin,
+  Calendar,
+  Clock,
+  Share,
+  Bookmark,
+  FaBookmark,
+  FaRegBookmark,
+} from "../../assets/icons";
+import { Badge } from "../ui";
 import { useNavigate } from "react-router-dom";
 import { getEventDetailRoute } from "../../constants";
-import { formatDateTime } from "../../helpers";
+import { formatDateTime, truncateText } from "../../helpers";
 import ShareModal from "./ShareModal";
 
 interface EventCardProps {
@@ -14,6 +22,7 @@ interface EventCardProps {
   ticketPrice: number;
   eventType: string;
   venue: string;
+  imgSrc: string;
 }
 
 export const EventCard: FC<EventCardProps> = ({
@@ -24,6 +33,7 @@ export const EventCard: FC<EventCardProps> = ({
   ticketPrice,
   eventType,
   venue,
+  imgSrc,
 }) => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -31,21 +41,40 @@ export const EventCard: FC<EventCardProps> = ({
   const { date: formattedStartDate, time: formattedStartTime } =
     formatDateTime(startDate);
 
+  const truncatedTitle = truncateText(title, 25);
+  const truncatedSubtitle = truncateText(subtitle, 36);
+
   const handleDetailsClick = () => {
     navigate(getEventDetailRoute(eventId));
   };
 
+  const openShareModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsShareModalOpen(true);
+  };
+
+  const toggleBookmark = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+  };
+
   return (
     <div
-      className="p-4 border border-secondary-text-400 rounded-lg w-full xl:w-full flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4 xl:gap-8"
+      className="p-4 border border-secondary-text-400 rounded-lg w-full xl:w-full flex flex-col xl:flex-col xl:justify-center xl:items-start gap-4 hover:cursor-pointer"
       style={{ boxShadow: "0 0 4px rgba(85, 60, 154, 0.25)" }}
+      onClick={handleDetailsClick}
     >
       <div className="flex flex-col gap-2 xl:gap-3">
+        <img
+          src={imgSrc}
+          alt="event-image"
+          className="rounded-lg w-96 h-48 object-cover shadow-md border border-gray-200"
+        />
+
         <div>
           <h3 className="text-2xl font-medium text-secondary-text-500">
-            {title}
+            {truncatedTitle}
           </h3>
-          <p className="text-md text-primary-text-400">{subtitle}</p>
+          <p className="text-md text-primary-text-400">{truncatedSubtitle}</p>
         </div>
         <div className="flex justify-between space-x-4 flex-col gap-2 text-primary-text-500">
           <span className="flex items-center text-md">
@@ -67,41 +96,38 @@ export const EventCard: FC<EventCardProps> = ({
       </div>
 
       {/* Right Side */}
-      <div className="flex flex-col justify-between space-y-4 w-full lg:w-auto xl:border-l-2 xl:border-secondary-text-400 xl:pl-8 xl:py-4 border-l-1 border-secondary-text-400 pl-4 py-2">
+      <div className="flex justify-between items-center w-full">
         {/* Top Section: Badge + Price */}
-        <div className="flex items-center justify-start xl:justify-end gap-4 text-lg font-semibold">
-          <Badge>{eventType}</Badge>
+        <div className="flex items-center justify-start gap-4 h-full text-lg font-semibold">
           {ticketPrice === 0 ? (
-            <span className="text-accent-400">FREE</span>
+            <span className="text-accent-500">FREE</span>
           ) : (
-            <span className="text-accent-400">Rs {ticketPrice.toFixed(2)}</span>
+            <span className="text-accent-500">Rs {ticketPrice.toFixed(2)}</span>
           )}
+          <Badge>{eventType}</Badge>
         </div>
 
-        {/* Bottom Section: Buttons */}
-        <div className="flex flex-col xl:flex-row gap-4">
-          <Button
-            className="w-full lg:w-auto flex-1 text-secondary-text-500 border-secondary-text-400"
-            onClick={handleDetailsClick}
+        <div>
+          <button
+            className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+            onClick={toggleBookmark}
           >
-            <Library className="h-4 w-4 mr-2" />
-            Details
-          </Button>
-          <Button
-            className="w-full lg:w-auto flex-1 text-secondary-text-500 border-secondary-text-400"
-            onClick={() => setIsShareModalOpen(true)}
+            <FaRegBookmark className="h-5 w-5 mr-2" />
+          </button>
+          <button
+            className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+            onClick={openShareModal}
           >
-            <Share2 className="h-4 w-4 mr-2" />
-            Share
-          </Button>
-
-          <ShareModal
-            isOpen={isShareModalOpen}
-            onClose={() => setIsShareModalOpen(false)}
-            shareUrl={`${window.location.href}/${eventId}`}
-            // shareUrl="https://lucide.dev/icons/circle-x"
-          />
+            <Share className="h-5 w-5 mr-2" />
+          </button>
         </div>
+
+        <ShareModal
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+          shareUrl={`${window.location.href}/${eventId}`}
+          // shareUrl="https://lucide.dev/icons/circle-x"
+        />
       </div>
     </div>
   );

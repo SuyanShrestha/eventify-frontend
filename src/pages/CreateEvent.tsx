@@ -1,8 +1,10 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar, FileClock, MapPin, Tag } from "../assets/icons";
 import { useToast } from "../hooks";
 import { validateEventForm } from "../helpers";
+import MarkdownEditor from "../components/MarkdownEditor";
+import Delta from "quill-delta";
 
 const CreateEvent: React.FC = () => {
   const [event, setEvent] = useState({
@@ -16,15 +18,20 @@ const CreateEvent: React.FC = () => {
     details: "",
   });
 
+  useEffect(() => console.log("event details: ", event.details), [event]);
+
   const { showToast } = useToast();
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setEvent((prev) => ({ ...prev, [name]: value }));
+  const handleInputChange = (e: any) => {
+    if (e.target) {
+      const { name, value } = e.target;
+      setEvent((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleQuillChange = (content: string, delta: Delta, source: string) => {
+    const markdown = deltaToMarkdown(delta.ops); // Convert to Markdown
+    setEvent((prev) => ({ ...prev, details: markdown }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -271,6 +278,11 @@ const CreateEvent: React.FC = () => {
                   />
                 </div>
               </div>
+
+              <MarkdownEditor
+                value={event.details}
+                onChange={handleQuillChange}
+              />
             </div>
 
             {/* Submit Button */}

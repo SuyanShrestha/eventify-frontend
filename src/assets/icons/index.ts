@@ -1,4 +1,9 @@
-import { FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
+import {
+  FaLinkedinIn,
+  FaWhatsapp,
+  FaRegBookmark,
+  FaBookmark,
+} from "react-icons/fa";
 
 import { FaXTwitter, FaFacebookF } from "react-icons/fa6";
 
@@ -7,6 +12,7 @@ import {
   MapPin,
   Calendar,
   Clock,
+  Share,
   Share2,
   Library,
   Info,
@@ -15,7 +21,10 @@ import {
   User,
   Clipboard,
   ClipboardCheck,
-  FileClock
+  FileClock,
+  Maximize2,
+  Heart,
+  Bookmark,
 } from "lucide-react";
 
 export {
@@ -24,9 +33,11 @@ export {
   FaWhatsapp,
   FaXTwitter,
   CircleX,
+  Maximize2,
   MapPin,
   Calendar,
   Clock,
+  Share,
   Share2,
   Library,
   Info,
@@ -35,6 +46,9 @@ export {
   User,
   Clipboard,
   ClipboardCheck,
-  FileClock
+  FileClock,
+  Heart,
+  Bookmark,
+  FaRegBookmark,
+  FaBookmark,
 };
-
