@@ -6,21 +6,14 @@ import { eventsData } from "../constants";
 import { useDebounce } from "../hooks";
 import { Search } from "lucide-react";
 import { EventCard, Sidebar } from "../components/events";
-import {
-  clearFilters,
-  setEvents,
-  setFilters,
-  setSearchTerm,
-} from "../store/eventSlice";
+import { setEvents, setSearchTerm } from "../store/eventSlice";
 
 const ExplorePage: React.FC = () => {
   const [searchText, setSearchText] = useState<string>("");
   const debouncedSearchText = useDebounce<string>(searchText, 300);
 
   const dispatch = useDispatch();
-  const { filteredEvents, filters } = useSelector(
-    (state: RootState) => state.events
-  );
+  const { filteredEvents } = useSelector((state: RootState) => state.events);
 
   useEffect(() => {
     dispatch(setEvents(eventsData));
@@ -29,14 +22,6 @@ const ExplorePage: React.FC = () => {
   useEffect(() => {
     dispatch(setSearchTerm(debouncedSearchText));
   }, [debouncedSearchText, dispatch]);
-
-  const handleFilterChange = (filterType: string, value: string) => {
-    dispatch(setFilters({ [filterType]: value }));
-  };
-
-  const handleClearFilters = () => {
-    dispatch(clearFilters());
-  };
 
   return (
     <div className="flex mt-[4rem] ">

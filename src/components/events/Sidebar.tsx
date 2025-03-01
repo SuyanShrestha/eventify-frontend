@@ -4,12 +4,9 @@ import {
   Option,
   Calendar,
   MapPin,
-  Scan,
-  Timer,
 } from "../../assets/icons";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { clearFilters, setFilters } from "../../store/eventSlice";
+import { useDispatch } from "react-redux";
+import { setFilters } from "../../store/eventSlice";
 
 interface SidebarProps {}
 
