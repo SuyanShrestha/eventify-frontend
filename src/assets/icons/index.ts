@@ -25,6 +25,10 @@ import {
   Maximize2,
   Heart,
   Bookmark,
+  Option,
+  Ticket,
+  Scan,
+  Timer
 } from "lucide-react";
 
 export {
@@ -49,6 +53,10 @@ export {
   FileClock,
   Heart,
   Bookmark,
+  Option,
+  Ticket,
+  Scan,
+  Timer,
   FaRegBookmark,
   FaBookmark,
 };

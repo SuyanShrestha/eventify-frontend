@@ -4,7 +4,6 @@ import {
   Calendar,
   Clock,
   Share,
-  Bookmark,
   FaBookmark,
   FaRegBookmark,
 } from "../../assets/icons";
@@ -59,8 +58,8 @@ export const EventCard: FC<EventCardProps> = ({
 
   return (
     <div
-      className="p-4 border border-secondary-text-400 rounded-lg w-full xl:w-full flex flex-col xl:flex-col xl:justify-center xl:items-start gap-4 hover:cursor-pointer"
-      style={{ boxShadow: "0 0 4px rgba(85, 60, 154, 0.25)" }}
+      className="p-4 border border-gray-200 rounded-lg w-full xl:w-full flex flex-col xl:flex-col xl:justify-center xl:items-start gap-4 hover:cursor-pointer"
+      style={{ boxShadow: "0 0 10px rgba(85, 60, 154, 0.4)" }}
       onClick={handleDetailsClick}
     >
       <div className="flex flex-col gap-2 xl:gap-3">
@@ -107,7 +106,7 @@ export const EventCard: FC<EventCardProps> = ({
           <Badge>{eventType}</Badge>
         </div>
 
-        <div>
+        <div className="flex gap-2 justify-center items-center">
           <button
             className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
             onClick={toggleBookmark}

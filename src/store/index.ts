@@ -7,8 +7,8 @@ import eventReducer from "./eventSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["events"],
-  blacklist: ["auth"],
+  // whitelist: ["events"],
+  blacklist: ["auth", "events"],
 };
 
 const rootReducer = combineReducers({

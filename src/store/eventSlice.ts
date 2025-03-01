@@ -49,8 +49,17 @@ const filterByDate = (event: Event, date: string): boolean => {
       return eventStartDate.toDateString() === today.toDateString();
     case "tomorrow":
       return eventStartDate.toDateString() === tomorrow.toDateString();
-    case "this-week":
-      return eventStartDate.getDate() >= today.getDate();
+
+    case "this-week": {
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(today.getDate() - today.getDay());
+
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+      return eventStartDate >= startOfWeek && eventStartDate <= endOfWeek;
+    }
+
     case "this-month":
       return eventStartDate.getMonth() === today.getMonth();
     default:
