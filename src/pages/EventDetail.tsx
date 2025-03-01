@@ -6,7 +6,7 @@ import {
   Calendar,
   Info,
   MapPin,
-  Share2,
+  Share,
   ShoppingCart,
   Tag,
   User,
@@ -37,6 +37,11 @@ const EventDetail: React.FC = () => {
   const { date: formattedEndDate, time: formattedEndTime } = formatDateTime(
     eventItem.endDate
   );
+
+  const openShareModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsShareModalOpen(true);
+  };
 
   return (
     <div
@@ -86,13 +91,12 @@ const EventDetail: React.FC = () => {
           </div>
 
           <div>
-            <Button
-              className="max-w-32 h-12 flex-1 text-secondary-text-500 border-secondary-text-400 flex justify-between"
-              onClick={() => setIsShareModalOpen(true)}
+            <button
+              className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+              onClick={openShareModal}
             >
-              <Share2 className="h-4 w-4 mr-2" />
-              Share
-            </Button>
+              <Share className="h-6 w-6 mr-2" />
+            </button>
 
             <ShareModal
               isOpen={isShareModalOpen}
