@@ -314,35 +314,35 @@ const EventDetail: React.FC = () => {
                 </div>
               )}
 
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
-                  {mappedBookings.length > 0
-                    ? `Your Bookings [${mappedBookings.length}]`
-                    : "No bookings made"}
-                </h3>
-                <ul>
-                  {mappedBookings.map((booking) => (
-                    <li key={booking.bookingId} className="booking-item">
-                      <div className="flex gap-4 items-center">
-                        <button
-                          onClick={(e) => openQrModal(e, booking.bookingId)}
-                        >
-                          <QrCode className="h-8 w-8 cursor-pointer text-secondary-text-500" />
-                        </button>
-                        <span className="text-md text-gray-700">
-                          {new Date(booking.bookingCreated).toLocaleString()}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                <QrCodeModal
-                  isOpen={isQrModalOpen}
-                  onClose={() => setIsQrModalOpen(false)}
-                  selectedBookingId={selectedBookingId}
-                  eventItem={eventItem}
-                />
-              </div>
+              {!isOwnEvent && (
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
+                      Your Bookings [{mappedBookings.length}]
+                  </h3>
+                  <ul>
+                    {mappedBookings.map((booking) => (
+                      <li key={booking.bookingId} className="booking-item">
+                        <div className="flex gap-4 items-center">
+                          <button
+                            onClick={(e) => openQrModal(e, booking.bookingId)}
+                          >
+                            <QrCode className="h-8 w-8 cursor-pointer text-secondary-text-500" />
+                          </button>
+                          <span className="text-md text-gray-700">
+                            {new Date(booking.bookingCreated).toLocaleString()}
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <QrCodeModal
+                    isOpen={isQrModalOpen}
+                    onClose={() => setIsQrModalOpen(false)}
+                    selectedBookingId={selectedBookingId}
+                    eventItem={eventItem}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

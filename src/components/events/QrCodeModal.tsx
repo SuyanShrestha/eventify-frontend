@@ -38,11 +38,17 @@ const QrCodeModal: React.FC<QrCodeModalProps> = ({
       >
         <Sheet.Container>
           <Sheet.Header />
-          <Sheet.Content className="p-4 space-y-4">
-            <h2 className="text-xl font-semibold text-center mb-4 text-secondary-text-500">
-              Ticket QR code
-            </h2>
-            <QRCodeSVG value={qrCodeData} size={256} />
+          <Sheet.Content className="p-2 space-y-4 flex flex-col justify-between items-center">
+            <div className="flex flex-col">
+              <h2 className="text-xl font-semibold text-center mb-4 text-secondary-text-500">
+                Ticket QR code
+              </h2>
+              <hr className="border-t border-gray-300 " />
+            </div>
+
+            <div className="mb-4">
+              <QRCodeSVG value={qrCodeData} size={220} />
+            </div>
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop onTap={onClose} />
