@@ -32,36 +32,42 @@ const ShareModal: React.FC<ShareModalProps> = ({
   const isSmallScreen = useMediaQuery({ maxWidth: 767 }); // for <md screens
 
   return isSmallScreen ? (
-    // Bottom Sheet for small screens
-    <Sheet
-      isOpen={isOpen}
-      onClose={onClose}
-      snapPoints={[0.4, 0]}
-      initialSnap={0}
-    >
-      <Sheet.Container>
-        <Sheet.Header />
-        <Sheet.Content className="p-4 space-y-4">
-          <h2 className="text-xl font-semibold text-center mb-4 text-secondary-text-500">
-            Share this Event
-          </h2>
-          <hr className="border-t border-gray-300 " />
+    // bottom sheet for small screens
+    <div className={`fixed inset-0 z-20 ${isOpen ? "visible" : "hidden"}`}>
+      {isOpen && (
+        <div className="absolute inset-0 backdrop-blur-xs bg-black/30 z-10" />
+      )}
+      <Sheet
+        isOpen={isOpen}
+        onClose={onClose}
+        snapPoints={[0.4, 0]}
+        initialSnap={0}
+      >
+        <Sheet.Container>
+          <Sheet.Header />
+          <Sheet.Content className="p-4 space-y-4">
+            <h2 className="text-xl font-semibold text-center mb-4 text-secondary-text-500">
+              Share this Event
+            </h2>
+            <hr className="border-t border-gray-300 " />
 
-          <ShareOptions shareUrl={shareUrl} />
-        </Sheet.Content>
-      </Sheet.Container>
-      <Sheet.Backdrop onTap={onClose} />
-    </Sheet>
+            <ShareOptions shareUrl={shareUrl} />
+          </Sheet.Content>
+        </Sheet.Container>
+        <Sheet.Backdrop onTap={onClose} />
+      </Sheet>
+    </div>
   ) : (
-    // Centered Modal for larger screens
     <div
       className={`fixed inset-0 flex items-center justify-center bg-gray-500/30 z-25 ${
         isOpen ? "visible" : "hidden"
       }`}
       onClick={onClose}
     >
+      <div className="absolute inset-0 backdrop-blur-xs z-10" />
+
       <div
-        className="bg-white p-6 rounded-lg shadow-lg w-96 relative"
+        className="bg-white p-6 rounded-lg shadow-lg w-96 relative z-20"
         style={{ boxShadow: "0 0 4px rgba(85, 60, 154, 0.25)" }}
         onClick={(e) => e.stopPropagation()}
       >

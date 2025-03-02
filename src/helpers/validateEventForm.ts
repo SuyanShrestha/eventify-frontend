@@ -1,5 +1,5 @@
 // Define Event type
-export interface EventForm {
+export interface EventFormInterface {
   title: string;
   subtitle: string;
   startDate?: string;
@@ -10,7 +10,7 @@ export interface EventForm {
 }
 
 // Validation Helper Function
-export const validateEventForm = (event: EventForm): string[] => {
+export const validateEventForm = (event: EventFormInterface): string[] => {
   let errors: string[] = [];
 
   if (!event.title.trim()) {

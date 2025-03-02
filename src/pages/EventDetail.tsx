@@ -95,7 +95,7 @@ const EventDetail: React.FC = () => {
             <p className="text-xl sm:text-2xl text-secondary-text-400 mb-4">
               {eventItem.subtitle}
             </p>
-            <div className="text-lg flex items-center text-[#423e33] mb-2">
+            <div className="text-sm sm:text-lg flex items-center text-[#423e33] mb-2">
               <Calendar className="w-5 h-5 mr-2" />
               {formattedStartDate === formattedEndDate ? (
                 // Single-day event
@@ -118,7 +118,7 @@ const EventDetail: React.FC = () => {
                 </>
               )}
             </div>
-            <div className="text-lg flex items-center text-[#423e33]">
+            <div className="text-sm sm:text-lg flex items-center text-[#423e33]">
               <MapPin className="w-5 h-5 mr-2" />
               <span>{eventItem.venue}</span>
             </div>
@@ -126,36 +126,36 @@ const EventDetail: React.FC = () => {
 
           <div>
             {!isOwnEvent ? (
-              <div className="flex gap-2 justify-center items-center">
+              <div className="flex gap-4 justify-start items-center">
                 <button
-                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  className="max-w-5 lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
                   onClick={toggleBookmark}
                 >
                   <FaRegBookmark className="h-5 w-5 mr-2" />
                 </button>
                 <button
-                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  className="max-w-5 lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
                   onClick={openShareModal}
                 >
                   <Share className="h-5 w-5 mr-2" />
                 </button>
               </div>
             ) : (
-              <div className="flex gap-2 justify-center items-center">
+              <div className="flex gap-4 justify-start items-center">
                 <button
-                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  className="max-w-5 lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
                   onClick={handleEditEvent}
                 >
                   <PenLine className="h-5 w-5 mr-2" />
                 </button>
                 <button
-                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  className="max-w-5 lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
                   onClick={handleDeleteEvent}
                 >
                   <Trash className="h-5 w-5 mr-2" />
                 </button>
                 <button
-                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  className="max-w-5 lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
                   onClick={openShareModal}
                 >
                   <Share className="h-5 w-5 mr-2" />
