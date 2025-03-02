@@ -33,6 +33,8 @@ import {
   Trash,
   PenLine,
   Users,
+  UserRound,
+  UserRoundCheck,
 } from "lucide-react";
 
 export {
@@ -65,6 +67,8 @@ export {
   Trash,
   PenLine,
   Users,
+  UserRound,
+  UserRoundCheck,
   FaRegBookmark,
   FaBookmark,
 };

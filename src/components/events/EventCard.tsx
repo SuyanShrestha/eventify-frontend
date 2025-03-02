@@ -8,10 +8,11 @@ import {
   FaRegBookmark,
   PenLine,
   Trash,
+  Users,
 } from "../../assets/icons";
 import { Badge } from "../ui";
 import { useNavigate } from "react-router-dom";
-import { getEventDetailRoute } from "../../constants";
+import { Attendee, getEventDetailRoute } from "../../constants";
 import { checkExpired, formatDateTime, truncateText } from "../../helpers";
 import ShareModal from "./ShareModal";
 import { useSelector } from "react-redux";
@@ -29,6 +30,7 @@ interface EventCardProps {
   eventType: string;
   venue: string;
   imgSrc: string;
+  attendees: Attendee[];
 }
 
 export const EventCard: FC<EventCardProps> = ({
@@ -43,6 +45,7 @@ export const EventCard: FC<EventCardProps> = ({
   eventType,
   venue,
   imgSrc,
+  attendees,
 }) => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -123,14 +126,26 @@ export const EventCard: FC<EventCardProps> = ({
 
       <div className="flex justify-between items-center w-full">
         {/* Top Section: Badge + Price */}
-        <div className="flex items-center justify-start gap-4 h-full text-lg font-semibold">
-          {ticketPrice === 0 ? (
-            <span className="text-accent-500">FREE</span>
-          ) : (
-            <span className="text-accent-500">Rs {ticketPrice.toFixed(2)}</span>
-          )}
-          <Badge>{eventType}</Badge>
-        </div>
+        {!isOwnEvent ? (
+          <div className="flex items-center justify-start gap-4 h-full text-lg font-semibold">
+            {ticketPrice === 0 ? (
+              <span className="text-accent-500">FREE</span>
+            ) : (
+              <span className="text-accent-500">
+                Rs {ticketPrice.toFixed(2)}
+              </span>
+            )}
+            <Badge>{eventType}</Badge>
+          </div>
+        ) : (
+          <div className="flex gap-2 text-accent-text-500">
+            <Users className="h-5 w-5" />
+            <span className="flex gap-1 justify-center items-center font-medium">
+              <span>{attendees.length ? attendees.length : 'No'}</span>
+              <span>Attendees</span>
+            </span>
+          </div>
+        )}
 
         {!isOwnEvent ? (
           <div className="flex gap-2 justify-center items-center">

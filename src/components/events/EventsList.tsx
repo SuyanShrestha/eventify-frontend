@@ -94,6 +94,7 @@ const EventsList: React.FC<EventsListProps> = ({ isDashboard = false }) => {
                 eventType={event.eventType}
                 venue={event.venue}
                 imgSrc={event.imgSrc}
+                attendees={event.attendees}
               />
             ))
           )}

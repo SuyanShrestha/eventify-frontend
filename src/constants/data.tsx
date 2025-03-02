@@ -58,6 +58,11 @@ export const eventsData = [
     eventType: "physical",
     venue: "Kathmandu Convention Hall",
     imgSrc: "/gallery/1.jpg",
+    attendees: [
+      { attendeeId: "user_1", isCheckedIn: false },
+      { attendeeId: "user_2", isCheckedIn: true },
+      { attendeeId: "org_3", isCheckedIn: false },
+    ],
   },
   {
     id: 2,
@@ -72,6 +77,7 @@ export const eventsData = [
     eventType: "remote",
     venue: "Google Meet",
     imgSrc: "/gallery/2.jpg",
+    attendees: [],
   },
   {
     id: 3,
@@ -87,6 +93,7 @@ export const eventsData = [
     eventType: "remote",
     venue: "Google Meet",
     imgSrc: "/gallery/3.jpg",
+    attendees: [],
   },
   {
     id: 4,
@@ -101,6 +108,7 @@ export const eventsData = [
     eventType: "physical",
     venue: "Tundikhel Grounds, Kathmandu",
     imgSrc: "/gallery/DummyImage2.jpg",
+    attendees: [],
   },
   {
     id: 5,
@@ -116,6 +124,7 @@ export const eventsData = [
     eventType: "remote",
     venue: "Google Meet",
     imgSrc: "/gallery/DummyConcert.png",
+    attendees: [],
   },
   {
     id: 6,
@@ -129,6 +138,7 @@ export const eventsData = [
     eventType: "physical",
     venue: "Art & Creativity Center, Lalitpur",
     imgSrc: "/gallery/1.jpg",
+    attendees: [],
   },
   {
     id: 7,
@@ -144,6 +154,7 @@ export const eventsData = [
     eventType: "physical",
     venue: "Nagarkot Hill Resort",
     imgSrc: "/gallery/2.jpg",
+    attendees: [],
   },
   {
     id: 8,
@@ -158,12 +169,13 @@ export const eventsData = [
     eventType: "remote",
     venue: "Google Meet",
     imgSrc: "/gallery/3.jpg",
+    attendees: [],
   },
 ];
 
 export const usersData = [
   {
-    id: 'org_1',
+    id: "org_1",
     username: "Event Master",
     password: "securePass123",
     role: "organizer",

@@ -13,6 +13,8 @@ import {
   Tag,
   Trash,
   User,
+  UserRound,
+  UserRoundCheck,
 } from "../assets/icons";
 import { formatDateTime } from "../helpers";
 import { Button } from "../components/ui";
@@ -32,6 +34,16 @@ const EventDetail: React.FC = () => {
   const eventItem = eventsData.find((e) => e.id.toString() === eventId);
   const organizer = users.find((user) => user.id === eventItem?.organizerId);
   const isOwnEvent = eventItem?.organizerId === currentUser?.id;
+
+  const mappedAttendees = eventItem?.attendees.map(
+    ({ attendeeId, isCheckedIn }) => {
+      const user = users.find((user) => user.id === attendeeId);
+      return {
+        name: user?.username || "Unknown",
+        isCheckedIn,
+      };
+    }
+  );
 
   if (!eventItem) {
     return (
@@ -64,7 +76,6 @@ const EventDetail: React.FC = () => {
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
   };
-
 
   return (
     <div
@@ -201,40 +212,77 @@ const EventDetail: React.FC = () => {
             </div>
 
             {/* Right Column */}
-            <div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
-                  Ticket Information
-                </h3>
+            {!isOwnEvent ? (
+              <div>
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
+                    Ticket Information
+                  </h3>
 
-                {eventItem.ticketPrice === 0 ? (
-                  <p className="text-2xl font-bold text-accent-text-500 mb-4">
-                    FREE
-                  </p>
-                ) : (
-                  <p className="text-2xl font-bold text-accent-text-500 mb-4">
-                    Rs {eventItem.ticketPrice.toFixed(2)}
-                  </p>
-                )}
-                <Button
-                  bgColor="bg-accent-500"
-                  textColor="text-accent-btn-text"
-                  className="w-full bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300"
-                >
-                  {eventItem.ticketPrice === 0 ? "Get Ticket" : "Buy Ticket"}
-                  <ShoppingCart className="w-5 h-5 ml-2" />
-                </Button>
-              </div>
-              <div className="mt-6 bg-[rgba(255,132,0,0.2)] p-4 rounded-lg">
-                <div className="flex items-start">
-                  <Info className="w-5 h-5 mr-2 text-accent-text-500 mt-1" />
-                  <p className="text-sm text-[#7c6f50]">
-                    Please note that tickets are non-refundable. Make sure to
-                    review all event details before purchasing.
-                  </p>
+                  {eventItem.ticketPrice === 0 ? (
+                    <p className="text-2xl font-bold text-accent-text-500 mb-4">
+                      FREE
+                    </p>
+                  ) : (
+                    <p className="text-2xl font-bold text-accent-text-500 mb-4">
+                      Rs {eventItem.ticketPrice.toFixed(2)}
+                    </p>
+                  )}
+                  <Button
+                    bgColor="bg-accent-500"
+                    textColor="text-accent-btn-text"
+                    className="w-full bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300"
+                  >
+                    {eventItem.ticketPrice === 0 ? "Get Ticket" : "Buy Ticket"}
+                    <ShoppingCart className="w-5 h-5 ml-2" />
+                  </Button>
+                </div>
+                <div className="mt-6 bg-[rgba(255,132,0,0.2)] p-4 rounded-lg">
+                  <div className="flex items-start">
+                    <Info className="w-5 h-5 mr-2 text-accent-text-500 mt-1" />
+                    <p className="text-sm text-[#7c6f50]">
+                      Please note that tickets are non-refundable. Make sure to
+                      review all event details before purchasing.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div>
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
+                    {eventItem.attendees.length > 0
+                      ? `Attendees [${eventItem.attendees.length}]`
+                      : "No attendees yet"}
+                  </h3>
+                  <ul className="mt-4 space-y-2">
+                    {mappedAttendees?.map(({ name, isCheckedIn }, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center justify-start gap-2 text-secondary-text-500"
+                      >
+                        {isCheckedIn ? (
+                          <UserRoundCheck className="h-5 w-5 text-green-500" />
+                        ) : (
+                          <UserRound className="h-5 w-5 text-gray-700" />
+                        )}
+                        <span className="text-gray-800">{name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-6 bg-[rgba(255,132,0,0.2)] p-4 rounded-lg">
+                  <div className="flex items-start">
+                    <Info className="w-5 h-5 mr-2 text-accent-text-500 mt-1" />
+                    <p className="text-sm text-[#7c6f50]">
+                      Spread the word and share this event to attract more
+                      participants!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
