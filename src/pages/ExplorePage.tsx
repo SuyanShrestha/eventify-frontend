@@ -54,13 +54,15 @@ const ExplorePage: React.FC = () => {
           />
         </div>
 
-        <div className=" mt-[5rem] p-4 h-full max-w-7xl mx-auto overflow-auto flex-grow justify-start w-full">
+        <div className=" mt-[5rem] pt-4 max-w-7xl mx-auto flex justify-center w-full">
           <h3 className="text-2xl mb-6 font-semibold text-secondary-text-500">
-            Events
+            - Events - 
           </h3>
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-12 xl:gap-6 min-h-[60vh]">
+        </div>
+        <div className="p-4 h-full max-w-7xl mx-auto overflow-auto flex-grow justify-start ">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-12 xl:gap-6">
             {!filteredEvents.length ? (
-              <div className="flex justify-center items-center h-full col-span-3">
+              <div className="flex justify-center items-center min-h-[60vh] col-span-3">
                 <EmptyLottie spanText={Messages.no_events_message} />
               </div>
             ) : (
