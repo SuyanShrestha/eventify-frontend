@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import AdminLayout from "./layouts/AdminLayout";
 import AuthLayout from "./layouts/AuthLayout";
@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [isAdminRoute, setIsAdminRoute] = useState(false);
 
   useFetchUsers();
-  
+
   return (
     <Router>
       <ToastContainer />

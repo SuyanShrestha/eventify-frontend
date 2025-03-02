@@ -27,9 +27,6 @@ const EventDetail: React.FC = () => {
   const eventItem = eventsData.find((e) => e.id.toString() === eventId);
   const organizer = users.find((user) => user.id === eventItem?.organizerId);
 
-  console.log("eventsItem: ", eventItem)
-  console.log("users: ", users); 
-  
   if (!eventItem) {
     return (
       <div className="text-center mt-10 text-xl text-red-500">
