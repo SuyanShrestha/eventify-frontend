@@ -7,6 +7,7 @@ interface Event {
   hostname: string;
   startDate: string;
   endDate: string;
+  bookingDeadline?: string;
   details: string;
   ticketPrice: number;
   eventType: string;
@@ -18,6 +19,7 @@ interface FilterState {
   date: string; // 'today', 'tomorrow', 'this-week', 'this-month'
   type: string; // 'online', 'physical'
   price: string; // 'free', 'paid'
+  expirationStatus: string;
 }
 
 interface EventState {
@@ -34,6 +36,7 @@ const initialState: EventState = {
     date: "",
     type: "",
     price: "",
+    expirationStatus: "",
   },
   searchTerm: "",
 };
@@ -77,6 +80,22 @@ const filterByPrice = (event: Event, price: string): boolean => {
   return true;
 };
 
+const filterByStatus = (event: Event, expirationStatus: string): boolean => {
+  if (!expirationStatus) return true;
+
+  const currentDate = new Date();
+  const bookingDeadline = event.bookingDeadline
+    ? new Date(event.bookingDeadline)
+    : null;
+  const endDate = new Date(event.endDate);
+
+  const isExpired = bookingDeadline
+    ? currentDate > bookingDeadline
+    : currentDate > endDate;
+
+  return expirationStatus === "expired" ? isExpired : !isExpired;
+};
+
 const filterBySearchTerm = (event: Event, searchTerm: string): boolean => {
   return event.title.toLowerCase().includes(searchTerm.toLowerCase());
 };
@@ -88,12 +107,13 @@ const applyFilters = (
   searchTerm: string
 ): Event[] => {
   const filtered = events.filter((event) => {
-    const { date, type, price } = filters;
+    const { date, type, price, expirationStatus } = filters;
 
     return (
       filterByDate(event, date) &&
       filterByType(event, type) &&
       filterByPrice(event, price) &&
+      filterByStatus(event, expirationStatus) &&
       filterBySearchTerm(event, searchTerm)
     );
   });
@@ -108,7 +128,7 @@ const eventSlice = createSlice({
   reducers: {
     setEvents: (state, action: PayloadAction<Event[]>) => {
       state.events = action.payload;
-      state.filteredEvents = action.payload; // No filtering initially
+      state.filteredEvents = action.payload;
     },
 
     setFilters: (state, action: PayloadAction<Partial<FilterState>>) => {
@@ -130,7 +150,7 @@ const eventSlice = createSlice({
     },
 
     clearFilters: (state) => {
-      state.filters = { date: "", type: "", price: "" };
+      state.filters = { date: "", type: "", price: "", expirationStatus: "" };
       state.searchTerm = "";
       state.filteredEvents = state.events;
     },

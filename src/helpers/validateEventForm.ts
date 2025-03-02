@@ -4,6 +4,7 @@ export interface EventForm {
   subtitle: string;
   startDate?: string;
   endDate?: string;
+  bookingDeadline?: string;
   venue: string;
   ticketPrice: number;
 }
@@ -50,6 +51,15 @@ export const validateEventForm = (event: EventForm): string[] => {
 
   if (event.ticketPrice < 0) {
     errors.push("Ticket Price cannot be negative!");
+  }
+
+  if (event.bookingDeadline) {
+    const bookingDeadline = new Date(event.bookingDeadline);
+    const endDate = new Date(event.endDate!); // endDate is required, so it will exist
+
+    if (bookingDeadline > endDate) {
+      errors.push("Booking Deadline cannot be later than End Date!");
+    }
   }
 
   return errors;

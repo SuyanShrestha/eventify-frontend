@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Calendar, FileClock, MapPin, Tag } from "../assets/icons";
 import { useToast } from "../hooks";
 import { validateEventForm } from "../helpers";
-import MarkdownEditor from "../components/MarkdownEditor";
-import Delta from "quill-delta";
+// import MarkdownEditor from "../components/MarkdownEditor";
+// import Delta from "quill-delta";
 
 const CreateEvent: React.FC = () => {
   const [event, setEvent] = useState({
@@ -12,6 +12,7 @@ const CreateEvent: React.FC = () => {
     subtitle: "",
     startDate: "",
     endDate: "",
+    bookingDeadline: "",
     eventType: "physical",
     venue: "",
     ticketPrice: 0,
@@ -29,10 +30,10 @@ const CreateEvent: React.FC = () => {
     }
   };
 
-  const handleQuillChange = (content: string, delta: Delta, source: string) => {
-    const markdown = deltaToMarkdown(delta.ops); // Convert to Markdown
-    setEvent((prev) => ({ ...prev, details: markdown }));
-  };
+  // const handleQuillChange = (content: string, delta: Delta, source: string) => {
+  //   const markdown = deltaToMarkdown(delta.ops); // Convert to Markdown
+  //   setEvent((prev) => ({ ...prev, details: markdown }));
+  // };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +52,7 @@ const CreateEvent: React.FC = () => {
       subtitle: "",
       startDate: "",
       endDate: "",
+      bookingDeadline: "",
       eventType: "physical",
       venue: "",
       ticketPrice: 0,
@@ -202,6 +204,31 @@ const CreateEvent: React.FC = () => {
                 </div>
               </div>
 
+              {/* bookingDeadline */}
+              <div>
+                <label
+                  htmlFor="bookingDeadline"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
+                >
+                  Booking Deadline
+                </label>
+                <div className="relative">
+                  <Calendar
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
+                    size={18}
+                  />
+                  <input
+                    type="datetime-local"
+                    id="bookingDeadline"
+                    name="bookingDeadline"
+                    value={event.bookingDeadline}
+                    onChange={handleInputChange}
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
+                    required
+                  />
+                </div>
+              </div>
+
               {/* Event Type */}
               <div>
                 <label
@@ -279,10 +306,27 @@ const CreateEvent: React.FC = () => {
                 </div>
               </div>
 
-              <MarkdownEditor
+              {/* <MarkdownEditor
                 value={event.details}
                 onChange={handleQuillChange}
-              />
+              /> */}
+
+              <div className="col-span-full">
+                <label
+                  htmlFor="details"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
+                >
+                  Details
+                </label>
+                <textarea
+                  id="details"
+                  name="details"
+                  value={event.details}
+                  onChange={handleInputChange}
+                  className={`w-full px-3 py-3 border border-gray-300
+                  rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 min-h-[150px]`}
+                />
+              </div>
             </div>
 
             {/* Submit Button */}

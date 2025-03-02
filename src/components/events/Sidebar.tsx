@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Ticket, Option, Calendar, MapPin, CircleX } from "../../assets/icons";
+import {
+  Ticket,
+  Option,
+  Calendar,
+  CircleX,
+  Timer,
+  Tag,
+} from "../../assets/icons";
 import { useDispatch } from "react-redux";
 import { setFilters } from "../../store/eventSlice";
 
@@ -26,26 +33,27 @@ const SIDEBAR_CATEGORIES = [
   },
   {
     label: "Platform",
-    icon: <MapPin className="w-8 h-8 text-secondary-text-500" />,
+    icon: <Tag className="w-8 h-8 text-secondary-text-500" />,
     options: [
       { label: "Physical", value: "physical" },
       { label: "Remote", value: "remote" },
     ],
   },
-  // {
-  //   label: "Status",
-  //   icon: <Timer className="w-8 h-8 text-secondary-text-500" />,
-  //   options: [
-  //     { label: "Upcoming", value: "upcoming" },
-  //     { label: "Expired", value: "expired" },
-  //   ],
-  // },
+  {
+    label: "Status",
+    icon: <Timer className="w-8 h-8 text-secondary-text-500" />,
+    options: [
+      { label: "Upcoming", value: "upcoming" },
+      { label: "Expired", value: "expired" },
+    ],
+  },
 ];
 
 const CATEGORY_MAPPER: Record<string, string> = {
   Price: "price",
   Date: "date",
   Platform: "type",
+  Status: "expirationStatus",
 };
 
 const Sidebar: React.FC<SidebarProps> = () => {
@@ -105,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
               onClear();
             }}
           >
-            <CircleX className="w-5 h-5 font-bold"/>
+            <CircleX className="w-5 h-5 font-bold" />
           </button>
         )}
       </div>
@@ -141,9 +149,8 @@ const Sidebar: React.FC<SidebarProps> = () => {
                 label={option.label}
                 value={option.value}
                 selectedValue={selectedFilters[CATEGORY_MAPPER[category.label]]}
-                onSelect={
-                  (value) =>
-                    handleSelectFilter(CATEGORY_MAPPER[category.label], value)
+                onSelect={(value) =>
+                  handleSelectFilter(CATEGORY_MAPPER[category.label], value)
                 }
                 onClear={() =>
                   handleClearFilter(CATEGORY_MAPPER[category.label])

@@ -18,6 +18,8 @@ interface EventCardProps {
   title: string;
   subtitle: string;
   startDate: string;
+  endDate: string;
+  bookingDeadline?: string;
   ticketPrice: number;
   eventType: string;
   venue: string;
@@ -29,6 +31,8 @@ export const EventCard: FC<EventCardProps> = ({
   title,
   subtitle,
   startDate,
+  endDate,
+  bookingDeadline,
   ticketPrice,
   eventType,
   venue,
@@ -55,6 +59,20 @@ export const EventCard: FC<EventCardProps> = ({
   const toggleBookmark = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
   };
+
+  const checkExpired = (endDate: string, bookingDeadline?: string): boolean => {
+    const currentDate = new Date();
+    const parsedBookingDeadline = bookingDeadline
+      ? new Date(bookingDeadline)
+      : null;
+    const parsedEndDate = new Date(endDate);
+
+    return parsedBookingDeadline
+      ? currentDate > parsedBookingDeadline
+      : currentDate > parsedEndDate;
+  };
+
+  const isExpired = checkExpired(endDate, bookingDeadline);
 
   return (
     <div
@@ -86,15 +104,18 @@ export const EventCard: FC<EventCardProps> = ({
               <Calendar className="h-4 w-4 mr-2" />
               <span className="flex items-center">{formattedStartDate}</span>
             </span>
-            <span className="flex items-center space-x-2">
-              <Clock className="h-4 w-4 mr-2" />
-              <span className="flex items-center">{formattedStartTime}</span>
-            </span>
+            {isExpired ? (
+              <Badge>booking expired</Badge>
+            ) : (
+              <span className="flex items-center space-x-2">
+                <Clock className="h-4 w-4 mr-2" />
+                <span className="flex items-center">{formattedStartTime}</span>
+              </span>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Right Side */}
       <div className="flex justify-between items-center w-full">
         {/* Top Section: Badge + Price */}
         <div className="flex items-center justify-start gap-4 h-full text-lg font-semibold">
