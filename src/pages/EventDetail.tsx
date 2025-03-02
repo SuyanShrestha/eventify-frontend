@@ -4,11 +4,14 @@ import { useParams } from "react-router-dom";
 import { eventsData } from "../constants";
 import {
   Calendar,
+  FaRegBookmark,
   Info,
   MapPin,
+  PenLine,
   Share,
   ShoppingCart,
   Tag,
+  Trash,
   User,
 } from "../assets/icons";
 import { formatDateTime } from "../helpers";
@@ -24,8 +27,11 @@ const EventDetail: React.FC = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const { users } = useSelector((state: RootState) => state.users);
+  const { user: currentUser } = useSelector((state: RootState) => state.auth);
+
   const eventItem = eventsData.find((e) => e.id.toString() === eventId);
   const organizer = users.find((user) => user.id === eventItem?.organizerId);
+  const isOwnEvent = eventItem?.organizerId === currentUser?.id;
 
   if (!eventItem) {
     return (
@@ -46,6 +52,19 @@ const EventDetail: React.FC = () => {
     e.stopPropagation();
     setIsShareModalOpen(true);
   };
+
+  const toggleBookmark = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+  };
+
+  const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+  };
+
+  const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+  };
+
 
   return (
     <div
@@ -95,12 +114,43 @@ const EventDetail: React.FC = () => {
           </div>
 
           <div>
-            <button
-              className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
-              onClick={openShareModal}
-            >
-              <Share className="h-6 w-6 mr-2" />
-            </button>
+            {!isOwnEvent ? (
+              <div className="flex gap-2 justify-center items-center">
+                <button
+                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  onClick={toggleBookmark}
+                >
+                  <FaRegBookmark className="h-5 w-5 mr-2" />
+                </button>
+                <button
+                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  onClick={openShareModal}
+                >
+                  <Share className="h-5 w-5 mr-2" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2 justify-center items-center">
+                <button
+                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  onClick={handleEditEvent}
+                >
+                  <PenLine className="h-5 w-5 mr-2" />
+                </button>
+                <button
+                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  onClick={handleDeleteEvent}
+                >
+                  <Trash className="h-5 w-5 mr-2" />
+                </button>
+                <button
+                  className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+                  onClick={openShareModal}
+                >
+                  <Share className="h-5 w-5 mr-2" />
+                </button>
+              </div>
+            )}
 
             <ShareModal
               isOpen={isShareModalOpen}

@@ -1,38 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-
-import { Messages, eventsData } from "../constants";
-import { Search } from "../assets/icons";
-import { useDebounce } from "../hooks";
-import { EventCard, Sidebar } from "../components/events";
-import { clearFilters, setEvents, setSearchTerm } from "../store/eventSlice";
-import { useLocation } from "react-router-dom";
-import EmptyLottie from "../components/ui/EmptyLottie";
+import React from "react";
+import { Sidebar } from "../components/events";
 import EventsList from "../components/events/EventsList";
 
 const ExplorePage: React.FC = () => {
-  const [searchText, setSearchText] = useState<string>("");
-  const debouncedSearchText = useDebounce<string>(searchText, 300);
-  const location = useLocation();
-
-  const dispatch = useDispatch();
-  const { filteredEvents } = useSelector((state: RootState) => state.events);
-
-  useEffect(() => {
-    dispatch(setEvents(eventsData));
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(setSearchTerm(debouncedSearchText));
-  }, [debouncedSearchText, dispatch]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(clearFilters());
-    };
-  }, [location.pathname]);
-
   return (
     <div className="flex mt-[4rem] ">
       {/* Sidebar Section */}

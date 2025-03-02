@@ -30,6 +30,9 @@ import {
   Scan,
   Timer,
   Search,
+  Trash,
+  PenLine,
+  Users,
 } from "lucide-react";
 
 export {
@@ -59,6 +62,9 @@ export {
   Scan,
   Timer,
   Search,
+  Trash,
+  PenLine,
+  Users,
   FaRegBookmark,
   FaBookmark,
 };

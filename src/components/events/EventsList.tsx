@@ -84,6 +84,7 @@ const EventsList: React.FC<EventsListProps> = ({ isDashboard = false }) => {
               <EventCard
                 key={event.id}
                 eventId={event.id.toString()}
+                organizerId={event.organizerId}
                 title={event.title}
                 subtitle={event.subtitle}
                 startDate={event.startDate}
