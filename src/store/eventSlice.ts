@@ -5,7 +5,7 @@ interface Event {
   id: number;
   title: string;
   subtitle: string;
-  hostname: string;
+  organizerId: string;
   startDate: string;
   endDate: string;
   bookingDeadline?: string;

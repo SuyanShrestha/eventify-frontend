@@ -1,6 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { usersData } from "../constants/data";
 
-const initialState = {
+interface User {
+  id: string;
+  username: string;
+  password: string;
+  role: string;
+}
+
+interface AuthState {
+  user: User | null;
+  role: string;
+  isAuthenticated: boolean;
+}
+
+const initialState: AuthState = {
   user: null,
   role: "unauthenticated",
   isAuthenticated: false,
@@ -10,20 +24,17 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    register: (state, action) => {
-      state.user = action.payload;
-      state.role = action.payload.role || "user";
-      state.isAuthenticated = false; // for registered but not logged in yet
-    },
-    loginAsUser: (state, action) => {
-      state.user = action.payload;
-      state.role = "user";
-      state.isAuthenticated = true;
-    },
-    loginAsOrganizer: (state, action) => {
-      state.user = action.payload;
-      state.role = "organizer";
-      state.isAuthenticated = true;
+    login: (state, action) => {
+      const { username, password } = action.payload;
+      const user = usersData.find(
+        (u) => u.username === username && u.password === password
+      );
+
+      if (user) {
+        state.user = user;
+        state.role = user.role;
+        state.isAuthenticated = true;
+      }
     },
     logout: (state) => {
       state.user = null;
@@ -33,6 +44,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { register, loginAsUser, loginAsOrganizer, logout } =
-  authSlice.actions;
+export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;

@@ -14,9 +14,9 @@ export const Gallery = {
 export const eventsData = [
   {
     id: 1,
+    organizerId: "org_1",
     title: "Tech Conference 2025",
     subtitle: "Innovations in AI and Blockchain",
-    hostname: "Tech Global",
     startDate: "March 15 2025 10:00:00 GMT+0545 (Nepal Time)",
     endDate: "March 15 2025 18:00:00 GMT+0545 (Nepal Time)",
     details: `
@@ -61,9 +61,9 @@ export const eventsData = [
   },
   {
     id: 2,
+    organizerId: "org_1",
     title: "Entrepreneurs Summit",
     subtitle: "Scaling Startups Successfully",
-    hostname: "Startup Nepal",
     startDate: "March 01 2025 17:00:00 GMT+0545 (Nepal Time)",
     endDate: "April 10 2025 20:00:00 GMT+0545 (Nepal Time)",
     bookingDeadline: "March 31 2025 23:59:59 GMT+0545 (Nepal Time)",
@@ -75,9 +75,9 @@ export const eventsData = [
   },
   {
     id: 3,
+    organizerId: "org_2",
     title: "Digital Marketing Workshop",
     subtitle: "Master SEO & Social Media Strategies in Nepal",
-    hostname: "Marketing Pro",
     startDate: "March 02 2025 14:00:00 GMT+0545 (Nepal Time)",
     endDate: "May 5 2025 16:00:00 GMT+0545 (Nepal Time)",
     bookingDeadline: "April 25 2025 23:59:59 GMT+0545 (Nepal Time)",
@@ -90,9 +90,9 @@ export const eventsData = [
   },
   {
     id: 4,
+    organizerId: "org_2",
     title: "Music Festival 2025",
     subtitle: "A Celebration of Sound",
-    hostname: "Nepal Music Association",
     startDate: "March 01 2025 12:00:00 GMT+0545 (Nepal Time)",
     endDate: "June 20 2025 23:00:00 GMT+0545 (Nepal Time)",
     bookingDeadline: "June 15 2025 23:59:59 GMT+0545 (Nepal Time)",
@@ -104,9 +104,9 @@ export const eventsData = [
   },
   {
     id: 5,
+    organizerId: "org_2",
     title: "Cybersecurity Awareness Seminar",
     subtitle: "Protect Yourself Online",
-    hostname: "CyberShield",
     startDate: "March 6 2025 10:30:00 GMT+0545 (Nepal Time)",
     endDate: "March 12 2025 12:30:00 GMT+0545 (Nepal Time)",
     bookingDeadline: "July 1 2025 23:59:59 GMT+0545 (Nepal Time)",
@@ -119,9 +119,9 @@ export const eventsData = [
   },
   {
     id: 6,
+    organizerId: "org_1",
     title: "Photography Masterclass",
     subtitle: "Capture the Perfect Shot",
-    hostname: "PhotoWorld Academy",
     startDate: "August 15 2024 09:00:00 GMT+0545 (Nepal Time)",
     endDate: "August 15 2024 15:00:00 GMT+0545 (Nepal Time)",
     details: "Join a professional photographer in this hands-on masterclass...",
@@ -132,9 +132,9 @@ export const eventsData = [
   },
   {
     id: 7,
+    organizerId: "org_1",
     title: "Yoga & Wellness Retreat",
     subtitle: "Find Your Inner Peace",
-    hostname: "Wellness Nepal",
     startDate: "September 5 2024 07:00:00 GMT+0545 (Nepal Time)",
     endDate: "September 5 2024 19:00:00 GMT+0545 (Nepal Time)",
     bookingDeadline: "August 31 2024 23:59:59 GMT+0545 (Nepal Time)",
@@ -147,9 +147,9 @@ export const eventsData = [
   },
   {
     id: 8,
+    organizerId: "org_1",
     title: "Blockchain & Crypto Conference",
     subtitle: "Understanding Decentralized Finance",
-    hostname: "CryptoNepal",
     startDate: "October 22 2025 13:00:00 GMT+0545 (Nepal Time)",
     endDate: "October 22 2025 17:00:00 GMT+0545 (Nepal Time)",
     bookingDeadline: "October 15 2025 23:59:59 GMT+0545 (Nepal Time)",
@@ -158,5 +158,38 @@ export const eventsData = [
     eventType: "remote",
     venue: "Google Meet",
     imgSrc: "/gallery/3.jpg",
+  },
+];
+
+export const usersData = [
+  {
+    id: 'org_1',
+    username: "Event Master",
+    password: "securePass123",
+    role: "organizer",
+  },
+  {
+    id: "org_2",
+    username: "Food Festival Team",
+    password: "tastyTreats@2024",
+    role: "organizer",
+  },
+  {
+    id: "user_1",
+    username: "Suyan Shrestha",
+    password: "admin789",
+    role: "user",
+  },
+  {
+    id: "user_2",
+    username: "Lionel Mausi",
+    password: "giga456",
+    role: "user",
+  },
+  {
+    id: "org_3",
+    username: "Tech Conference Host",
+    password: "techInnovate2025",
+    role: "organizer",
   },
 ];

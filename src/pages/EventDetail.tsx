@@ -16,13 +16,20 @@ import { Button } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import ShareModal from "../components/events/ShareModal";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const EventDetail: React.FC = () => {
   const { eventId } = useParams();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
+  const { users } = useSelector((state: RootState) => state.users);
   const eventItem = eventsData.find((e) => e.id.toString() === eventId);
+  const organizer = users.find((user) => user.id === eventItem?.organizerId);
 
+  console.log("eventsItem: ", eventItem)
+  console.log("users: ", users); 
+  
   if (!eventItem) {
     return (
       <div className="text-center mt-10 text-xl text-red-500">
@@ -132,7 +139,8 @@ const EventDetail: React.FC = () => {
                   <div className="flex items-center">
                     <User className="w-5 h-5 mr-3 text-accent-text-500" />
                     <span className="text-primary-text-500">
-                      Hosted by : {eventItem.hostname}
+                      Hosted by :{" "}
+                      {organizer ? organizer.username : "Unknown Organizer"}
                     </span>
                   </div>
                   <div className="flex items-center">
