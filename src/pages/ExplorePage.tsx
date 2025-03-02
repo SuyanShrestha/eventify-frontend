@@ -6,11 +6,13 @@ import { eventsData } from "../constants";
 import { useDebounce } from "../hooks";
 import { Search } from "lucide-react";
 import { EventCard, Sidebar } from "../components/events";
-import { setEvents, setSearchTerm } from "../store/eventSlice";
+import { clearFilters, setEvents, setSearchTerm } from "../store/eventSlice";
+import { useLocation } from "react-router-dom";
 
 const ExplorePage: React.FC = () => {
   const [searchText, setSearchText] = useState<string>("");
   const debouncedSearchText = useDebounce<string>(searchText, 300);
+  const location = useLocation();
 
   const dispatch = useDispatch();
   const { filteredEvents } = useSelector((state: RootState) => state.events);
@@ -22,6 +24,13 @@ const ExplorePage: React.FC = () => {
   useEffect(() => {
     dispatch(setSearchTerm(debouncedSearchText));
   }, [debouncedSearchText, dispatch]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearFilters())
+    }
+  }, [location.pathname])
+
 
   return (
     <div className="flex mt-[4rem] ">

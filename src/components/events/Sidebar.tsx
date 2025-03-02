@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  Ticket,
-  Option,
-  Calendar,
-  MapPin,
-} from "../../assets/icons";
+import { Ticket, Option, Calendar, MapPin, CircleX } from "../../assets/icons";
 import { useDispatch } from "react-redux";
 import { setFilters } from "../../store/eventSlice";
 
@@ -62,32 +57,57 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
   const dispatch = useDispatch();
 
+  const handleClearFilter = (category: string) => {
+    setSelectedFilters((prevState) => ({
+      ...prevState,
+      [category]: null,
+    }));
+
+    dispatch(setFilters({ [category]: "" }));
+  };
+
   const OptionItem = ({
     label,
     value,
     selectedValue,
     onSelect,
+    onClear,
   }: {
     label: string;
     value: string;
     selectedValue: string | null;
     onSelect: (value: string) => void;
+    onClear: () => void;
   }) => {
     const isSelected = selectedValue === value;
 
     return (
-      <div
-        className={`flex gap-4 justify-start items-center cursor-pointer ${
-          isSelected ? "text-secondary-text-500" : ""
-        }`}
-        onClick={() => onSelect(value)}
-      >
-        <Option
-          className={`w-5 h-5 ${isSelected ? "text-secondary-text-500" : ""}`}
-        />
-        <span className={`text-lg ${isSelected ? "font-bold" : ""}`}>
-          {label}
-        </span>
+      <div className="flex justify-between items-center">
+        <div
+          className={`flex gap-4 justify-start items-center cursor-pointer ${
+            isSelected ? "text-secondary-text-500" : ""
+          }`}
+          onClick={() => onSelect(value)}
+        >
+          <Option
+            className={`w-5 h-5 ${isSelected ? "text-secondary-text-500" : ""}`}
+          />
+          <span className={`text-lg ${isSelected ? "font-bold" : ""}`}>
+            {label}
+          </span>
+        </div>
+
+        {isSelected && (
+          <button
+            className="ml-auto text-secondary-text-500 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClear();
+            }}
+          >
+            <CircleX className="w-5 h-5 font-bold"/>
+          </button>
+        )}
       </div>
     );
   };
@@ -120,10 +140,13 @@ const Sidebar: React.FC<SidebarProps> = () => {
                 key={option.value}
                 label={option.label}
                 value={option.value}
-                selectedValue={selectedFilters[CATEGORY_MAPPER[category.label]]} // Use mapped key
+                selectedValue={selectedFilters[CATEGORY_MAPPER[category.label]]}
                 onSelect={
                   (value) =>
-                    handleSelectFilter(CATEGORY_MAPPER[category.label], value) // Use mapped key
+                    handleSelectFilter(CATEGORY_MAPPER[category.label], value)
+                }
+                onClear={() =>
+                  handleClearFilter(CATEGORY_MAPPER[category.label])
                 }
               />
             ))}
