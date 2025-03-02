@@ -77,7 +77,11 @@ export const eventsData = [
     eventType: "remote",
     venue: "Google Meet",
     imgSrc: "/gallery/2.jpg",
-    attendees: [],
+    attendees: [
+      { attendeeId: "user_1", isCheckedIn: false },
+      { attendeeId: "user_2", isCheckedIn: true },
+      { attendeeId: "org_3", isCheckedIn: false },
+    ],
   },
   {
     id: 3,
@@ -93,7 +97,11 @@ export const eventsData = [
     eventType: "remote",
     venue: "Google Meet",
     imgSrc: "/gallery/3.jpg",
-    attendees: [],
+    attendees: [
+      { attendeeId: "user_1", isCheckedIn: false },
+      { attendeeId: "user_2", isCheckedIn: true },
+      { attendeeId: "org_3", isCheckedIn: false },
+    ],
   },
   {
     id: 4,

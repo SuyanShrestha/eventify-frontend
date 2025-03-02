@@ -35,6 +35,7 @@ import {
   Users,
   UserRound,
   UserRoundCheck,
+  QrCode,
 } from "lucide-react";
 
 export {
@@ -69,6 +70,7 @@ export {
   Users,
   UserRound,
   UserRoundCheck,
+  QrCode,
   FaRegBookmark,
   FaBookmark,
 };
