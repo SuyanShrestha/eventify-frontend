@@ -10,7 +10,7 @@ import {
 import { Badge } from "../ui";
 import { useNavigate } from "react-router-dom";
 import { getEventDetailRoute } from "../../constants";
-import { formatDateTime, truncateText } from "../../helpers";
+import { checkExpired, formatDateTime, truncateText } from "../../helpers";
 import ShareModal from "./ShareModal";
 
 interface EventCardProps {
@@ -58,18 +58,6 @@ export const EventCard: FC<EventCardProps> = ({
 
   const toggleBookmark = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-  };
-
-  const checkExpired = (endDate: string, bookingDeadline?: string): boolean => {
-    const currentDate = new Date();
-    const parsedBookingDeadline = bookingDeadline
-      ? new Date(bookingDeadline)
-      : null;
-    const parsedEndDate = new Date(endDate);
-
-    return parsedBookingDeadline
-      ? currentDate > parsedBookingDeadline
-      : currentDate > parsedEndDate;
   };
 
   const isExpired = checkExpired(endDate, bookingDeadline);

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { checkExpired } from "../helpers";
 
 interface Event {
   id: number;
@@ -82,16 +83,7 @@ const filterByPrice = (event: Event, price: string): boolean => {
 
 const filterByStatus = (event: Event, expirationStatus: string): boolean => {
   if (!expirationStatus) return true;
-
-  const currentDate = new Date();
-  const bookingDeadline = event.bookingDeadline
-    ? new Date(event.bookingDeadline)
-    : null;
-  const endDate = new Date(event.endDate);
-
-  const isExpired = bookingDeadline
-    ? currentDate > bookingDeadline
-    : currentDate > endDate;
+  const isExpired = checkExpired(event.endDate, event.bookingDeadline);
 
   return expirationStatus === "expired" ? isExpired : !isExpired;
 };
@@ -118,8 +110,27 @@ const applyFilters = (
     );
   });
 
-  console.log("filtered: ", filtered);
   return filtered;
+};
+
+const sortEvents = (
+  events: Event[]
+): { upcomingEvents: Event[]; expiredEvents: Event[] } => {
+  const upcomingEvents = events
+    .filter((event) => !checkExpired(event.endDate, event.bookingDeadline))
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+    );
+
+  const expiredEvents = events
+    .filter((event) => checkExpired(event.endDate, event.bookingDeadline))
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+    );
+
+  return { upcomingEvents, expiredEvents };
 };
 
 const eventSlice = createSlice({
@@ -127,8 +138,11 @@ const eventSlice = createSlice({
   initialState,
   reducers: {
     setEvents: (state, action: PayloadAction<Event[]>) => {
-      state.events = action.payload;
-      state.filteredEvents = action.payload;
+      const allEvents = action.payload;
+      const { upcomingEvents, expiredEvents } = sortEvents(allEvents);
+
+      state.events = [...upcomingEvents, ...expiredEvents];
+      state.filteredEvents = [...upcomingEvents, ...expiredEvents];
     },
 
     setFilters: (state, action: PayloadAction<Partial<FilterState>>) => {
