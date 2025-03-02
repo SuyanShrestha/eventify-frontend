@@ -3,6 +3,7 @@ export const enum RoutingLinks {
   Events = "/events",
   CreateEvent = "/create",
   Dashboard = "/dashboard",
+  Bookings = "/bookings",
   Login = "/login",
   Signup = "/signup",
 }

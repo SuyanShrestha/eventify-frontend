@@ -4,7 +4,7 @@ import storage from "redux-persist/lib/storage";
 import authReducer from "./authSlice";
 import eventReducer from "./eventSlice";
 import usersReducer from "./usersSlice";
-
+import bookingsReducer from "./bookingSlice";
 
 const persistConfig = {
   key: "root",
@@ -17,6 +17,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   events: eventReducer,
   users: usersReducer,
+  bookings: bookingsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

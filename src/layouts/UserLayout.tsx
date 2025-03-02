@@ -3,7 +3,14 @@ import { Route, Routes } from "react-router-dom";
 
 // Pages or Components for Routes
 import Navbar from "../components/Navbar";
-import { CreateEvent, Dashboard, EventDetail, ExplorePage, HomePage } from "../pages";
+import {
+  BookingsPage,
+  CreateEvent,
+  Dashboard,
+  EventDetail,
+  ExplorePage,
+  HomePage,
+} from "../pages";
 
 const UserLayout: React.FC = () => {
   return (
@@ -17,6 +24,7 @@ const UserLayout: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/events" element={<ExplorePage />} />
           <Route path="/events/:eventId" element={<EventDetail />} />
+          <Route path="/bookings" element={<BookingsPage />} />
           <Route path="/create" element={<CreateEvent />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>

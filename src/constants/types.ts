@@ -10,10 +10,9 @@ export interface UsersState {
 }
 
 export interface Attendee {
-  attendeeId: string;  
-  isCheckedIn: boolean; 
+  attendeeId: string;
+  isCheckedIn: boolean;
 }
-
 
 export interface Event {
   id: number;
@@ -29,4 +28,11 @@ export interface Event {
   venue: string;
   imgSrc: string;
   attendees: Attendee[];
+}
+
+export interface Booking {
+  bookingId: string;
+  eventId: number;
+  userId: string;
+  bookingCreated: string;
 }

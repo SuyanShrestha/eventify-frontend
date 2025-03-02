@@ -11,10 +11,14 @@ import { EventCard } from "./EventCard";
 import { cn } from "../../lib/utils";
 
 interface EventsListProps {
-  isDashboard: boolean;
+  isDashboard?: boolean;
+  isBooking?: boolean;
 }
 
-const EventsList: React.FC<EventsListProps> = ({ isDashboard = false }) => {
+const EventsList: React.FC<EventsListProps> = ({
+  isDashboard = false,
+  isBooking = false,
+}) => {
   const [searchText, setSearchText] = useState<string>("");
   const debouncedSearchText = useDebounce<string>(searchText, 300);
   const location = useLocation();
@@ -22,9 +26,40 @@ const EventsList: React.FC<EventsListProps> = ({ isDashboard = false }) => {
   const dispatch = useDispatch();
   const { filteredEvents } = useSelector((state: RootState) => state.events);
   const { user: currentUser } = useSelector((state: RootState) => state.auth);
+  const { users } = useSelector((state: RootState) => state.users);
+  const { bookings } = useSelector((state: RootState) => state.bookings);
+
+  const mappedBookings = bookings.map(
+    ({ bookingId, eventId, userId, bookingCreated }) => {
+      const user = users.find((user) => user.id === userId);
+      const event = eventsData.find((event) => event.id === eventId);
+
+      return {
+        bookingId,
+        eventId: event?.id,
+        eventTitle: event?.title,
+        eventSubtitle: event?.subtitle,
+        eventImage: event?.imgSrc,
+        userId: user?.id,
+        userName: user?.username,
+        bookingCreated,
+      };
+    }
+  );
+
+  const currentUserBookings = mappedBookings.filter(
+    (item) => item.userId === currentUser?.id
+  );
 
   useEffect(() => {
-    if (isDashboard && currentUser) {
+    if (isBooking && currentUser) {
+      const bookedEvents = currentUserBookings
+        .map((booking) =>
+          eventsData.find((event) => event.id === booking.eventId)
+        )
+        .filter((event) => event !== undefined);
+      dispatch(setEvents(bookedEvents as Event[]));
+    } else if (isDashboard && currentUser) {
       const eventsFilteredByUser = eventsData.filter(
         (event: Event) => event.organizerId === currentUser.id
       );
@@ -32,7 +67,7 @@ const EventsList: React.FC<EventsListProps> = ({ isDashboard = false }) => {
     } else {
       dispatch(setEvents(eventsData));
     }
-  }, [dispatch, isDashboard, currentUser]);
+  }, [dispatch, isDashboard, isBooking, currentUser]);
 
   useEffect(() => {
     dispatch(setSearchTerm(debouncedSearchText));
@@ -48,14 +83,18 @@ const EventsList: React.FC<EventsListProps> = ({ isDashboard = false }) => {
     <div
       className={cn(
         " min-h-[calc(100vh-4rem)] flex flex-col bg-secondary-500",
-        !isDashboard && "ml-0 md:ml-[20rem] flex-grow "
+        !isDashboard && !isBooking && "ml-0 md:ml-[20rem] flex-grow "
       )}
     >
       {/* <div className="bg-secondary-500 shadow-md p-4 fixed top-16 left-[5rem] md:left-[20rem] right-0 z-10 "> */}
       <div
         className={cn(
           "bg-secondary-500 shadow-md p-4 fixed top-16 z-10",
-          !isDashboard ? "left-[5rem] md:left-[20rem] right-0 " : "left-1/2 transform -translate-x-1/2 max-w-7xl w-full"
+          isDashboard
+            ? "left-1/2 transform -translate-x-1/2 max-w-7xl w-full"
+            : isBooking
+            ? "left-1/2 transform -translate-x-1/2 max-w-7xl w-full"
+            : "left-[5rem] md:left-[20rem] right-0 "
         )}
       >
         <Search className="absolute left-8 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
@@ -70,7 +109,11 @@ const EventsList: React.FC<EventsListProps> = ({ isDashboard = false }) => {
 
       <div className=" mt-[5rem] pt-4 max-w-7xl mx-auto flex justify-center w-full">
         <h3 className="text-2xl mb-6 font-semibold text-secondary-text-500">
-          {isDashboard ? "- My Events -" : "- Events -"}
+          {isBooking
+            ? "- My Bookings -"
+            : isDashboard
+            ? "- My Events -"
+            : "- Events -"}
         </h3>
       </div>
       <div className="p-4 h-full max-w-7xl mx-auto overflow-auto flex-grow justify-start ">

@@ -9,6 +9,8 @@ import { ToastContainer } from "react-toastify";
 import { useFetchUsers } from "./hooks";
 import { useDispatch } from "react-redux";
 import { login } from "./store/authSlice";
+import { setBookings } from "./store/bookingSlice";
+import { bookingsData } from "./constants/data";
 
 const App: React.FC = () => {
   const [isAuthRoute, setIsAuthRoute] = useState(false);
@@ -18,12 +20,14 @@ const App: React.FC = () => {
 
   // only for dummy data
   useFetchUsers();
+
   useEffect(() => {
     const testUser = {
       username: "Event Master",
       password: "securePass123",
     };
     dispatch(login(testUser));
+    dispatch(setBookings(bookingsData));
   }, [dispatch]);
 
   return (

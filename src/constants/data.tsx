@@ -14,7 +14,7 @@ export const Gallery = {
 export const eventsData = [
   {
     id: 1,
-    organizerId: "org_1",
+    organizerId: "org_2",
     title: "Tech Conference 2025",
     subtitle: "Innovations in AI and Blockchain",
     startDate: "March 15 2025 10:00:00 GMT+0545 (Nepal Time)",
@@ -203,5 +203,50 @@ export const usersData = [
     username: "Tech Conference Host",
     password: "techInnovate2025",
     role: "organizer",
+  },
+];
+
+export const bookingsData = [
+  {
+    bookingId: "b1",
+    eventId: 1,
+    userId: "org_1",
+    bookingCreated: "February 25 2025 10:30:00 GMT+0545 (Nepal Time)",
+  },
+  {
+    bookingId: "b2",
+    eventId: 3,
+    userId: "org_1",
+    bookingCreated: "March 26 2025 12:15:00 GMT+0545 (Nepal Time)",
+  },
+  {
+    bookingId: "b3",
+    eventId: 5,
+    userId: "org_1",
+    bookingCreated: "January 27 2025 14:45:00 GMT+0545 (Nepal Time)",
+  },
+  {
+    bookingId: "b4",
+    eventId: 4,
+    userId: "org_1",
+    bookingCreated: "June 02 2025 16:20:00 GMT+0545 (Nepal Time)",
+  },
+  {
+    bookingId: "b5",
+    eventId: 2,
+    userId: "user_1",
+    bookingCreated: "March 29 2025 18:00:00 GMT+0545 (Nepal Time)",
+  },
+  {
+    bookingId: "b6",
+    eventId: 4,
+    userId: "user_2",
+    bookingCreated: "June 01 2025 09:30:00 GMT+0545 (Nepal Time)",
+  },
+  {
+    bookingId: "b7",
+    eventId: 6,
+    userId: "org_2",
+    bookingCreated: "June 02 2024 11:10:00 GMT+0545 (Nepal Time)",
   },
 ];

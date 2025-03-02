@@ -41,6 +41,17 @@ const Navbar: React.FC = () => {
               </Link>
 
               <Link
+                to={RoutingLinks.Bookings}
+                className={`px-3 py-2 text-lg transition-colors duration-300 ${
+                  location.pathname === RoutingLinks.Bookings
+                    ? "text-accent-500"
+                    : "text-primary-text-500 hover:text-secondary-text-500"
+                }`}
+              >
+                Bookings
+              </Link>
+
+              <Link
                 to={RoutingLinks.CreateEvent}
                 className={`px-3 py-2 text-lg transition-colors duration-300 ${
                   location.pathname === RoutingLinks.CreateEvent
