@@ -28,7 +28,8 @@ import {
   Option,
   Ticket,
   Scan,
-  Timer
+  Timer,
+  Search,
 } from "lucide-react";
 
 export {
@@ -57,6 +58,7 @@ export {
   Ticket,
   Scan,
   Timer,
+  Search,
   FaRegBookmark,
   FaBookmark,
 };

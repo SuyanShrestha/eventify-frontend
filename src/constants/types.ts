@@ -8,3 +8,18 @@ export interface User {
 export interface UsersState {
   users: User[];
 }
+
+export interface Event {
+  id: number;
+  title: string;
+  subtitle: string;
+  organizerId: string;
+  startDate: string;
+  endDate: string;
+  bookingDeadline?: string;
+  details: string;
+  ticketPrice: number;
+  eventType: string;
+  venue: string;
+  imgSrc: string;
+}

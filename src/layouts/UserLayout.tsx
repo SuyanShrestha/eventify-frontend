@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 
 // Pages or Components for Routes
 import Navbar from "../components/Navbar";
-import { CreateEvent, EventDetail, ExplorePage, HomePage } from "../pages";
+import { CreateEvent, Dashboard, EventDetail, ExplorePage, HomePage } from "../pages";
 
 const UserLayout: React.FC = () => {
   return (
@@ -18,6 +18,7 @@ const UserLayout: React.FC = () => {
           <Route path="/events" element={<ExplorePage />} />
           <Route path="/events/:eventId" element={<EventDetail />} />
           <Route path="/create" element={<CreateEvent />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </main>
     </div>

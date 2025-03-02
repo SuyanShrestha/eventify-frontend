@@ -1,21 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { checkExpired } from "../helpers";
-
-interface Event {
-  id: number;
-  title: string;
-  subtitle: string;
-  organizerId: string;
-  startDate: string;
-  endDate: string;
-  bookingDeadline?: string;
-  details: string;
-  ticketPrice: number;
-  eventType: string;
-  venue: string;
-  imgSrc: string;
-}
-
+import { Event } from "../constants";
 interface FilterState {
   date: string; // 'today', 'tomorrow', 'this-week', 'this-month'
   type: string; // 'online', 'physical'

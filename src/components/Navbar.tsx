@@ -50,6 +50,17 @@ const Navbar: React.FC = () => {
               >
                 Create
               </Link>
+
+              <Link
+                to={RoutingLinks.Dashboard}
+                className={`px-3 py-2 text-lg transition-colors duration-300 ${
+                  location.pathname === RoutingLinks.Dashboard
+                    ? "text-accent-500"
+                    : "text-primary-text-500 hover:text-secondary-text-500"
+                }`}
+              >
+                Dashboard
+              </Link>
             </div>
           </div>
           <div className="hidden md:block">
