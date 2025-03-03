@@ -21,8 +21,13 @@ const QrCodeModal: React.FC<QrCodeModalProps> = ({
 }) => {
   const isSmallScreen = useMediaQuery({ maxWidth: 767 }); // for <md screens
   const { user: currentUser } = useSelector((state: RootState) => state.auth);
+  const { bookings } = useSelector((state: RootState) => state.bookings);
 
-  const qrCodeData = `booking_id:${selectedBookingId}|event_id:${eventItem.id}|user_id:${currentUser?.id}`;
+  const bookingTimestamp =
+    bookings.find((booking) => booking.bookingId === selectedBookingId)
+      ?.bookingCreated || "N/A";
+
+  const qrCodeData = `booking_id:${selectedBookingId}|event_id:${eventItem.id}|user_id:${currentUser?.id}|bookingTimestamp:${bookingTimestamp}`;
 
   return isSmallScreen ? (
     // bottom sheet for small screens
