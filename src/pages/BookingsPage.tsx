@@ -1,5 +1,5 @@
 import React from "react";
-import EventsList from "../components/events/EventsList";
+import { EventsList } from "../components/events";
 
 const BookingsPage: React.FC = () => {
   return (

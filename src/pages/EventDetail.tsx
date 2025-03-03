@@ -22,10 +22,9 @@ import { formatDateTime } from "../helpers";
 import { Button } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import ShareModal from "../components/events/ShareModal";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import QrCodeModal from "../components/events/QrCodeModal";
+import { QrCodeModal, ShareModal } from "../components/events";
 
 const EventDetail: React.FC = () => {
   const { eventId } = useParams();

@@ -1,6 +1,5 @@
 import React from "react";
-import { Sidebar } from "../components/events";
-import EventsList from "../components/events/EventsList";
+import { EventsList, Sidebar } from "../components/events";
 
 const ExplorePage: React.FC = () => {
   return (
