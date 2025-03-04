@@ -24,12 +24,14 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { QrCodeModal, ShareModal } from "../components/events";
+import { QrCodeModal, QrScanModal, ShareModal } from "../components/events";
 
 const EventDetail: React.FC = () => {
   const { eventId } = useParams();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [isQrScanOpen, setIsQrScanOpen] = useState(false);
+
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
     null
   );
@@ -85,13 +87,18 @@ const EventDetail: React.FC = () => {
     setIsShareModalOpen(true);
   };
 
-  const openQrModal = (
+  const openQrReadModal = (
     e: React.MouseEvent<HTMLButtonElement>,
     bookingId: string
   ) => {
     e.stopPropagation();
     setSelectedBookingId(bookingId);
     setIsQrModalOpen(true);
+  };
+
+  const openQrScanModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsQrScanOpen(true);
   };
 
   const toggleBookmark = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -287,7 +294,10 @@ const EventDetail: React.FC = () => {
                           ? `Attendees [${eventItem.attendees.length}]`
                           : "No attendees yet"}
                       </h3>
-                      <button className="cursor-pointer">
+                      <button
+                        className="cursor-pointer"
+                        onClick={openQrScanModal}
+                      >
                         <ScanQrCode className="h-8 w-8" />
                       </button>
                     </div>
@@ -329,7 +339,9 @@ const EventDetail: React.FC = () => {
                       <li key={booking.bookingId} className="booking-item">
                         <div className="flex gap-4 items-center">
                           <button
-                            onClick={(e) => openQrModal(e, booking.bookingId)}
+                            onClick={(e) =>
+                              openQrReadModal(e, booking.bookingId)
+                            }
                           >
                             <QrCode className="h-8 w-8 cursor-pointer text-secondary-text-500" />
                           </button>
@@ -348,6 +360,11 @@ const EventDetail: React.FC = () => {
                   />
                 </div>
               )}
+
+              <QrScanModal
+                isOpen={isQrScanOpen}
+                onClose={() => setIsQrScanOpen(false)}
+              />
             </div>
           </div>
         </div>
