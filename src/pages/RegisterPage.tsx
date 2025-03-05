@@ -4,14 +4,24 @@ import { RegisterLottie } from "../assets/lottie";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
 import { RoutingLinks } from "../constants";
-import { Eye, EyeClosed, Lock, Mail, UserRound } from "../assets/icons";
+import {
+  Eye,
+  EyeClosed,
+  Lock,
+  Mail,
+  TriangleAlert,
+  UserRound,
+} from "../assets/icons";
 
 const RegisterPage: React.FC = () => {
+  const [username, setUsername] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [userType, setUserType] = useState<"user" | "organizer">("user");
 
   const isSmallScreen = useMediaQuery({ maxWidth: 1024 });
   const lottieHeight = isSmallScreen ? 450 : 600;
@@ -22,7 +32,7 @@ const RegisterPage: React.FC = () => {
       setPasswordsMatch(false);
       return;
     }
-    console.log("Signup submitted", { email, password });
+    console.log("Signup submitted", { username, email, password });
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,8 +74,8 @@ const RegisterPage: React.FC = () => {
                   required
                   className="appearance-none relative block w-full pl-12 pr-4 py-2 border-b-2 border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-accent-500 focus:ring-0 text-sm md:text-base transition duration-200"
                   placeholder="Username"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
 
@@ -145,11 +155,37 @@ const RegisterPage: React.FC = () => {
                     <EyeClosed className="h-5 w-5" />
                   )}
                 </button>
-                {!passwordsMatch && (
-                  <p className="text-red-500 text-xs mt-1">
-                    Passwords do not match
-                  </p>
-                )}
+              </div>
+              {!passwordsMatch && (
+                <p className="text-red-500 text-xs mt-1 flex gap-1">
+                  <TriangleAlert className="h-4 w-4" /> Passwords do not match
+                </p>
+              )}
+
+              {/* User Type Selection */}
+              <div className="flex w-full">
+                <button
+                  type="button"
+                  className={`w-1/2 px-4 py-2 text-sm font-medium rounded-l-md border  transition-all duration-300 ${
+                    userType === "user"
+                      ? "bg-secondary-text-400 text-white border-accent-500"
+                      : "bg-gray-100 text-gray-700 border-gray-300"
+                  }`}
+                  onClick={() => setUserType("user")}
+                >
+                  User
+                </button>
+                <button
+                  type="button"
+                  className={`w-1/2 px-4 py-2 text-sm font-medium rounded-r-md border  transition-all duration-300 ${
+                    userType === "organizer"
+                      ? "bg-secondary-text-400 text-white border-accent-500"
+                      : "bg-gray-100 text-gray-700 border-gray-300"
+                  }`}
+                  onClick={() => setUserType("organizer")}
+                >
+                  Organizer
+                </button>
               </div>
             </div>
 
