@@ -288,7 +288,7 @@ const EventDetail: React.FC = () => {
               ) : (
                 <div>
                   <div className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="flex justify-between items-center text-secondary-text-500 mb-4">
+                    <div className="flex justify-between items-center gap-2 text-secondary-text-500 mb-4">
                       <h3 className="text-xl font-semibold">
                         {eventItem.attendees.length > 0
                           ? `Attendees [${eventItem.attendees.length}]`

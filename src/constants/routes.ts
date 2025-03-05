@@ -5,7 +5,7 @@ export const enum RoutingLinks {
   Dashboard = "/dashboard",
   Bookings = "/bookings",
   Login = "/login",
-  Signup = "/signup",
+  Register = "/register",
 }
 
 export const getEventDetailRoute = (eventId: string | number) =>

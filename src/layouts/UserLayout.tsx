@@ -10,7 +10,10 @@ import {
   EventDetail,
   ExplorePage,
   HomePage,
+  LoginPage,
+  RegisterPage,
 } from "../pages";
+
 
 const UserLayout: React.FC = () => {
   return (
@@ -27,6 +30,8 @@ const UserLayout: React.FC = () => {
           <Route path="/bookings" element={<BookingsPage />} />
           <Route path="/create" element={<CreateEvent />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </main>
     </div>

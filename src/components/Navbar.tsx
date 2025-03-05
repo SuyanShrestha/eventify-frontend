@@ -83,10 +83,10 @@ const Navbar: React.FC = () => {
                 Login
               </Link>
               <Link
-                to={RoutingLinks.Signup}
+                to={RoutingLinks.Register}
                 className="bg-[var(--color-accent-500)] text-white hover:bg-[var(--color-accent-300)] px-4 py-2 rounded-md text-lg font-medium transition-colors duration-300"
               >
-                Sign Up
+                Register
               </Link>
             </div>
           </div>

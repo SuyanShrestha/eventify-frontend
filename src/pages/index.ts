@@ -4,6 +4,8 @@ import Dashboard from "./Dashboard";
 import EventDetail from "./EventDetail";
 import ExplorePage from "./ExplorePage";
 import HomePage from "./HomePage";
+import LoginPage from "./LoginPage";
+import RegisterPage from "./RegisterPage";
 
 export {
   CreateEvent,
@@ -12,4 +14,6 @@ export {
   HomePage,
   Dashboard,
   BookingsPage,
+  LoginPage,
+  RegisterPage,
 };

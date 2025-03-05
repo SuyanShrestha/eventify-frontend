@@ -15,6 +15,9 @@ const QrScanModal: React.FC<QrScanModalProps> = ({ isOpen, onClose }) => {
   //   const { user: currentUser } = useSelector((state: RootState) => state.auth);
   //   const { bookings } = useSelector((state: RootState) => state.bookings);
 
+  const isSmallest = useMediaQuery({ maxWidth: 475 });
+  const isSmaller = useMediaQuery({ minWidth: 476, maxWidth: 767 });
+
   return isSmallScreen ? (
     // bottom sheet for small screens
     <div className={`fixed inset-0 z-20 ${isOpen ? "visible" : "hidden"}`}>
@@ -24,7 +27,7 @@ const QrScanModal: React.FC<QrScanModalProps> = ({ isOpen, onClose }) => {
       <Sheet
         isOpen={isOpen}
         onClose={onClose}
-        snapPoints={[0.4, 0]}
+        snapPoints={isSmallest ? [0.6, 0] : isSmaller ? [-100, 0] : [0]}
         initialSnap={0}
       >
         <Sheet.Container>
@@ -35,7 +38,11 @@ const QrScanModal: React.FC<QrScanModalProps> = ({ isOpen, onClose }) => {
                 Ticket QR code
               </h2>
               <hr className="border-t border-gray-300 " />
-              <Scanner onScan={(result) => console.log(result)} paused={!isOpen} />
+              <Scanner
+                onScan={(result) => console.log(result)}
+                paused={!isOpen}
+                classNames={{ video: "w-5 h-5" }}
+              />
             </div>
           </Sheet.Content>
         </Sheet.Container>
@@ -61,7 +68,7 @@ const QrScanModal: React.FC<QrScanModalProps> = ({ isOpen, onClose }) => {
             Ticket QR code
           </h2>
           <hr className="border-t border-gray-300 " />
-          <Scanner onScan={(result) => console.log(result)}  paused={!isOpen} />
+          <Scanner onScan={(result) => console.log(result)} paused={!isOpen} />
         </div>
         <CircleX
           className="w-8 h-8 absolute right-2 top-2 text-accent-500 cursor-pointer"
