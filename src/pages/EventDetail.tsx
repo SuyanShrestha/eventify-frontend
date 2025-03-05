@@ -18,7 +18,7 @@ import {
   UserRound,
   UserRoundCheck,
 } from "../assets/icons";
-import { formatDateTime } from "../helpers";
+import { formatDateTime, roundToTwo } from "../helpers";
 import { Button } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -31,6 +31,7 @@ const EventDetail: React.FC = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [isQrScanOpen, setIsQrScanOpen] = useState(false);
+  const [ticketCount, setTicketCount] = useState(1);
 
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
     null
@@ -112,6 +113,10 @@ const EventDetail: React.FC = () => {
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
   };
+
+  const handleIncrease = () => setTicketCount((prev) => prev + 1);
+  const handleDecrease = () =>
+    setTicketCount((prev) => (prev > 1 ? prev - 1 : 1));
 
   return (
     <div
@@ -255,14 +260,54 @@ const EventDetail: React.FC = () => {
                     <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
                       Ticket Information
                     </h3>
-                    {eventItem.ticketPrice === 0 ? (
-                      <p className="text-2xl font-bold text-accent-text-500 mb-4">
-                        FREE
-                      </p>
-                    ) : (
-                      <p className="text-2xl font-bold text-accent-text-500 mb-4">
-                        Rs {eventItem.ticketPrice.toFixed(2)}
-                      </p>
+                    <div className="flex items-center justify-between">
+                      {eventItem.ticketPrice === 0 ? (
+                        <p className="text-2xl font-bold text-accent-text-500 mb-4">
+                          FREE
+                        </p>
+                      ) : (
+                        <p className="text-2xl font-bold text-accent-text-500 mb-4">
+                          Rs {eventItem.ticketPrice.toFixed(2)}
+                        </p>
+                      )}
+                      {/* Ticket Counter */}
+                      {eventItem.ticketPrice !== 0 && (
+                        <div className="flex items-center gap-4 mb-5">
+                          <button
+                            onClick={handleDecrease}
+                            className="bg-secondary-500 cursor-pointer text-gray-700 text-center w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 transition"
+                          >
+                            −
+                          </button>
+                          <span className="text-lg font-semibold">
+                            {ticketCount}
+                          </span>
+                          <button
+                            onClick={handleIncrease}
+                            className="bg-secondary-500 cursor-pointer text-gray-700 text-center w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 transition"
+                          >
+                            +
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {eventItem.ticketPrice !== 0 && (
+                      <div className="flex flex-col gap-4 mb-4 justify-center">
+                        <span className="w-full flex gap-2 items-center justify-between text-gray-700">
+                          Total Tickets:
+                          <span className="bg-secondary-500 cursor-pointer text-gray-700 text-center w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 transition">
+                            {ticketCount}
+                          </span>
+                        </span>
+
+                        <span className="w-full flex gap-2 items-center justify-between text-gray-700">
+                          Total Price:
+                          <span>
+                            {roundToTwo(ticketCount * eventItem.ticketPrice)}
+                          </span>
+                        </span>
+                      </div>
                     )}
                     <Button
                       bgColor="bg-accent-500"
