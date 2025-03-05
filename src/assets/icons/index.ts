@@ -37,6 +37,10 @@ import {
   UserRoundCheck,
   QrCode,
   ScanQrCode,
+  Mail,
+  Lock,
+  Eye,
+  EyeClosed,
 } from "lucide-react";
 
 export {
@@ -73,6 +77,10 @@ export {
   UserRoundCheck,
   QrCode,
   ScanQrCode,
+  Mail,
+  Lock,
+  Eye,
+  EyeClosed,
   FaRegBookmark,
   FaBookmark,
 };
