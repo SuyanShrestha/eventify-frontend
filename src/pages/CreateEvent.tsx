@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Calendar, FileClock, MapPin, Tag } from "../assets/icons";
 import { useToast } from "../hooks";
 import { validateEventForm } from "../helpers";
+import { ImageDragDrop } from "../components/ui";
 // import MarkdownEditor from "../components/MarkdownEditor";
 // import Delta from "quill-delta";
 
@@ -17,9 +18,15 @@ const CreateEvent: React.FC = () => {
     venue: "",
     ticketPrice: 0,
     details: "",
+    imgSrc: null,
   });
 
-  useEffect(() => console.log("event details: ", event.details), [event]);
+  useEffect(() => {
+    console.log("Event details: ", event.details);
+    if (event.imgSrc) {
+      console.log("Image Source: ", event.imgSrc);
+    }
+  }, [event]);
 
   const { showToast } = useToast();
 
@@ -28,6 +35,10 @@ const CreateEvent: React.FC = () => {
       const { name, value } = e.target;
       setEvent((prev) => ({ ...prev, [name]: value }));
     }
+  };
+
+  const handleImageChange = (newDataUrl: string) => {
+    setEvent((prev) => ({ ...prev, imgSrc: newDataUrl }));
   };
 
   // const handleQuillChange = (content: string, delta: Delta, source: string) => {
@@ -229,33 +240,6 @@ const CreateEvent: React.FC = () => {
                 </div>
               </div>
 
-              {/* Event Type */}
-              <div>
-                <label
-                  htmlFor="eventType"
-                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
-                >
-                  Event Type
-                </label>
-                <div className="relative">
-                  <Tag
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
-                    size={18}
-                  />
-                  <select
-                    id="eventType"
-                    name="eventType"
-                    value={event.eventType}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 appearance-none"
-                    required
-                  >
-                    <option value="physical">Physical</option>
-                    <option value="remote">Remote</option>
-                  </select>
-                </div>
-              </div>
-
               {/* Venue */}
               <div>
                 <label
@@ -281,31 +265,74 @@ const CreateEvent: React.FC = () => {
                 </div>
               </div>
 
-              {/* Ticket Price */}
-              <div>
-                <label
-                  htmlFor="ticketPrice"
-                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
-                >
-                  Ticket Price
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400">
-                    Rs
-                  </span>
-                  <input
-                    type="text"
-                    id="ticketPrice"
-                    name="ticketPrice"
-                    value={event.ticketPrice}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
-                    placeholder="0 for free event"
-                    required
-                  />
+              <div className="space-y-6">
+                {/* Ticket Price */}
+                <div>
+                  <label
+                    htmlFor="ticketPrice"
+                    className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
+                  >
+                    Ticket Price
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400">
+                      Rs
+                    </span>
+                    <input
+                      type="text"
+                      id="ticketPrice"
+                      name="ticketPrice"
+                      value={event.ticketPrice}
+                      onChange={handleInputChange}
+                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
+                      placeholder="0 for free event"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                {/* Event Type */}
+                <div>
+                  <label
+                    htmlFor="eventType"
+                    className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
+                  >
+                    Event Type
+                  </label>
+                  <div className="relative">
+                    <Tag
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
+                      size={18}
+                    />
+                    <select
+                      id="eventType"
+                      name="eventType"
+                      value={event.eventType}
+                      onChange={handleInputChange}
+                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 appearance-none"
+                      required
+                    >
+                      <option value="physical">Physical</option>
+                      <option value="remote">Remote</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
+              <div>
+                <label
+                  htmlFor="eventImage"
+                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
+                >
+                  Event Image
+                </label>
+                <div className="bg-gray-100 w-full h-60 flex justify-center items-center rounded-md">
+                  <ImageDragDrop
+                    dataUrl={event.imgSrc}
+                    onChange={handleImageChange}
+                  />
+                </div>
+              </div>
               {/* <MarkdownEditor
                 value={event.details}
                 onChange={handleQuillChange}
