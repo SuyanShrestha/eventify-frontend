@@ -12,7 +12,7 @@ import {
 } from "../../assets/icons";
 import { Badge } from "../ui";
 import { useNavigate } from "react-router-dom";
-import { Attendee, getEventDetailRoute } from "../../constants";
+import { Attendee, getEditEventRoute, getEventDetailRoute } from "../../constants";
 import { checkExpired, formatDateTime, truncateText } from "../../helpers";
 import ShareModal from "./ShareModal";
 import { useSelector } from "react-redux";
@@ -74,6 +74,7 @@ export const EventCard: FC<EventCardProps> = ({
 
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    navigate(getEditEventRoute(eventId))
   };
 
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {

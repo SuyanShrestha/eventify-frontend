@@ -122,6 +122,13 @@ const eventSlice = createSlice({
   name: "events",
   initialState,
   reducers: {
+    setUnfilteredEvents: (state, action: PayloadAction<Event[]>) => {
+      const allEvents = action.payload;
+      const { upcomingEvents, expiredEvents } = sortEvents(allEvents);
+
+      state.events = [...upcomingEvents, ...expiredEvents];
+    },
+
     setEvents: (state, action: PayloadAction<Event[]>) => {
       const allEvents = action.payload;
       const { upcomingEvents, expiredEvents } = sortEvents(allEvents);

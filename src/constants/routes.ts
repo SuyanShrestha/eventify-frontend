@@ -10,3 +10,6 @@ export const enum RoutingLinks {
 
 export const getEventDetailRoute = (eventId: string | number) =>
   `/events/${eventId}`;
+
+export const getEditEventRoute = (eventId: string | number) =>
+  `/edit/${eventId}`;
