@@ -1,6 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Calendar, MapPin, Tag } from "../../assets/icons";
+import { Calendar, LayoutList, MapPin, Tag, Ticket } from "../../assets/icons";
 import { useToast } from "../../hooks";
 import { validateEventForm } from "../../helpers";
 import { ImageDragDrop } from "../../components/ui";
@@ -16,8 +16,10 @@ interface EventState {
   endDate: string;
   bookingDeadline: string;
   eventType: string;
+  eventCategory: string;
   venue: string;
   ticketPrice: number;
+  availableTickets: number | null;
   details: string;
   imgSrc: string | null;
 }
@@ -27,7 +29,6 @@ interface EventFormProps {
 }
 
 const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
-
   const [event, setEvent] = useState<EventState>({
     title: "",
     subtitle: "",
@@ -35,12 +36,15 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
     endDate: "",
     bookingDeadline: "",
     eventType: "physical",
+    eventCategory: "educational",
     venue: "",
     ticketPrice: 0,
+    availableTickets: null,
     details: "",
     imgSrc: null,
   });
 
+  const [isFree, setIsFree] = useState(false);
 
   useEffect(() => {
     console.log("Event details: ", event.details);
@@ -60,6 +64,15 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
 
   const handleImageChange = (newDataUrl: string) => {
     setEvent((prev) => ({ ...prev, imgSrc: newDataUrl }));
+  };
+
+  const toggleFreeEvent = () => {
+    setIsFree((prev) => !prev);
+    setEvent((prev) => ({
+      ...prev,
+      ticketPrice: isFree ? 0 : prev.ticketPrice,
+      availableTickets: isFree ? null : prev.availableTickets,
+    }));
   };
 
   // const handleQuillChange = (content: string, delta: Delta, source: string) => {
@@ -86,8 +99,10 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
       endDate: "",
       bookingDeadline: "",
       eventType: "physical",
+      eventCategory: "educational",
       venue: "",
       ticketPrice: 0,
+      availableTickets: null,
       details: "",
       imgSrc: null,
     });
@@ -266,60 +281,161 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
               </div>
             </div>
 
-            <div className="space-y-6">
-              {/* Ticket Price */}
-              <div>
-                <label
-                  htmlFor="ticketPrice"
-                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
+            {/* Event Type */}
+            <div>
+              <label
+                htmlFor="eventType"
+                className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
+              >
+                Event Type
+              </label>
+              <div className="relative">
+                <Tag
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
+                  size={18}
+                />
+                <select
+                  id="eventType"
+                  name="eventType"
+                  value={event.eventType}
+                  onChange={handleInputChange}
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 appearance-none cursor-pointer"
+                  required
                 >
-                  Ticket Price
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400">
-                    Rs
-                  </span>
-                  <input
-                    type="text"
-                    id="ticketPrice"
-                    name="ticketPrice"
-                    value={event.ticketPrice}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
-                    placeholder="0 for free event"
-                    required
-                  />
-                </div>
+                  <option value="physical">Physical</option>
+                  <option value="remote">Remote</option>
+                </select>
               </div>
+            </div>
 
-              {/* Event Type */}
-              <div>
-                <label
-                  htmlFor="eventType"
-                  className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
+            {/* Event Category */}
+            <div>
+              <label
+                htmlFor="eventCategory"
+                className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1"
+              >
+                Event Category
+              </label>
+              <div className="relative">
+                <LayoutList
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
+                  size={18}
+                />
+                <select
+                  id="eventCategory"
+                  name="eventCategory"
+                  value={event.eventCategory}
+                  onChange={handleInputChange}
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 appearance-none cursor-pointer"
+                  required
                 >
-                  Event Type
-                </label>
-                <div className="relative">
-                  <Tag
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
-                    size={18}
-                  />
-                  <select
-                    id="eventType"
-                    name="eventType"
-                    value={event.eventType}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 appearance-none"
-                    required
+                  <option value="educational">Educational</option>
+                  <option value="entertainment">Entertainment</option>
+                  <option value="career">Career</option>
+                  <option value="others">Others</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Ticket Details */}
+            <div className="space-y-6 flex flex-col">
+              <span className="block text-md sm:text-lg font-medium text-primary-text-400 mb-1">
+                Ticket Details
+              </span>
+
+              <div className="space-y-6 bg-gray-50 border-gray-300 border-2 flex-grow p-4 rounded-md ">
+                {/* isFree */}
+                <div className="flex items-center gap-3">
+                  <label htmlFor="isFree" className="relative cursor-pointer">
+                    <input
+                      type="checkbox"
+                      id="isFree"
+                      name="isFree"
+                      checked={isFree}
+                      onChange={toggleFreeEvent}
+                      className="sr-only peer"
+                    />
+                    <div className="w-10 h-5 bg-gray-300 rounded-full peer-checked:bg-accent-400 relative">
+                      <div
+                        className={`absolute left-1 top-1 w-3 h-3 bg-white rounded-full transition-transform ${
+                          isFree ? "translate-x-5" : ""
+                        }`}
+                      ></div>
+                    </div>
+                  </label>
+                  <span className="text-sm sm:text-md font-medium text-primary-text-400">
+                    Free Event
+                  </span>
+                </div>
+
+                {/* Ticket Price */}
+                <div>
+                  <label
+                    htmlFor="ticketPrice"
+                    className="block text-sm sm:text-md font-medium text-primary-text-400 mb-1"
                   >
-                    <option value="physical">Physical</option>
-                    <option value="remote">Remote</option>
-                  </select>
+                    Ticket Price
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400">
+                      Rs
+                    </span>
+                    <input
+                      type="number"
+                      id="ticketPrice"
+                      name="ticketPrice"
+                      value={isFree ? 0 : event.ticketPrice}
+                      min={1}
+                      onChange={handleInputChange}
+                      className={`w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 ${
+                        isFree ? "cursor-not-allowed" : ""
+                      }`}
+                      placeholder="Enter ticket price"
+                      required
+                      disabled={isFree}
+                    />
+                  </div>
+                </div>
+
+                {/* Available Tickets */}
+                <div>
+                  <label
+                    htmlFor="availableTickets"
+                    className="block text-sm sm:text-md font-medium text-primary-text-400 mb-1"
+                  >
+                    Number of available tickets
+                  </label>
+                  <div className="relative">
+                    <Ticket
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
+                      size={18}
+                    />
+                    <input
+                      type="number"
+                      id="availableTickets"
+                      name="availableTickets"
+                      value={
+                        event.ticketPrice === 0 || isFree
+                          ? ""
+                          : event.availableTickets
+                      }
+                      min={1}
+                      onChange={handleInputChange}
+                      className={`w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 ${
+                        event.ticketPrice === 0 || isFree
+                          ? "cursor-not-allowed"
+                          : ""
+                      }`}
+                      placeholder="Enter number of tickets"
+                      required
+                      disabled={event.ticketPrice === 0 || isFree}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* image dropdown */}
             <div>
               <label
                 htmlFor="eventImage"
@@ -352,7 +468,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                 value={event.details}
                 onChange={handleInputChange}
                 className={`w-full px-3 py-3 border border-gray-300
-              rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 min-h-[150px]`}
+              rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 min-h-60`}
               />
             </div>
           </div>

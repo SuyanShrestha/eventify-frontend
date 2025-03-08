@@ -260,7 +260,7 @@ const EventDetail: React.FC = () => {
                     <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
                       Ticket Information
                     </h3>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-4">
                       {eventItem.ticketPrice === 0 ? (
                         <p className="text-2xl font-bold text-accent-text-500 mb-4">
                           FREE

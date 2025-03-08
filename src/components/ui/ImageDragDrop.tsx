@@ -78,7 +78,10 @@ const ImageDragDrop: React.FC<ImageDragDropProps> = ({ dataUrl, onChange }) => {
           </div>
         )
       ) : (
-        <p className="text-gray-500">Drop your files here or click to browse</p>
+        <div className="flex flex-col gap-2 justify-center items-center">
+          <p className="text-gray-600 font-semibold">Drag and drop an image here</p>
+          <p className="text-gray-500">or click to browse</p>
+        </div>
       )}
     </div>
   );

@@ -24,6 +24,7 @@ export interface Event {
   bookingDeadline?: string;
   details: string;
   ticketPrice: number;
+  availableTickets?: number | null;
   eventType: string;
   venue: string;
   imgSrc: string | null;
