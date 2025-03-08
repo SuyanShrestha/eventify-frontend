@@ -60,9 +60,30 @@ export const eventsData = [
     venue: "Kathmandu Convention Hall",
     imgSrc: "/gallery/1.jpg",
     attendees: [
-      { attendeeId: "user_1", isCheckedIn: false },
+      { attendeeId: "user_1", isCheckedIn: true },
       { attendeeId: "user_2", isCheckedIn: true },
       { attendeeId: "org_3", isCheckedIn: false },
+    ],
+    feedbacks: [
+      {
+        feedbackId: "f1",
+        userId: "user_1",
+        username: "Lionel Mausi",
+        feedbackContent: "Great event! Learned a lot about scaling startups.",
+      },
+      {
+        feedbackId: "f2",
+        userId: "user_1",
+        username: "Lionel Mausi",
+        feedbackContent:
+          "Also made some valuable connections with other entrepreneurs.",
+      },
+      {
+        feedbackId: "f3",
+        userId: "org_3",
+        username: "Tech Conference Host",
+        feedbackContent: "Looking forward to next summit!",
+      },
     ],
   },
   {
@@ -84,6 +105,27 @@ export const eventsData = [
       { attendeeId: "user_1", isCheckedIn: false },
       { attendeeId: "user_2", isCheckedIn: true },
       { attendeeId: "org_3", isCheckedIn: false },
+    ],
+    feedbacks: [
+      {
+        feedbackId: "f1",
+        userId: "user_2",
+        username: "Lionel Mausi",
+        feedbackContent: "Great event! Learned a lot about scaling startups.",
+      },
+      {
+        feedbackId: "f2",
+        userId: "user_2",
+        username: "Lionel Mausi",
+        feedbackContent:
+          "Also made some valuable connections with other entrepreneurs.",
+      },
+      {
+        feedbackId: "f3",
+        userId: "org_3",
+        username: "Tech Conference Host",
+        feedbackContent: "Looking forward to next summit!",
+      },
     ],
   },
   {
@@ -107,6 +149,7 @@ export const eventsData = [
       { attendeeId: "user_2", isCheckedIn: true },
       { attendeeId: "org_3", isCheckedIn: false },
     ],
+    feedbacks: [],
   },
   {
     id: 4,
@@ -124,6 +167,7 @@ export const eventsData = [
     venue: "Tundikhel Grounds, Kathmandu",
     imgSrc: "/gallery/DummyImage2.jpg",
     attendees: [],
+    feedbacks: [],
   },
   {
     id: 5,
@@ -141,6 +185,7 @@ export const eventsData = [
     venue: "Google Meet",
     imgSrc: "/gallery/DummyConcert.png",
     attendees: [],
+    feedbacks: [],
   },
   {
     id: 6,
@@ -157,6 +202,7 @@ export const eventsData = [
     venue: "Art & Creativity Center, Lalitpur",
     imgSrc: "/gallery/1.jpg",
     attendees: [],
+    feedbacks: [],
   },
   {
     id: 7,
@@ -175,6 +221,7 @@ export const eventsData = [
     venue: "Nagarkot Hill Resort",
     imgSrc: "/gallery/2.jpg",
     attendees: [],
+    feedbacks: [],
   },
   {
     id: 8,
@@ -192,6 +239,7 @@ export const eventsData = [
     venue: "Google Meet",
     imgSrc: "/gallery/3.jpg",
     attendees: [],
+    feedbacks: [],
   },
 ];
 

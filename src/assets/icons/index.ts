@@ -43,6 +43,7 @@ import {
   EyeClosed,
   TriangleAlert,
   LayoutList,
+  MessageSquareText,
 } from "lucide-react";
 
 export {
@@ -85,6 +86,7 @@ export {
   EyeClosed,
   LayoutList,
   TriangleAlert,
+  MessageSquareText,
   FaRegBookmark,
   FaBookmark,
 };

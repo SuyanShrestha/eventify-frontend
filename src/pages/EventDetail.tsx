@@ -7,6 +7,7 @@ import {
   FaRegBookmark,
   Info,
   MapPin,
+  MessageSquareText,
   PenLine,
   QrCode,
   ScanQrCode,
@@ -103,13 +104,13 @@ const EventDetail: React.FC = () => {
     setIsQrScanOpen(true);
   };
 
-  const toggleBookmark = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const openFeedbackModal = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
   };
 
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    navigate(getEditEventRoute(eventItem.id))
+    navigate(getEditEventRoute(eventItem.id));
   };
 
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -172,12 +173,6 @@ const EventDetail: React.FC = () => {
               <div className="flex gap-4 justify-start items-center">
                 <button
                   className="max-w-5 lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
-                  onClick={toggleBookmark}
-                >
-                  <FaRegBookmark className="h-5 w-5 mr-2" />
-                </button>
-                <button
-                  className="max-w-5 lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
                   onClick={openShareModal}
                 >
                   <Share className="h-5 w-5 mr-2" />
@@ -225,6 +220,11 @@ const EventDetail: React.FC = () => {
                 <h2 className="text-2xl sm:text-3xl font-semibold text-secondary-text-500 mb-4">
                   Event Overview
                 </h2>
+                <img
+                  src={eventItem.imgSrc}
+                  alt={eventItem.title}
+                  className="rounded-lg w-4xl h-96 object-cover shadow-md border border-gray-200 mb-4"
+                />
                 <div className="prose text-primary-text-400 mb-6">
                   <Markdown remarkPlugins={[remarkGfm]}>
                     {eventItem.details}
@@ -341,12 +341,20 @@ const EventDetail: React.FC = () => {
                           ? `Attendees [${eventItem.attendees.length}]`
                           : "No attendees yet"}
                       </h3>
-                      <button
-                        className="cursor-pointer"
-                        onClick={openQrScanModal}
-                      >
-                        <ScanQrCode className="h-8 w-8" />
-                      </button>
+                      <div className="flex gap-4">
+                        <button
+                          className="cursor-pointer"
+                          onClick={openFeedbackModal}
+                        >
+                          <MessageSquareText className="h-6 w-6" />
+                        </button>
+                        <button
+                          className="cursor-pointer"
+                          onClick={openQrScanModal}
+                        >
+                          <ScanQrCode className="h-6 w-6" />
+                        </button>
+                      </div>
                     </div>
                     <ul className="mt-4 space-y-2">
                       {mappedAttendees?.map(({ name, isCheckedIn }, index) => (
@@ -378,9 +386,17 @@ const EventDetail: React.FC = () => {
 
               {!isOwnEvent && (
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
-                    Your Bookings [{mappedBookings.length}]
-                  </h3>
+                  <div className="flex items-center justify-between mb-4 text-secondary-text-500">
+                    <h3 className="text-xl font-semibold text-secondary-text-500 ">
+                      Your Bookings [{mappedBookings.length}]
+                    </h3>
+                    <button
+                      className="cursor-pointer"
+                      onClick={openFeedbackModal}
+                    >
+                      <MessageSquareText className="h-6 w-6" />
+                    </button>
+                  </div>
                   <ul>
                     {mappedBookings.map((booking) => (
                       <li key={booking.bookingId} className="booking-item">
