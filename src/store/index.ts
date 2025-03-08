@@ -5,6 +5,7 @@ import authReducer from "./authSlice";
 import eventReducer from "./eventSlice";
 import usersReducer from "./usersSlice";
 import bookingsReducer from "./bookingSlice";
+import categoriesReducer from "./categorySlice";
 
 const persistConfig = {
   key: "root",
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   events: eventReducer,
   users: usersReducer,
   bookings: bookingsReducer,
+  categories: categoriesReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

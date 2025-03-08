@@ -10,7 +10,8 @@ import { useFetchUsers } from "./hooks";
 import { useDispatch } from "react-redux";
 import { login } from "./store/authSlice";
 import { setBookings } from "./store/bookingSlice";
-import { bookingsData } from "./constants/data";
+import { bookingsData, categoriesData } from "./constants/data";
+import { setCategories } from "./store/categorySlice";
 
 const App: React.FC = () => {
   const [isAuthRoute, setIsAuthRoute] = useState(false);
@@ -28,6 +29,7 @@ const App: React.FC = () => {
     };
     dispatch(login(testUser));
     dispatch(setBookings(bookingsData));
+    dispatch(setCategories(categoriesData));
   }, [dispatch]);
 
   return (

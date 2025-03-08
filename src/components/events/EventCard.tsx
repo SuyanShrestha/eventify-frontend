@@ -29,7 +29,7 @@ interface EventCardProps {
   ticketPrice: number;
   eventType: string;
   venue: string;
-  imgSrc: string;
+  imgSrc: string | undefined;
   attendees: Attendee[];
 }
 

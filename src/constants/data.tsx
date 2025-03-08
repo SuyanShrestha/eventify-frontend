@@ -264,3 +264,10 @@ export const bookingsData = [
     bookingCreated: "June 02 2024 11:10:00 GMT+0545 (Nepal Time)",
   },
 ];
+
+export const categoriesData = [
+  { id: "c1", name: "Educational" },
+  { id: "c2", name: "Career" },
+  { id: "c3", name: "Exhibition" },
+  { id: "c4", name: "Others" },
+];

@@ -35,7 +35,7 @@ const ImageDragDrop: React.FC<ImageDragDropProps> = ({ dataUrl, onChange }) => {
   const handleRemoveImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setPreview(null);
-    onChange(null);
+    onChange('');
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

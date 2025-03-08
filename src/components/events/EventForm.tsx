@@ -16,10 +16,10 @@ interface EventState {
   endDate: string;
   bookingDeadline: string;
   eventType: string;
-  eventCategory: string;
+  eventCategoryId: string;
   venue: string;
   ticketPrice: number;
-  availableTickets: number | null;
+  availableTickets: number | undefined;
   details: string;
   imgSrc: string | null;
 }
@@ -36,13 +36,15 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
     endDate: "",
     bookingDeadline: "",
     eventType: "physical",
-    eventCategory: "educational",
+    eventCategoryId: "c1",
     venue: "",
     ticketPrice: 0,
-    availableTickets: null,
+    availableTickets: undefined,
     details: "",
     imgSrc: null,
   });
+
+  const { categories } = useSelector((state: RootState) => state.categories);
 
   const [isFree, setIsFree] = useState(false);
 
@@ -71,7 +73,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
     setEvent((prev) => ({
       ...prev,
       ticketPrice: isFree ? 0 : prev.ticketPrice,
-      availableTickets: isFree ? null : prev.availableTickets,
+      availableTickets: isFree ? undefined : prev.availableTickets,
     }));
   };
 
@@ -99,10 +101,10 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
       endDate: "",
       bookingDeadline: "",
       eventType: "physical",
-      eventCategory: "educational",
+      eventCategoryId: "c1",
       venue: "",
       ticketPrice: 0,
-      availableTickets: null,
+      availableTickets: undefined,
       details: "",
       imgSrc: null,
     });
@@ -324,15 +326,16 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                 <select
                   id="eventCategory"
                   name="eventCategory"
-                  value={event.eventCategory}
+                  value={event.eventCategoryId}
                   onChange={handleInputChange}
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 appearance-none cursor-pointer"
                   required
                 >
-                  <option value="educational">Educational</option>
-                  <option value="entertainment">Entertainment</option>
-                  <option value="career">Career</option>
-                  <option value="others">Others</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
