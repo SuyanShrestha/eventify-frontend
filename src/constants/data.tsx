@@ -278,5 +278,6 @@ export const categoriesData = [
   { id: "c2", name: "Career" },
   { id: "c3", name: "Exhibition" },
   { id: "c4", name: "Entertainment" },
-  { id: "c5", name: "Others" },
+  { id: "c5", name: "Traditional" },
+  { id: "c6", name: "Others" },
 ];

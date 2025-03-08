@@ -17,7 +17,7 @@ interface SidebarProps {}
 const SIDEBAR_CATEGORIES = [
   {
     label: "Price",
-    icon: <Ticket className="w-8 h-8 text-secondary-text-500" />,
+    icon: <Ticket className="w-6 h-6 text-secondary-text-500" />,
     options: [
       { label: "Free", value: "free" },
       { label: "Paid", value: "paid" },
@@ -25,7 +25,7 @@ const SIDEBAR_CATEGORIES = [
   },
   {
     label: "Date",
-    icon: <Calendar className="w-8 h-8 text-secondary-text-500" />,
+    icon: <Calendar className="w-6 h-6 text-secondary-text-500" />,
     options: [
       { label: "Today", value: "today" },
       { label: "Tomorrow", value: "tomorrow" },
@@ -35,7 +35,7 @@ const SIDEBAR_CATEGORIES = [
   },
   {
     label: "Platform",
-    icon: <Tag className="w-8 h-8 text-secondary-text-500" />,
+    icon: <Tag className="w-6 h-6 text-secondary-text-500" />,
     options: [
       { label: "Physical", value: "physical" },
       { label: "Remote", value: "remote" },
@@ -43,7 +43,7 @@ const SIDEBAR_CATEGORIES = [
   },
   {
     label: "Status",
-    icon: <Timer className="w-8 h-8 text-secondary-text-500" />,
+    icon: <Timer className="w-6 h-6 text-secondary-text-500" />,
     options: [
       { label: "Upcoming", value: "upcoming" },
       { label: "Expired", value: "expired" },
@@ -79,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
       ? [
           {
             label: "Categories",
-            icon: <LayoutList className="w-8 h-8 text-secondary-text-500" />,
+            icon: <LayoutList className="w-6 h-6 text-secondary-text-500" />,
             options: eventCategories.map((category) => ({
               label: category.name,
               value: category.id,
@@ -124,7 +124,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
           <Option
             className={`w-5 h-5 ${isSelected ? "text-secondary-text-500" : ""}`}
           />
-          <span className={`text-lg ${isSelected ? "font-bold" : ""}`}>
+          <span className={`text-md ${isSelected ? "font-bold" : ""}`}>
             {label}
           </span>
         </div>
@@ -154,16 +154,16 @@ const Sidebar: React.FC<SidebarProps> = () => {
   };
 
   return (
-    <div className="mx-4 py-2 h-full flex flex-col overflow-y-auto custom-scrollbar">
-      <h1 className="text-3xl p-4 text-secondary-text-500 font-bold">
+    <div className="mx-4 py-2 h-[calc(100vh-4rem)] flex flex-col overflow-y-auto custom-scrollbar">
+      <h1 className="text-2xl p-4 text-secondary-text-500 font-bold">
         Events Category
       </h1>
 
       {sidebarCategories.map((category) => (
         <div className="p-4 flex flex-col gap-4" key={category.label}>
-          <div className="flex gap-4">
+          <div className="flex gap-4 justify-start items-center">
             {category.icon}
-            <h3 className="text-2xl text-secondary-text-500 font-semibold">
+            <h3 className="text-xl text-secondary-text-500 font-semibold">
               {category.label}
             </h3>
           </div>
