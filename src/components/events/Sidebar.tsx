@@ -6,9 +6,11 @@ import {
   CircleX,
   Timer,
   Tag,
+  LayoutList,
 } from "../../assets/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../store/eventSlice";
+import { RootState } from "../../store";
 
 interface SidebarProps {}
 
@@ -54,6 +56,7 @@ const CATEGORY_MAPPER: Record<string, string> = {
   Date: "date",
   Platform: "type",
   Status: "expirationStatus",
+  Categories: "eventCategoryId",
 };
 
 const Sidebar: React.FC<SidebarProps> = () => {
@@ -61,9 +64,30 @@ const Sidebar: React.FC<SidebarProps> = () => {
     ticketType: null as string | null,
     eventDate: null as string | null,
     platform: null as string | null,
+    expirationStatus: null as string | null,
+    eventCategoryId: null as string | null,
   });
 
   const dispatch = useDispatch();
+  const { categories: eventCategories } = useSelector(
+    (state: RootState) => state.categories
+  );
+
+  const sidebarCategories = [
+    ...SIDEBAR_CATEGORIES,
+    ...(eventCategories.length > 0
+      ? [
+          {
+            label: "Categories",
+            icon: <LayoutList className="w-8 h-8 text-secondary-text-500" />,
+            options: eventCategories.map((category) => ({
+              label: category.name,
+              value: category.id,
+            })),
+          },
+        ]
+      : []),
+  ];
 
   const handleClearFilter = (category: string) => {
     setSelectedFilters((prevState) => ({
@@ -125,16 +149,17 @@ const Sidebar: React.FC<SidebarProps> = () => {
       ...prevState,
       [category]: value,
     }));
+    console.log('selected category is: ', category)
     dispatch(setFilters({ [category]: value }));
   };
 
   return (
-    <div className="mx-4 py-2 h-full flex flex-col">
+    <div className="mx-4 py-2 h-full flex flex-col overflow-y-auto custom-scrollbar">
       <h1 className="text-3xl p-4 text-secondary-text-500 font-bold">
         Events Category
       </h1>
 
-      {SIDEBAR_CATEGORIES.map((category) => (
+      {sidebarCategories.map((category) => (
         <div className="p-4 flex flex-col gap-4" key={category.label}>
           <div className="flex gap-4">
             {category.icon}

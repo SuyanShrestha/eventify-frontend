@@ -6,6 +6,7 @@ interface FilterState {
   type: string; // 'online', 'physical'
   price: string; // 'free', 'paid'
   expirationStatus: string;
+  eventCategoryId: string;
 }
 
 interface EventState {
@@ -23,6 +24,7 @@ const initialState: EventState = {
     type: "",
     price: "",
     expirationStatus: "",
+    eventCategoryId: "",
   },
   searchTerm: "",
 };
@@ -66,6 +68,10 @@ const filterByPrice = (event: Event, price: string): boolean => {
   return true;
 };
 
+const filterByCategory = (event: Event, eventCategoryId: string): boolean => {
+  return eventCategoryId ? event.eventCategoryId === eventCategoryId : true;
+};
+
 const filterByStatus = (event: Event, expirationStatus: string): boolean => {
   if (!expirationStatus) return true;
   const isExpired = checkExpired(event.endDate, event.bookingDeadline);
@@ -77,20 +83,21 @@ const filterBySearchTerm = (event: Event, searchTerm: string): boolean => {
   return event.title.toLowerCase().includes(searchTerm.toLowerCase());
 };
 
-// Main filter function to apply all filters
+// main filter function to apply all filters
 const applyFilters = (
   events: Event[],
   filters: FilterState,
   searchTerm: string
 ): Event[] => {
   const filtered = events.filter((event) => {
-    const { date, type, price, expirationStatus } = filters;
+    const { date, type, price, expirationStatus, eventCategoryId } = filters;
 
     return (
       filterByDate(event, date) &&
       filterByType(event, type) &&
       filterByPrice(event, price) &&
       filterByStatus(event, expirationStatus) &&
+      filterByCategory(event, eventCategoryId) &&
       filterBySearchTerm(event, searchTerm)
     );
   });
@@ -156,7 +163,7 @@ const eventSlice = createSlice({
     },
 
     clearFilters: (state) => {
-      state.filters = { date: "", type: "", price: "", expirationStatus: "" };
+      state.filters = { date: "", type: "", price: "", expirationStatus: "", eventCategoryId: "" };
       state.searchTerm = "";
       state.filteredEvents = state.events;
     },

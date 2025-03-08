@@ -26,6 +26,7 @@ export interface Event {
   ticketPrice: number;
   availableTickets?: number | null;
   eventType: string;
+  eventCategoryId: string;
   venue: string;
   imgSrc: string | undefined;
   attendees: Attendee[];
