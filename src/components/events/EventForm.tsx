@@ -208,17 +208,13 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                 Start Date
               </label>
               <div className="relative">
-                <Calendar
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
-                  size={18}
-                />
                 <input
                   type="datetime-local"
                   id="startDate"
                   name="startDate"
                   value={event.startDate}
                   onChange={handleInputChange}
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
+                  className="w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
                   required
                 />
               </div>
@@ -233,17 +229,13 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                 End Date
               </label>
               <div className="relative">
-                <Calendar
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
-                  size={18}
-                />
                 <input
                   type="datetime-local"
                   id="endDate"
                   name="endDate"
                   value={event.endDate}
                   onChange={handleInputChange}
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
+                  className="w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
                   required
                 />
               </div>
@@ -258,17 +250,13 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                 Booking Deadline
               </label>
               <div className="relative">
-                <Calendar
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-text-400"
-                  size={18}
-                />
                 <input
                   type="datetime-local"
                   id="bookingDeadline"
                   name="bookingDeadline"
                   value={event.bookingDeadline}
                   onChange={handleInputChange}
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
+                  className="w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400"
                   required
                 />
               </div>
