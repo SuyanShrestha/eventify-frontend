@@ -28,6 +28,7 @@
   --color-accent-btn-text: #fffaeb;
 }
 
+/* hidden scrollbars */
 .custom-scrollbar::-webkit-scrollbar {
   display: none; /* Hide scrollbar for Chrome, Safari */
 }

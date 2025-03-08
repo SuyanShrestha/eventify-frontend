@@ -2,10 +2,12 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { Calendar, LayoutList, MapPin, Tag, Ticket } from "../../assets/icons";
 import { useToast } from "../../hooks";
-import { validateEventForm } from "../../helpers";
+import { formatDateToInputFormat, validateEventForm } from "../../helpers";
 import { ImageDragDrop } from "../../components/ui";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useNavigate, useParams } from "react-router-dom";
+import { RoutingLinks, eventsData } from "../../constants";
 // import MarkdownEditor from "../../components/MarkdownEditor";
 // import Delta from "quill-delta";
 
@@ -29,24 +31,36 @@ interface EventFormProps {
 }
 
 const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
+  const { eventId } = useParams<{ eventId: string }>();
+  const eventItem = eventsData.find((e) => e.id.toString() === eventId);
+
   const [event, setEvent] = useState<EventState>({
-    title: "",
-    subtitle: "",
-    startDate: "",
-    endDate: "",
-    bookingDeadline: "",
-    eventType: "physical",
-    eventCategoryId: "c1",
-    venue: "",
-    ticketPrice: 0,
-    availableTickets: undefined,
-    details: "",
-    imgSrc: null,
+    title: eventItem?.title || "",
+    subtitle: eventItem?.subtitle || "",
+    startDate: eventItem?.startDate
+      ? formatDateToInputFormat(eventItem.startDate)
+      : "",
+    endDate: eventItem?.endDate
+      ? formatDateToInputFormat(eventItem.endDate)
+      : "",
+    bookingDeadline: eventItem?.bookingDeadline
+      ? formatDateToInputFormat(eventItem.bookingDeadline)
+      : "",
+    eventType: eventItem?.eventType || "physical",
+    eventCategoryId: eventItem?.eventCategoryId || "c1",
+    venue: eventItem?.venue || "",
+    ticketPrice: eventItem?.ticketPrice || 0,
+    availableTickets: eventItem?.availableTickets || undefined,
+    details: eventItem?.details || "",
+    imgSrc: eventItem?.imgSrc || null,
   });
 
-  const { categories } = useSelector((state: RootState) => state.categories);
+  // const [isFree, setIsFree] = useState(false);
+  const [isFree, setIsFree] = useState(() => eventItem?.ticketPrice === 0);
 
-  const [isFree, setIsFree] = useState(false);
+  const { categories } = useSelector((state: RootState) => state.categories);
+  const { showToast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("Event details: ", event.details);
@@ -54,8 +68,6 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
       console.log("Image Source: ", event.imgSrc);
     }
   }, [event]);
-
-  const { showToast } = useToast();
 
   const handleInputChange = (e: any) => {
     if (e.target) {
@@ -110,6 +122,10 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
     });
 
     showToast(["Event submitted successfully!"], "success");
+
+    if (isEditing) {
+      navigate(RoutingLinks.Dashboard);
+    }
   };
 
   return (
@@ -135,7 +151,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                 value={event.title}
                 onChange={handleInputChange}
                 className={`w-full px-3 py-2 border ${
-                  event.title.length > 100
+                  event.title.length > 50
                     ? "border-accent-400"
                     : "border-gray-300"
                 } rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400`}
@@ -143,12 +159,12 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
               />
               <p
                 className={` ${
-                  event.title.length > 100
+                  event.title.length > 50
                     ? "text-accent-text-500 font-bold text-xs mt-2"
                     : "text-primary-text-400 text-xs mt-1"
                 }`}
               >
-                {event.title.length}/100 characters
+                {event.title.length}/50 characters
               </p>
             </div>
 
@@ -167,19 +183,19 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                 value={event.subtitle}
                 onChange={handleInputChange}
                 className={`w-full px-3 py-2 border ${
-                  event.title.length > 100
+                  event.title.length > 50
                     ? "border-accent-400"
                     : "border-gray-300"
                 } rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400`}
               />
               <p
                 className={` ${
-                  event.subtitle.length > 100
+                  event.subtitle.length > 50
                     ? "text-accent-text-500 font-bold text-xs mt-2"
                     : "text-primary-text-400 text-xs mt-1"
                 }`}
               >
-                {event.subtitle.length}/100 characters
+                {event.subtitle.length}/50 characters
               </p>
             </div>
 
@@ -384,7 +400,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                       Rs
                     </span>
                     <input
-                      type="number"
+                      type="text"
                       id="ticketPrice"
                       name="ticketPrice"
                       value={isFree ? 0 : event.ticketPrice}
@@ -482,7 +498,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
               type="submit"
               className="w-full bg-accent-500 text-accent-btn-text py-3 px-4 rounded-md hover:bg-accent-400 transition duration-300 font-semibold cursor-pointer"
             >
-              Create Event
+              {isEditing ? "Update Event" : "Create Event"}
             </button>
           </div>
         </form>

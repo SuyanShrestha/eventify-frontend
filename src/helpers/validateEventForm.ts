@@ -15,12 +15,12 @@ export const validateEventForm = (event: EventFormInterface): string[] => {
 
   if (!event.title.trim()) {
     errors.push("Title is required!");
-  } else if (event.title.length > 100) {
-    errors.push("Title must be less than 100 characters!");
+  } else if (event.title.length > 50) {
+    errors.push("Title must be less than 50 characters!");
   }
 
-  if (event.subtitle && event.subtitle.length > 100) {
-    errors.push("Subtitle must be less than 100 characters!");
+  if (event.subtitle && event.subtitle.length > 50) {
+    errors.push("Subtitle must be less than 50 characters!");
   }
 
   if (!event.startDate) {
@@ -51,6 +51,8 @@ export const validateEventForm = (event: EventFormInterface): string[] => {
 
   if (event.ticketPrice < 0) {
     errors.push("Ticket Price cannot be negative!");
+  } else if (isNaN(event.ticketPrice)) {
+    errors.push("Ticket Price must be a valid number!");
   }
 
   if (event.bookingDeadline) {

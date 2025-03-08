@@ -8,4 +8,10 @@ const formatDateTime = (dateString: string) => {
   };
 };
 
-export { formatDateTime };
+// for datetime input compatible format
+const formatDateToInputFormat = (dateString: string) => {
+  const dateObj = new Date(dateString);
+  return format(dateObj, "yyyy-MM-dd'T'HH:mm");
+};
+
+export { formatDateTime, formatDateToInputFormat };

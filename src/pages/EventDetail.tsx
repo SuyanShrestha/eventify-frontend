@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { eventsData } from "../constants";
+import { useNavigate, useParams } from "react-router-dom";
+import { eventsData, getEditEventRoute } from "../constants";
 import {
   Calendar,
   FaRegBookmark,
@@ -37,6 +37,7 @@ const EventDetail: React.FC = () => {
     null
   );
 
+  const navigate = useNavigate();
   const { users } = useSelector((state: RootState) => state.users);
   const { user: currentUser } = useSelector((state: RootState) => state.auth);
 
@@ -108,6 +109,7 @@ const EventDetail: React.FC = () => {
 
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    navigate(getEditEventRoute(eventItem.id))
   };
 
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
