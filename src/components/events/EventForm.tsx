@@ -1,6 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Calendar, LayoutList, MapPin, Tag, Ticket } from "../../assets/icons";
+import { LayoutList, MapPin, Tag, Ticket } from "../../assets/icons";
 import { useToast } from "../../hooks";
 import { formatDateToInputFormat, validateEventForm } from "../../helpers";
 import { ImageDragDrop } from "../../components/ui";

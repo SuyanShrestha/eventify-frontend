@@ -4,8 +4,6 @@ import {
   Calendar,
   Clock,
   Share,
-  FaBookmark,
-  FaRegBookmark,
   PenLine,
   Trash,
   Users,
@@ -66,10 +64,6 @@ export const EventCard: FC<EventCardProps> = ({
   const openShareModal = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsShareModalOpen(true);
-  };
-
-  const toggleBookmark = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
   };
 
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -150,12 +144,6 @@ export const EventCard: FC<EventCardProps> = ({
 
         {!isOwnEvent ? (
           <div className="flex gap-2 justify-center items-center">
-            <button
-              className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
-              onClick={toggleBookmark}
-            >
-              <FaRegBookmark className="h-5 w-5 mr-2" />
-            </button>
             <button
               className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
               onClick={openShareModal}
