@@ -44,6 +44,7 @@ import {
   TriangleAlert,
   LayoutList,
   MessageSquareText,
+  Bell,
 } from "lucide-react";
 
 export {
@@ -87,6 +88,7 @@ export {
   LayoutList,
   TriangleAlert,
   MessageSquareText,
+  Bell,
   FaRegBookmark,
   FaBookmark,
 };

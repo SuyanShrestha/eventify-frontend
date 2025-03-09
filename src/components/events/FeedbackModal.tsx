@@ -34,7 +34,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
       customClass="max-w-2xl w-full"
     >
       <div className="flex flex-col">
-        <h2 className="text-xl font-semibold text-center mb-4 text-secondary-text-500">
+        <h2 className="text-xl px-8 font-semibold text-center mb-4 text-secondary-text-500">
           {modalContentType === "write"
             ? "Send Your Feedback"
             : "Here are the Feedbacks"}

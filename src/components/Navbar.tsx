@@ -1,9 +1,25 @@
 import type React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { RoutingLinks } from "../constants";
+import { AuthModal, NotificationModal } from "./home";
+import { useState } from "react";
+import { Bell, User } from "../assets/icons";
 
 const Navbar: React.FC = () => {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isNotificationModalOpen, setIsNotificaitonModalOpen] = useState(false);
+
   const location = useLocation();
+
+  const openAuthModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsAuthModalOpen(true);
+  };
+
+  const openNotificationModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsNotificaitonModalOpen(true);
+  };
 
   return (
     <header className="bg-secondary-500 shadow-md">
@@ -74,23 +90,23 @@ const Navbar: React.FC = () => {
               </Link>
             </div>
           </div>
-          <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6">
-              <Link
-                to={RoutingLinks.Login}
-                className="bg-[var(--color-accent-300)] text-white hover:bg-[var(--color-accent-500)] px-4 py-2 rounded-md text-lg font-medium mr-2 transition-colors duration-300"
-              >
-                Login
-              </Link>
-              <Link
-                to={RoutingLinks.Register}
-                className="bg-[var(--color-accent-500)] text-white hover:bg-[var(--color-accent-300)] px-4 py-2 rounded-md text-lg font-medium transition-colors duration-300"
-              >
-                Register
-              </Link>
-            </div>
+          <div className="flex gap-4 ml-4 h-full items-center justify-center">
+            <button className="cursor-pointer" onClick={openNotificationModal}>
+              <Bell className="h-6 w-6 text-accent-500" />
+            </button>
+            <button className="cursor-pointer" onClick={openAuthModal}>
+              <User className="h-6 w-6 text-accent-500" />
+            </button>
           </div>
         </div>
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+        />
+        <NotificationModal
+          isOpen={isNotificationModalOpen}
+          onClose={() => setIsNotificaitonModalOpen(false)}
+        />
       </div>
     </header>
   );
