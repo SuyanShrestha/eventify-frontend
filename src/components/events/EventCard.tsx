@@ -79,7 +79,7 @@ export const EventCard: FC<EventCardProps> = ({
 
   return (
     <div
-      className="p-4 border border-gray-200 rounded-lg w-full xl:w-full flex flex-col xl:flex-col xl:justify-center xl:items-start gap-4 hover:cursor-pointer"
+      className="p-4 bg-secondary-500 border border-gray-200 rounded-lg w-full xl:w-full flex flex-col xl:flex-col xl:justify-center xl:items-start gap-4 hover:cursor-pointer"
       style={{ boxShadow: "0 0 10px rgba(85, 60, 154, 0.4)" }}
       onClick={handleDetailsClick}
     >
