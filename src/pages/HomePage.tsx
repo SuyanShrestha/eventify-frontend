@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { HeroSection } from "../components/home";
+import { FeaturesSection, HeroSection } from "../components/home";
 import PreLoader from "../components/ui/Preloader";
 import Footer from "../components/Footer";
 
@@ -11,11 +11,11 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div>
+    <div className="bg-primary-500">
       {!page_load ? <PreLoader /> : ""}
 
       <HeroSection />
-      <div className="bg-blue-300 h-[100vh] w-full"></div>
+      <FeaturesSection />
       {/* Footer */}
       <Footer />
     </div>

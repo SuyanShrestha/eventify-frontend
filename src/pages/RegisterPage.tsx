@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LottieComponent } from "../components/ui";
+import { LottieComponent, Tabs } from "../components/ui";
 import { RegisterLottie } from "../assets/lottie";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
@@ -21,7 +21,9 @@ const RegisterPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-  const [userType, setUserType] = useState<"user" | "organizer">("user");
+  const [userType, setUserType] = useState<string>("user");
+
+  const userTypes = ["user", "organizer"];
 
   const isSmallScreen = useMediaQuery({ maxWidth: 1024 });
   const lottieHeight = isSmallScreen ? 450 : 600;
@@ -163,30 +165,11 @@ const RegisterPage: React.FC = () => {
               )}
 
               {/* User Type Selection */}
-              <div className="flex w-full">
-                <button
-                  type="button"
-                  className={`w-1/2 px-4 py-2 text-sm font-medium rounded-l-md border  transition-all duration-300 ${
-                    userType === "user"
-                      ? "bg-secondary-text-400 text-white border-accent-500"
-                      : "bg-gray-100 text-gray-700 border-gray-300"
-                  }`}
-                  onClick={() => setUserType("user")}
-                >
-                  User
-                </button>
-                <button
-                  type="button"
-                  className={`w-1/2 px-4 py-2 text-sm font-medium rounded-r-md border  transition-all duration-300 ${
-                    userType === "organizer"
-                      ? "bg-secondary-text-400 text-white border-accent-500"
-                      : "bg-gray-100 text-gray-700 border-gray-300"
-                  }`}
-                  onClick={() => setUserType("organizer")}
-                >
-                  Organizer
-                </button>
-              </div>
+              <Tabs
+                options={userTypes}
+                activeTab={userType}
+                setActiveTab={setUserType}
+              />
             </div>
 
             <div className="flex w-full justify-center gap-2">

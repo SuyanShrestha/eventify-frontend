@@ -8,6 +8,7 @@ import EmptyLottie from "./EmptyLottie";
 import ImageDragDrop from "./ImageDragDrop";
 import ModalSheet from "./ModalSheet";
 import CountBadge from "./CountBadge";
+import Tabs from "./Tabs";
 
 export {
   Card,
@@ -20,4 +21,5 @@ export {
   ImageDragDrop,
   ModalSheet,
   CountBadge,
+  Tabs,
 };
