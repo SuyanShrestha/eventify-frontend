@@ -1,5 +1,5 @@
-import IntroSection from "./IntroSection";
+import HeroSection from "./HeroSection";
 import AuthModal from "./AuthModal";
 import NotificationModal from "./NotificationModal";
 
-export { AuthModal, IntroSection, NotificationModal };
+export { AuthModal, HeroSection, NotificationModal };

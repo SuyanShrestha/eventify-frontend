@@ -34,10 +34,10 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
           <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
+            <div className="ml-10 flex items-baseline space-x-8 lg:space-x-4">
               <Link
                 to={RoutingLinks.Home}
-                className={`px-3 py-2 text-lg transition-colors duration-300 ${
+                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
                   location.pathname === RoutingLinks.Home
                     ? "text-accent-500"
                     : "text-primary-text-500 hover:text-secondary-text-500"
@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
               </Link>
               <Link
                 to={RoutingLinks.Events}
-                className={`px-3 py-2 text-lg transition-colors duration-300 ${
+                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
                   location.pathname === RoutingLinks.Events
                     ? "text-accent-500"
                     : "text-primary-text-500 hover:text-secondary-text-500"
@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
 
               <Link
                 to={RoutingLinks.Bookings}
-                className={`px-3 py-2 text-lg transition-colors duration-300 ${
+                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
                   location.pathname === RoutingLinks.Bookings
                     ? "text-accent-500"
                     : "text-primary-text-500 hover:text-secondary-text-500"
@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
 
               <Link
                 to={RoutingLinks.CreateEvent}
-                className={`px-3 py-2 text-lg transition-colors duration-300 ${
+                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
                   location.pathname === RoutingLinks.CreateEvent
                     ? "text-accent-500"
                     : "text-primary-text-500 hover:text-secondary-text-500"
@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
 
               <Link
                 to={RoutingLinks.Dashboard}
-                className={`px-3 py-2 text-lg transition-colors duration-300 ${
+                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
                   location.pathname === RoutingLinks.Dashboard
                     ? "text-accent-500"
                     : "text-primary-text-500 hover:text-secondary-text-500"

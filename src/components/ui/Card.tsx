@@ -14,13 +14,17 @@ const StyledCard = styled.div`
   flex-direction: column;
   justify-content: center;
   background-color: bisque;
-  width: 14rem;
+  width: 10rem;
   aspect-ratio: 9/16;
-  border-radius: 20px;
+  border-radius: 2rem;
   cursor: pointer;
 
+  @media (min-width: 768px) {
+    width: 14rem;
+  }
+
   @media (min-width: 1024px) {
-    width: 24rem;
+    width: 18rem;
   }
 
   & img {
