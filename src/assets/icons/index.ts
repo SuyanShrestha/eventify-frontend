@@ -45,6 +45,10 @@ import {
   LayoutList,
   MessageSquareText,
   Bell,
+  CirclePlus,
+  Filter,
+  Globe,
+  Pen,
 } from "lucide-react";
 
 export {
@@ -89,6 +93,10 @@ export {
   TriangleAlert,
   MessageSquareText,
   Bell,
+  CirclePlus,
+  Filter,
+  Globe,
+  Pen,
   FaRegBookmark,
   FaBookmark,
 };

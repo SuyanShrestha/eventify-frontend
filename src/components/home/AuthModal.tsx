@@ -31,6 +31,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         <div className="flex flex-col items-center w-full">
           <Link
             to={RoutingLinks.Login}
+            onClick={onClose}
             className="bg-[var(--color-accent-300)] text-white hover:bg-[var(--color-accent-500)] px-6 py-3 rounded-md text-lg font-medium mb-4 transition-colors duration-300 w-full text-center"
           >
             Log In
@@ -38,6 +39,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
           <Link
             to={RoutingLinks.Register}
+            onClick={onClose}
             className="bg-[var(--color-accent-500)] text-white hover:bg-[var(--color-accent-300)] px-6 py-3 rounded-md text-lg font-medium transition-colors duration-300 w-full text-center"
           >
             Register
