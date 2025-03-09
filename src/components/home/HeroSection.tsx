@@ -17,12 +17,7 @@ const HeroSection: React.FC = () => {
   }));
 
   return (
-    <section
-      className="flex flex-col items-center justify-center mt-[4rem] min-h-[calc(100vh-4rem)] w-full bg-primary-500  bg-center bg-fixed bg-cover bg-no-repeat"
-      style={{
-        backgroundImage: 'url("../../../public/flower-bg-2.png")',
-      }}
-    >
+    <section className="flex flex-col items-center justify-center mt-[4rem] min-h-[calc(100vh-4rem)] w-full bg-primary-500 bg-fixed bg-background-image">
       <div className="max-w-7xl w-full min-h-[calc(100vh-4rem) flex flex-col items-center lg:flex-row lg:justify-evenly ">
         <div className="text-center lg:text-left mb-8 lg:mb-0 lg:pr-8 lg:pl-8">
           <h1 className="font-['Playfair_Display'] text-4xl lg:text-5xl text-accent-500 mb-4">

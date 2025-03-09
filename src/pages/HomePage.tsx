@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { FeaturesSection, HeroSection } from "../components/home";
+import { AboutUs, FeaturesSection, HeroSection } from "../components/home";
 import PreLoader from "../components/ui/Preloader";
 import Footer from "../components/Footer";
 
@@ -16,7 +16,9 @@ const HomePage = () => {
 
       <HeroSection />
       <FeaturesSection />
-      {/* Footer */}
+      <AboutUs />
+      <FeaturesSection />
+
       <Footer />
     </div>
   );

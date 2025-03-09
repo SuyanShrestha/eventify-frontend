@@ -38,6 +38,12 @@
   scrollbar-width: none; /* Hide scrollbar for Firefox */
 }
 
+/* background image */
+.bg-background-image {
+  @apply bg-cover bg-center bg-no-repeat;
+  background-image: url('../public/flower-bg-2.png');
+}
+
 body {
   font-family: "Space Grotesk", sans-serif;
 }

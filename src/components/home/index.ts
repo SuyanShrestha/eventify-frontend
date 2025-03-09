@@ -3,5 +3,13 @@ import AuthModal from "./AuthModal";
 import NotificationModal from "./NotificationModal";
 import FeaturesSection from "./FeaturesSection";
 import FeatureCard from "./FeatureCard";
+import AboutUs from "./AboutUs";
 
-export { AuthModal, HeroSection, NotificationModal, FeaturesSection, FeatureCard };
+export {
+  AuthModal,
+  HeroSection,
+  NotificationModal,
+  FeaturesSection,
+  FeatureCard,
+  AboutUs,
+};
