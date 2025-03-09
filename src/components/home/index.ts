@@ -4,6 +4,7 @@ import NotificationModal from "./NotificationModal";
 import FeaturesSection from "./FeaturesSection";
 import FeatureCard from "./FeatureCard";
 import AboutUs from "./AboutUs";
+import TestimonialSection from "./TestimonialSection";
 
 export {
   AuthModal,
@@ -12,4 +13,5 @@ export {
   FeaturesSection,
   FeatureCard,
   AboutUs,
+  TestimonialSection,
 };
