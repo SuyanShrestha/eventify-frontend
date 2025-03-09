@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Ticket,
   Option,
@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../store/eventSlice";
 import { RootState } from "../../store";
+import { Tabs } from "../ui";
 
 interface SidebarProps {}
 
@@ -59,6 +60,8 @@ const CATEGORY_MAPPER: Record<string, string> = {
   Categories: "eventCategoryId",
 };
 
+const eventScopeOptions = ["All", "Saved"];
+
 const Sidebar: React.FC<SidebarProps> = () => {
   const [selectedFilters, setSelectedFilters] = useState({
     ticketType: null as string | null,
@@ -67,6 +70,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
     expirationStatus: null as string | null,
     eventCategoryId: null as string | null,
   });
+  const [activeScope, setActiveScope] = useState<string>("All");
 
   const dispatch = useDispatch();
   const { categories: eventCategories } = useSelector(
@@ -149,15 +153,27 @@ const Sidebar: React.FC<SidebarProps> = () => {
       ...prevState,
       [category]: value,
     }));
-    console.log('selected category is: ', category)
+    console.log("selected category is: ", category);
     dispatch(setFilters({ [category]: value }));
   };
 
+  useEffect(() => {
+    dispatch(setFilters({ isSavedFilter: activeScope === "Saved" }));
+  }, [activeScope, dispatch]);
+
   return (
-    <div className="mx-4 py-2 h-[calc(100vh-4rem)] flex flex-col overflow-y-auto custom-scrollbar">
+    <div className="mx-4 py-2 h-[calc(100vh-4rem)] flex flex-col gap-4 overflow-y-auto custom-scrollbar">
       <h1 className="text-2xl p-4 text-secondary-text-500 font-bold">
         Events Category
       </h1>
+
+      <div>
+        <Tabs
+          options={eventScopeOptions}
+          activeTab={activeScope}
+          setActiveTab={setActiveScope}
+        />
+      </div>
 
       {sidebarCategories.map((category) => (
         <div className="p-4 flex flex-col gap-4" key={category.label}>
@@ -167,6 +183,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
               {category.label}
             </h3>
           </div>
+
           <div className="flex flex-col pl-8 gap-4">
             {category.options.map((option) => (
               <OptionItem

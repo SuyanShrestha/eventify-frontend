@@ -7,6 +7,7 @@ interface FilterState {
   price: string; // 'free', 'paid'
   expirationStatus: string;
   eventCategoryId: string;
+  isSavedFilter: boolean;
 }
 
 interface EventState {
@@ -25,6 +26,7 @@ const initialState: EventState = {
     price: "",
     expirationStatus: "",
     eventCategoryId: "",
+    isSavedFilter: false,
   },
   searchTerm: "",
 };
@@ -83,14 +85,18 @@ const filterBySearchTerm = (event: Event, searchTerm: string): boolean => {
   return event.title.toLowerCase().includes(searchTerm.toLowerCase());
 };
 
+const filterBySaved = (event: Event, isSavedFilter: boolean): boolean => {
+  return isSavedFilter ? event.isSaved : true;
+};
+
 // main filter function to apply all filters
 const applyFilters = (
   events: Event[],
   filters: FilterState,
-  searchTerm: string
+  searchTerm: string,
 ): Event[] => {
   const filtered = events.filter((event) => {
-    const { date, type, price, expirationStatus, eventCategoryId } = filters;
+    const { date, type, price, expirationStatus, eventCategoryId, isSavedFilter } = filters;
 
     return (
       filterByDate(event, date) &&
@@ -98,7 +104,8 @@ const applyFilters = (
       filterByPrice(event, price) &&
       filterByStatus(event, expirationStatus) &&
       filterByCategory(event, eventCategoryId) &&
-      filterBySearchTerm(event, searchTerm)
+      filterBySearchTerm(event, searchTerm) &&
+      filterBySaved(event, isSavedFilter)
     );
   });
 
@@ -163,7 +170,14 @@ const eventSlice = createSlice({
     },
 
     clearFilters: (state) => {
-      state.filters = { date: "", type: "", price: "", expirationStatus: "", eventCategoryId: "" };
+      state.filters = {
+        date: "",
+        type: "",
+        price: "",
+        expirationStatus: "",
+        eventCategoryId: "",
+        isSavedFilter: false,
+      };
       state.searchTerm = "";
       state.filteredEvents = state.events;
     },

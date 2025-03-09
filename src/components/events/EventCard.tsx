@@ -7,10 +7,16 @@ import {
   PenLine,
   Trash,
   Users,
+  FaBookmark,
+  FaRegBookmark,
 } from "../../assets/icons";
 import { Badge } from "../ui";
 import { useNavigate } from "react-router-dom";
-import { Attendee, getEditEventRoute, getEventDetailRoute } from "../../constants";
+import {
+  Attendee,
+  getEditEventRoute,
+  getEventDetailRoute,
+} from "../../constants";
 import { checkExpired, formatDateTime, truncateText } from "../../helpers";
 import ShareModal from "./ShareModal";
 import { useSelector } from "react-redux";
@@ -29,6 +35,7 @@ interface EventCardProps {
   venue: string;
   imgSrc: string | undefined;
   attendees: Attendee[];
+  isSaved?: boolean;
 }
 
 export const EventCard: FC<EventCardProps> = ({
@@ -44,6 +51,7 @@ export const EventCard: FC<EventCardProps> = ({
   venue,
   imgSrc,
   attendees,
+  isSaved,
 }) => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -61,6 +69,11 @@ export const EventCard: FC<EventCardProps> = ({
     navigate(getEventDetailRoute(eventId));
   };
 
+  const toggleSavedItems = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+  };
+
+
   const openShareModal = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsShareModalOpen(true);
@@ -68,7 +81,7 @@ export const EventCard: FC<EventCardProps> = ({
 
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    navigate(getEditEventRoute(eventId))
+    navigate(getEditEventRoute(eventId));
   };
 
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -136,7 +149,7 @@ export const EventCard: FC<EventCardProps> = ({
           <div className="flex gap-2 text-accent-text-500">
             <Users className="h-5 w-5" />
             <span className="flex gap-1 justify-center items-center font-medium">
-              <span>{attendees.length ? attendees.length : 'No'}</span>
+              <span>{attendees.length ? attendees.length : "No"}</span>
               <span>Attendees</span>
             </span>
           </div>
@@ -144,6 +157,16 @@ export const EventCard: FC<EventCardProps> = ({
 
         {!isOwnEvent ? (
           <div className="flex gap-2 justify-center items-center">
+            <button
+              className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
+              onClick={toggleSavedItems}
+            >
+              {isSaved ? (
+                <FaBookmark className="h-5 w-5 mr-2 text-secondary-text-400" />
+              ) : (
+                <FaRegBookmark className="h-5 w-5 mr-2" />
+              )}
+            </button>
             <button
               className="w-full lg:w-auto flex-1 text-secondary-text-500 border-0 border-black p-0 hover:cursor-pointer"
               onClick={openShareModal}

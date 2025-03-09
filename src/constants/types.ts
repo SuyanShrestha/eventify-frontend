@@ -36,6 +36,7 @@ export interface Event {
   eventCategoryId: string;
   venue: string;
   imgSrc: string | undefined;
+  isSaved: boolean;
   attendees: Attendee[];
   feedbacks: Feedback[];
 }

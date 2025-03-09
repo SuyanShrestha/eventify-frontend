@@ -138,6 +138,7 @@ const EventsList: React.FC<EventsListProps> = ({
                 venue={event.venue}
                 imgSrc={event.imgSrc}
                 attendees={event.attendees}
+                isSaved={event.isSaved}
               />
             ))
           )}
