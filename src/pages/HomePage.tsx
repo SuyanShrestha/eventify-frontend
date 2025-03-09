@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import {
   AboutUs,
+  FeaturedEvents,
   FeaturesSection,
   HeroSection,
   TestimonialSection,
@@ -22,7 +23,7 @@ const HomePage = () => {
       <HeroSection />
       <FeaturesSection />
       <AboutUs />
-      <FeaturesSection />
+      <FeaturedEvents />
       <TestimonialSection />
       <FeaturesSection />
       <Footer />

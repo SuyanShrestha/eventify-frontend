@@ -1,3 +1,5 @@
+//  Static data
+
 export const Gallery = {
   path: "gallery/",
   img: [
@@ -10,6 +12,35 @@ export const Gallery = {
     },
   ],
 };
+
+export const testimonials = [
+  {
+    id: 1,
+    content:
+      "This platform completely transformed how we organize our annual conference. The interface is intuitive, and the support team is always ready to help with any questions we had.",
+    author: "Shristi Shrestha",
+    position: "Event Director, TechSummit",
+    avatar: "/people/shristi.jpg",
+  },
+  {
+    id: 2,
+    content:
+      "As an attendee, I've discovered some amazing events through this platform that I would have otherwise missed. The recommendation system really understands my interests!",
+    author: "Bishesh Maharjan",
+    position: "Software Engineer",
+    avatar: "/people/bishesh.jpg",
+  },
+  {
+    id: 3,
+    content:
+      "We've seen a 40% increase in ticket sales since moving our events to this platform. The analytics tools have been invaluable for understanding our audience better.",
+    author: "Prekshya Dali",
+    position: "Marketing Manager, Mandala Events",
+    avatar: "/people/prekshya.jpg",
+  },
+];
+
+//  Dummy data to be replaced after API
 
 export const eventsData = [
   {

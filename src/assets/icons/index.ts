@@ -49,6 +49,7 @@ import {
   Filter,
   Globe,
   Pen,
+  CircleChevronRight,
 } from "lucide-react";
 
 export {
@@ -97,6 +98,7 @@ export {
   Filter,
   Globe,
   Pen,
+  CircleChevronRight,
   FaRegBookmark,
   FaBookmark,
 };
