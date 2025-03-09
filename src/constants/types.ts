@@ -14,6 +14,13 @@ export interface Attendee {
   isCheckedIn: boolean;
 }
 
+export interface Feedback {
+  feedbackId: string;
+  userId: string;
+  username: string;
+  feedbackContent: string;
+}
+
 export interface Event {
   id: number;
   title: string;
@@ -30,6 +37,7 @@ export interface Event {
   venue: string;
   imgSrc: string | undefined;
   attendees: Attendee[];
+  feedbacks: Feedback[];
 }
 
 export interface Booking {

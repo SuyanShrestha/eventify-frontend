@@ -4,8 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { eventsData, getEditEventRoute } from "../constants";
 import {
   Calendar,
-  FaRegBookmark,
   Info,
+  LayoutList,
   MapPin,
   MessageSquareText,
   PenLine,
@@ -20,32 +20,45 @@ import {
   UserRoundCheck,
 } from "../assets/icons";
 import { formatDateTime, roundToTwo } from "../helpers";
-import { Button } from "../components/ui";
+import { Button, CountBadge } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { QrCodeModal, QrScanModal, ShareModal } from "../components/events";
+import {
+  FeedbackModal,
+  QrCodeModal,
+  QrScanModal,
+  ShareModal,
+} from "../components/events";
 
 const EventDetail: React.FC = () => {
   const { eventId } = useParams();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [isQrScanOpen, setIsQrScanOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [ticketCount, setTicketCount] = useState(1);
 
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
     null
   );
+  const [modalContentType, setModalContentType] = useState<"write" | "view">(
+    "write"
+  );
 
   const navigate = useNavigate();
   const { users } = useSelector((state: RootState) => state.users);
   const { user: currentUser } = useSelector((state: RootState) => state.auth);
+  const { categories } = useSelector((state: RootState) => state.categories);
+  const { bookings } = useSelector((state: RootState) => state.bookings);
 
   const eventItem = eventsData.find((e) => e.id.toString() === eventId);
-  const { bookings } = useSelector((state: RootState) => state.bookings);
   const organizer = users.find((user) => user.id === eventItem?.organizerId);
   const isOwnEvent = eventItem?.organizerId === currentUser?.id;
+  const eventCategory = categories.find(
+    (category) => category.id === eventItem?.eventCategoryId
+  );
 
   const mappedAttendees = eventItem?.attendees.map(
     ({ attendeeId, isCheckedIn }) => {
@@ -56,6 +69,8 @@ const EventDetail: React.FC = () => {
       };
     }
   );
+
+  const mappedFeedbacks = eventItem?.feedbacks;
 
   // get bookings which match current eventID and current user's id
   const mappedBookings = bookings
@@ -104,8 +119,13 @@ const EventDetail: React.FC = () => {
     setIsQrScanOpen(true);
   };
 
-  const openFeedbackModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const openFeedbackModal = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    type: "write" | "view"
+  ) => {
     e.stopPropagation();
+    setModalContentType(type);
+    setIsFeedbackModalOpen(true);
   };
 
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -245,6 +265,12 @@ const EventDetail: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center">
+                    <LayoutList className="w-5 h-5 mr-3 text-accent-text-500" />
+                    <span className="text-primary-text-500 capitalize">
+                      Category : {eventCategory?.name}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
                     <Tag className="w-5 h-5 mr-3 text-accent-text-500" />
                     <span className="text-primary-text-500 capitalize">
                       {eventItem.eventType} Event
@@ -343,10 +369,13 @@ const EventDetail: React.FC = () => {
                       </h3>
                       <div className="flex gap-4">
                         <button
-                          className="cursor-pointer"
-                          onClick={openFeedbackModal}
+                          className="cursor-pointer relative"
+                          onClick={(e) => openFeedbackModal(e, "view")}
                         >
                           <MessageSquareText className="h-6 w-6" />
+                          {mappedFeedbacks?.length ? (
+                            <CountBadge count={mappedFeedbacks?.length || 0} />
+                          ) : null}
                         </button>
                         <button
                           className="cursor-pointer"
@@ -390,12 +419,14 @@ const EventDetail: React.FC = () => {
                     <h3 className="text-xl font-semibold text-secondary-text-500 ">
                       Your Bookings [{mappedBookings.length}]
                     </h3>
-                    <button
-                      className="cursor-pointer"
-                      onClick={openFeedbackModal}
-                    >
-                      <MessageSquareText className="h-6 w-6" />
-                    </button>
+                    {mappedBookings.length ? (
+                      <button
+                        className="cursor-pointer"
+                        onClick={(e) => openFeedbackModal(e, "write")}
+                      >
+                        <MessageSquareText className="h-6 w-6" />
+                      </button>
+                    ) : null}
                   </div>
                   <ul>
                     {mappedBookings.map((booking) => (
@@ -427,6 +458,12 @@ const EventDetail: React.FC = () => {
               <QrScanModal
                 isOpen={isQrScanOpen}
                 onClose={() => setIsQrScanOpen(false)}
+              />
+              <FeedbackModal
+                isOpen={isFeedbackModalOpen}
+                onClose={() => setIsFeedbackModalOpen(false)}
+                modalContentType={modalContentType}
+                feedbacks={mappedFeedbacks}
               />
             </div>
           </div>

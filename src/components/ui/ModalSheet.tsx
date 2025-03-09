@@ -1,6 +1,7 @@
 import { CircleX } from "lucide-react";
 import { Sheet } from "react-modal-sheet";
 import { useMediaQuery } from "react-responsive";
+import { cn } from "../../lib/utils";
 
 interface ModalSheetProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface ModalSheetProps {
   children: React.ReactNode;
   snapPoints?: number[];
   showCrossIcon?: boolean;
+  customClass?: string;
 }
 
 const ModalSheet: React.FC<ModalSheetProps> = ({
@@ -16,6 +18,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
   children,
   snapPoints = [0.4, 0],
   showCrossIcon = true,
+  customClass = "",
 }) => {
   const isSmallScreen = useMediaQuery({ maxWidth: 767 });
 
@@ -33,8 +36,10 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
       >
         <Sheet.Container>
           <Sheet.Header />
-          <Sheet.Content className="p-2 space-y-4 flex flex-col justify-between items-center">
-            {children}
+          <Sheet.Content className="p-2 space-y-4 flex flex-col justify-start items-center">
+            <div className="w-full max-h-[60vh] overflow-y-auto px-2">
+              {children}
+            </div>
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop onTap={onClose} />
@@ -51,7 +56,11 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
       <div className="absolute inset-0 backdrop-blur-xs z-10" />
 
       <div
-        className="bg-white p-6 rounded-lg shadow-lg w-96 relative z-20 flex flex-col items-center gap-8"
+        className={cn(
+          `bg-white p-6 rounded-lg shadow-lg w-96 relative z-20 flex flex-col items-center gap-8`,
+          `max-h-[50vh] overflow-y-auto`,
+          customClass
+        )}
         style={{ boxShadow: "0 0 4px rgba(85, 60, 154, 0.25)" }}
         onClick={(e) => e.stopPropagation()}
       >

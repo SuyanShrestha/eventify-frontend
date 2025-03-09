@@ -7,6 +7,7 @@ import LottieComponent from "./LottieComponent";
 import EmptyLottie from "./EmptyLottie";
 import ImageDragDrop from "./ImageDragDrop";
 import ModalSheet from "./ModalSheet";
+import CountBadge from "./CountBadge";
 
 export {
   Card,
@@ -18,4 +19,5 @@ export {
   EmptyLottie,
   ImageDragDrop,
   ModalSheet,
+  CountBadge,
 };
