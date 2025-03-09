@@ -46,3 +46,11 @@ export interface Booking {
   userId: string;
   bookingCreated: string;
 }
+
+export interface Notification {
+  id: number;
+  event: number;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}

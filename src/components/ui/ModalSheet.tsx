@@ -58,7 +58,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
       <div
         className={cn(
           `bg-white p-6 rounded-lg shadow-lg w-96 relative z-20 flex flex-col items-center gap-8`,
-          `max-h-[50vh] overflow-y-auto`,
+          `max-h-[50vh] overflow-y-auto custom-scrollbar`,
           customClass
         )}
         style={{ boxShadow: "0 0 4px rgba(85, 60, 154, 0.25)" }}

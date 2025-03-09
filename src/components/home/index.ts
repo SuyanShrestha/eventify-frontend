@@ -7,6 +7,7 @@ import AboutUs from "./AboutUs";
 import TestimonialSection from "./TestimonialSection";
 import FeaturedEvents from "./FeaturedEvents";
 import ContactUs from "./ContactUs";
+import NotificationCard from "./NotificationCard";
 
 export {
   AuthModal,
@@ -18,4 +19,5 @@ export {
   TestimonialSection,
   FeaturedEvents,
   ContactUs,
+  NotificationCard,
 };

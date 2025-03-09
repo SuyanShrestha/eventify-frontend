@@ -3,12 +3,12 @@
 export const Gallery = {
   path: "gallery/",
   img: [
-    { imgSrc: "1.jpg", imgAlt: "Wedding", imgTitle: "Wedding" },
-    { imgSrc: "2.jpg", imgAlt: "Concert", imgTitle: "Concert" },
+    { imgSrc: "1.jpg", imgAlt: "TedX", imgTitle: "TedX" },
+    { imgSrc: "2.jpg", imgAlt: "Crocheting", imgTitle: "Crocheting" },
     {
       imgSrc: "3.jpg",
-      imgAlt: "Destination Parties",
-      imgTitle: "Destination Parties",
+      imgAlt: "Exhibition",
+      imgTitle: "Exhibition",
     },
   ],
 };
@@ -359,4 +359,77 @@ export const categoriesData = [
   { id: "c4", name: "Entertainment" },
   { id: "c5", name: "Traditional" },
   { id: "c6", name: "Others" },
+];
+
+export const notificationsData = [
+  {
+    id: 1,
+    event: 1,
+    message: "Your event 'Annual Meetup' has been updated with new details.",
+    is_read: false,
+    created_at: "2025-03-09T08:00:00Z",
+  },
+  {
+    id: 2,
+    event: 3,
+    message: "Reminder: 'Tech Expo 2025' is starting in 2 days.",
+    is_read: true,
+    created_at: "2025-03-08T14:45:00Z",
+  },
+  {
+    id: 3,
+    event: 5,
+    message: "Your RSVP for 'Startup Pitch Night' has been confirmed.",
+    is_read: false,
+    created_at: "2025-03-08T18:20:00Z",
+  },
+  {
+    id: 4,
+    event: 4,
+    message: "The location for 'AI & Machine Learning Conference' has changed.",
+    is_read: true,
+    created_at: "2025-03-07T10:10:00Z",
+  },
+  {
+    id: 5,
+    event: 2,
+    message: "'Web Development Bootcamp' is now live!",
+    is_read: false,
+    created_at: "2025-03-09T09:30:00Z",
+  },
+  {
+    id: 6,
+    event: 1,
+    message: "Reminder: 'Annual Meetup' starts tomorrow at 10 AM.",
+    is_read: false,
+    created_at: "2025-03-08T22:00:00Z",
+  },
+  {
+    id: 7,
+    event: 3,
+    message: "'Tech Expo 2025' has a new guest speaker lineup announced!",
+    is_read: true,
+    created_at: "2025-03-07T16:30:00Z",
+  },
+  {
+    id: 8,
+    event: 5,
+    message: "Your seat for 'Startup Pitch Night' has been reserved.",
+    is_read: false,
+    created_at: "2025-03-09T06:15:00Z",
+  },
+  {
+    id: 9,
+    event: 4,
+    message: "'AI & Machine Learning Conference' will begin in 1 hour.",
+    is_read: false,
+    created_at: "2025-03-09T11:00:00Z",
+  },
+  {
+    id: 10,
+    event: 2,
+    message: "New schedule added to 'Web Development Bootcamp'.",
+    is_read: true,
+    created_at: "2025-03-08T19:40:00Z",
+  },
 ];

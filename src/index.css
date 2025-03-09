@@ -41,7 +41,7 @@
 /* background image */
 .bg-background-image {
   @apply bg-cover bg-center bg-no-repeat;
-  background-image: url('../public/flower-bg-2.png');
+  background-image: url('../flower-bg-2.png');
 }
 
 body {
