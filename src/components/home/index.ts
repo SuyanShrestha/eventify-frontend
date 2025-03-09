@@ -6,6 +6,7 @@ import FeatureCard from "./FeatureCard";
 import AboutUs from "./AboutUs";
 import TestimonialSection from "./TestimonialSection";
 import FeaturedEvents from "./FeaturedEvents";
+import ContactUs from "./ContactUs";
 
 export {
   AuthModal,
@@ -16,4 +17,5 @@ export {
   AboutUs,
   TestimonialSection,
   FeaturedEvents,
+  ContactUs,
 };
