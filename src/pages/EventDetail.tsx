@@ -20,6 +20,7 @@ import {
   UserRoundCheck,
 } from "../assets/icons";
 import { formatDateTime, roundToTwo } from "../helpers";
+import {loadStripe} from '@stripe/stripe-js'
 import { Button, CountBadge } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -31,6 +32,7 @@ import {
   QrScanModal,
   ShareModal,
 } from "../components/events";
+import axios, { AxiosError } from 'axios'
 
 const EventDetail: React.FC = () => {
   const { eventId } = useParams();
@@ -140,6 +142,42 @@ const EventDetail: React.FC = () => {
   const handleIncrease = () => setTicketCount((prev) => prev + 1);
   const handleDecrease = () =>
     setTicketCount((prev) => (prev > 1 ? prev - 1 : 1));
+
+  
+// will work correctly with token created from backend or after the login is implemented in the frontend
+const handlePayment = async () => {
+  const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMjI4ODMxLCJpYXQiOjE3NDE2MjQwMzEsImp0aSI6IjA5YmIwZmNhZjFkNDQ5NTVhZjQyZGI5NDUxNDA0M2JhIiwidXNlcl9pZCI6MX0.QWZR_5029J73UK0Hgnx06930vFNH2874rdAMeGtBUZQ";
+
+  try {
+    const { data } = await axios.post(
+      "http://127.0.0.1:8000/api/payments/create-payment-intent/",
+      {
+        event_id: 2,
+        quantity: ticketCount,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (data.checkout_url) {
+      window.location.href = data.checkout_url;
+    } else {
+      console.error("Checkout URL not found in response", data);
+    }
+  } catch (error) {
+    if(error instanceof AxiosError){
+      console.error("Payment request failed:", error.response?.data || error.message);
+    }else{
+      console.error('error payment')
+    }
+  }
+};
+
+  
 
   return (
     <div
@@ -340,6 +378,7 @@ const EventDetail: React.FC = () => {
                     <Button
                       bgColor="bg-accent-500"
                       textColor="text-accent-btn-text"
+                      onClick={handlePayment}
                       className="w-full bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300"
                     >
                       {eventItem.ticketPrice === 0

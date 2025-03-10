@@ -14,6 +14,7 @@ import {
   LoginPage,
   RegisterPage,
 } from "../pages";
+import PaymentSuccessPage from "../pages/PaymentSuccessPage";
 
 
 const UserLayout: React.FC = () => {
@@ -34,6 +35,7 @@ const UserLayout: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/payment/success" element={<PaymentSuccessPage />} />
         </Routes>
       </main>
     </div>
