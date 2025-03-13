@@ -12,28 +12,53 @@ import {
   TriangleAlert,
   UserRound,
 } from "../assets/icons";
+import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
 
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState("");
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [userType, setUserType] = useState<string>("user");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const userTypes = ["user", "organizer"];
 
   const isSmallScreen = useMediaQuery({ maxWidth: 1024 });
   const lottieHeight = isSmallScreen ? 450 : 600;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setPasswordsMatch(false);
       return;
     }
+    
+    setIsSubmitting(true);
+    
+    try{
+      const response = await axios.post('http://localhost:8000/api/user/register/',
+        {
+         username,
+         email,
+         password,
+         is_organizer:userType === 'organizer'
+        })
+      toast.success(response.data.detail)
+    }catch (err) {
+      if (err instanceof AxiosError && err.response?.data) {
+        const errorData = err.response.data;
+        const messages = Object.values(errorData).flat().join("\n");
+        toast.error(messages);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }    
     console.log("Signup submitted", { username, email, password });
   };
 
@@ -164,7 +189,6 @@ const RegisterPage: React.FC = () => {
                 </p>
               )}
 
-              {/* User Type Selection */}
               <Tabs
                 options={userTypes}
                 activeTab={userType}
@@ -187,9 +211,10 @@ const RegisterPage: React.FC = () => {
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-secondary-500 bg-accent-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500"
+                disabled={isSubmitting}
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-secondary-500 bg-accent-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Sign up
+                {isSubmitting ? "Signing up..." : "Sign up"}
               </button>
             </div>
           </form>

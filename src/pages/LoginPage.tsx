@@ -2,21 +2,41 @@ import React, { useState } from "react";
 import { LottieComponent } from "../components/ui";
 import { LoginLottie } from "../assets/lottie";
 import { useMediaQuery } from "react-responsive";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RoutingLinks } from "../constants";
 import { Eye, EyeClosed, Lock, Mail } from "../assets/icons";
+import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate()
 
   const isSmallScreen = useMediaQuery({ maxWidth: 1024 });
   const lottieHeight = isSmallScreen ? 450 : 600;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login submitted", { email, password });
+    setIsSubmitting(true);
+    
+    try{
+      const response = await axios.post('http://localhost:8000/api/user/login/',{email,password})
+      toast.success(response.data.detail)
+      localStorage.setItem('eventify-token',response.data.access_token)
+      localStorage.setItem('eventify-refresh',response.data.refresh_token)
+      navigate('/')
+    }catch(err){
+      if(err instanceof AxiosError){
+        toast.error(err.response?.data.detail)
+      }else{
+        toast.error("Unexpected Error occured. Please try again later")
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -94,9 +114,10 @@ const LoginPage: React.FC = () => {
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-secondary-500 bg-accent-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500"
+                disabled={isSubmitting}
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-secondary-500 bg-accent-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Sign in
+                {isSubmitting ? "Signing in..." : "Sign in"}
               </button>
             </div>
           </form>

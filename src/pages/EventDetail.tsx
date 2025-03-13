@@ -144,9 +144,9 @@ const EventDetail: React.FC = () => {
     setTicketCount((prev) => (prev > 1 ? prev - 1 : 1));
 
   
-// will work correctly with token created from backend or after the login is implemented in the frontend
 const handlePayment = async () => {
-  const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMjI4ODMxLCJpYXQiOjE3NDE2MjQwMzEsImp0aSI6IjA5YmIwZmNhZjFkNDQ5NTVhZjQyZGI5NDUxNDA0M2JhIiwidXNlcl9pZCI6MX0.QWZR_5029J73UK0Hgnx06930vFNH2874rdAMeGtBUZQ";
+  if(typeof window === undefined) return
+  const accessToken = localStorage.getItem('eventify-token');
 
   try {
     const { data } = await axios.post(
