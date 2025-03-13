@@ -50,6 +50,8 @@ import {
   Globe,
   Pen,
   CircleChevronRight,
+  Menu,
+  X,
 } from "lucide-react";
 
 export {
@@ -99,6 +101,8 @@ export {
   Globe,
   Pen,
   CircleChevronRight,
+  Menu,
+  X,
   FaRegBookmark,
   FaBookmark,
 };

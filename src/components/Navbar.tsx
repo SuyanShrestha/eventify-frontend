@@ -1,13 +1,15 @@
 import type React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Bell, User, Menu, X } from "../assets/icons";
 import { RoutingLinks } from "../constants";
 import { AuthModal, NotificationModal } from "./home";
-import { useState } from "react";
-import { Bell, User } from "../assets/icons";
+import { SlidingMenu } from "./ui";
 
 const Navbar: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isNotificationModalOpen, setIsNotificaitonModalOpen] = useState(false);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const location = useLocation();
 
@@ -18,96 +20,106 @@ const Navbar: React.FC = () => {
 
   const openNotificationModal = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setIsNotificaitonModalOpen(true);
+    setIsNotificationModalOpen(true);
   };
 
   return (
     <header className="bg-secondary-500 shadow-md">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between h-16">
+          {/* Logo */}
           <div className="flex-shrink-0">
             <Link
               to={RoutingLinks.Home}
-              className="text-accent-text-500 text-3xl font-extrabold "
+              className="text-accent-text-500 text-3xl font-extrabold"
             >
               Eventify
             </Link>
           </div>
+
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8 lg:space-x-4">
-              <Link
-                to={RoutingLinks.Home}
-                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
-                  location.pathname === RoutingLinks.Home
-                    ? "text-accent-500"
-                    : "text-primary-text-500 hover:text-secondary-text-500"
-                }`}
-              >
-                Home
-              </Link>
-              <Link
-                to={RoutingLinks.Events}
-                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
-                  location.pathname === RoutingLinks.Events
-                    ? "text-accent-500"
-                    : "text-primary-text-500 hover:text-secondary-text-500"
-                }`}
-              >
-                Explore
-              </Link>
-
-              <Link
-                to={RoutingLinks.Bookings}
-                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
-                  location.pathname === RoutingLinks.Bookings
-                    ? "text-accent-500"
-                    : "text-primary-text-500 hover:text-secondary-text-500"
-                }`}
-              >
-                Bookings
-              </Link>
-
-              <Link
-                to={RoutingLinks.CreateEvent}
-                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
-                  location.pathname === RoutingLinks.CreateEvent
-                    ? "text-accent-500"
-                    : "text-primary-text-500 hover:text-secondary-text-500"
-                }`}
-              >
-                Create
-              </Link>
-
-              <Link
-                to={RoutingLinks.Dashboard}
-                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
-                  location.pathname === RoutingLinks.Dashboard
-                    ? "text-accent-500"
-                    : "text-primary-text-500 hover:text-secondary-text-500"
-                }`}
-              >
-                Dashboard
-              </Link>
+              {[
+                { name: "Home", path: RoutingLinks.Home },
+                { name: "Explore", path: RoutingLinks.Events },
+                { name: "Bookings", path: RoutingLinks.Bookings },
+                { name: "Create", path: RoutingLinks.CreateEvent },
+                { name: "Dashboard", path: RoutingLinks.Dashboard },
+              ].map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
+                    location.pathname === link.path
+                      ? "text-accent-500"
+                      : "text-primary-text-500 hover:text-secondary-text-500"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
             </div>
           </div>
-          <div className="flex gap-4 ml-4 h-full items-center justify-center">
+
+          <div className="flex items-center gap-4">
             <button className="cursor-pointer" onClick={openNotificationModal}>
               <Bell className="h-6 w-6 text-accent-500" />
             </button>
             <button className="cursor-pointer" onClick={openAuthModal}>
               <User className="h-6 w-6 text-accent-500" />
             </button>
+            <button
+              className="md:hidden cursor-pointer"
+              onClick={() => setIsMenuOpen(true)}
+            >
+              <Menu className="h-6 w-6 text-accent-500" />
+            </button>
           </div>
         </div>
-        <AuthModal
-          isOpen={isAuthModalOpen}
-          onClose={() => setIsAuthModalOpen(false)}
-        />
-        <NotificationModal
-          isOpen={isNotificationModalOpen}
-          onClose={() => setIsNotificaitonModalOpen(false)}
-        />
       </div>
+
+      {/* for responsive */}
+      <SlidingMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen}>
+        <button
+          className="absolute top-4 right-4"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          <X className="h-6 w-6 text-primary-text-500" />
+        </button>
+
+        <nav className="mt-16 flex flex-col items-start p-6 space-y-6">
+          {[
+            { name: "Home", path: RoutingLinks.Home },
+            { name: "Explore", path: RoutingLinks.Events },
+            { name: "Bookings", path: RoutingLinks.Bookings },
+            { name: "Create", path: RoutingLinks.CreateEvent },
+            { name: "Dashboard", path: RoutingLinks.Dashboard },
+          ].map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              className={`block text-lg transition-colors duration-300 ${
+                location.pathname === link.path
+                  ? "text-accent-500"
+                  : "text-primary-text-500 hover:text-secondary-text-500"
+              }`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </nav>
+      </SlidingMenu>
+
+      {/* Modals */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
+      <NotificationModal
+        isOpen={isNotificationModalOpen}
+        onClose={() => setIsNotificationModalOpen(false)}
+      />
     </header>
   );
 };
