@@ -7,13 +7,17 @@ import {
   Timer,
   Tag,
   LayoutList,
+  X,
 } from "../../assets/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../store/eventSlice";
 import { RootState } from "../../store";
 import { Tabs } from "../ui";
+import { useMediaQuery } from "react-responsive";
 
-interface SidebarProps {}
+interface SidebarProps {
+  setIsSidebarOpen?: (isOpen: boolean) => void;
+}
 
 const SIDEBAR_CATEGORIES = [
   {
@@ -62,7 +66,7 @@ const CATEGORY_MAPPER: Record<string, string> = {
 
 const eventScopeOptions = ["All", "Saved"];
 
-const Sidebar: React.FC<SidebarProps> = () => {
+const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
   const [selectedFilters, setSelectedFilters] = useState({
     ticketType: null as string | null,
     eventDate: null as string | null,
@@ -71,6 +75,8 @@ const Sidebar: React.FC<SidebarProps> = () => {
     eventCategoryId: null as string | null,
   });
   const [activeScope, setActiveScope] = useState<string>("All");
+
+  const isSmallScreen = useMediaQuery({ maxWidth: 767 }); // for <md screens
 
   const dispatch = useDispatch();
   const { categories: eventCategories } = useSelector(
@@ -163,9 +169,19 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
   return (
     <div className="mx-4 py-2 h-[calc(100vh-4rem)] flex flex-col gap-4 overflow-y-auto custom-scrollbar">
-      <h1 className="text-2xl p-4 text-secondary-text-500 font-bold">
-        Events Category
-      </h1>
+      <div className="w-full flex justify-between items-center ">
+        <h1 className="text-2xl py-4 text-secondary-text-500 font-bold">
+          Events Category
+        </h1>
+        {isSmallScreen && (
+          <button
+            className="cursor-pointer"
+            onClick={() => setIsSidebarOpen?.(false)}
+          >
+            <X className="h-6 w-6 text-secondary-text-500" />
+          </button>
+        )}
+      </div>
 
       <div>
         <Tabs

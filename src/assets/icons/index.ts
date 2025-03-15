@@ -52,6 +52,7 @@ import {
   CircleChevronRight,
   Menu,
   X,
+  PanelLeftOpen,
 } from "lucide-react";
 
 export {
@@ -103,6 +104,7 @@ export {
   CircleChevronRight,
   Menu,
   X,
+  PanelLeftOpen,
   FaRegBookmark,
   FaBookmark,
 };
