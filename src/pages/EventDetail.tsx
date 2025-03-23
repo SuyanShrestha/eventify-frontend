@@ -20,7 +20,7 @@ import {
   UserRoundCheck,
 } from "../assets/icons";
 import { formatDateTime, roundToTwo } from "../helpers";
-import {loadStripe} from '@stripe/stripe-js'
+import { loadStripe } from "@stripe/stripe-js";
 import { Button, CountBadge } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -30,9 +30,10 @@ import {
   FeedbackModal,
   QrCodeModal,
   QrScanModal,
+  RsvpModal,
   ShareModal,
 } from "../components/events";
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError } from "axios";
 
 const EventDetail: React.FC = () => {
   const { eventId } = useParams();
@@ -40,6 +41,7 @@ const EventDetail: React.FC = () => {
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [isQrScanOpen, setIsQrScanOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [isRsvpModalOpen, setIsRsvpModalOpen] = useState(false);
   const [ticketCount, setTicketCount] = useState(1);
 
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
@@ -121,6 +123,11 @@ const EventDetail: React.FC = () => {
     setIsQrScanOpen(true);
   };
 
+  const openRsvpModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsRsvpModalOpen(true);
+  };
+
   const openFeedbackModal = (
     e: React.MouseEvent<HTMLButtonElement>,
     type: "write" | "view"
@@ -129,6 +136,8 @@ const EventDetail: React.FC = () => {
     setModalContentType(type);
     setIsFeedbackModalOpen(true);
   };
+
+
 
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -143,41 +152,44 @@ const EventDetail: React.FC = () => {
   const handleDecrease = () =>
     setTicketCount((prev) => (prev > 1 ? prev - 1 : 1));
 
-  
-// will work correctly with token created from backend or after the login is implemented in the frontend
-const handlePayment = async () => {
-  const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMjI4ODMxLCJpYXQiOjE3NDE2MjQwMzEsImp0aSI6IjA5YmIwZmNhZjFkNDQ5NTVhZjQyZGI5NDUxNDA0M2JhIiwidXNlcl9pZCI6MX0.QWZR_5029J73UK0Hgnx06930vFNH2874rdAMeGtBUZQ";
+  // will work correctly with token created from backend or after the login is implemented in the frontend
+  const handlePayment = async () => {
+    const accessToken =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMjI4ODMxLCJpYXQiOjE3NDE2MjQwMzEsImp0aSI6IjA5YmIwZmNhZjFkNDQ5NTVhZjQyZGI5NDUxNDA0M2JhIiwidXNlcl9pZCI6MX0.QWZR_5029J73UK0Hgnx06930vFNH2874rdAMeGtBUZQ";
 
-  try {
-    const { data } = await axios.post(
-      "http://127.0.0.1:8000/api/payments/create-payment-intent/",
-      {
-        event_id: 2,
-        quantity: ticketCount,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+    try {
+      const { data } = await axios.post(
+        "http://127.0.0.1:8000/api/payments/create-payment-intent/",
+        {
+          event_id: 2,
+          quantity: ticketCount,
         },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        console.error("Checkout URL not found in response", data);
       }
-    );
-
-    if (data.checkout_url) {
-      window.location.href = data.checkout_url;
-    } else {
-      console.error("Checkout URL not found in response", data);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(
+          "Payment request failed:",
+          error.response?.data || error.message
+        );
+      } else {
+        console.error("error payment");
+      }
     }
-  } catch (error) {
-    if(error instanceof AxiosError){
-      console.error("Payment request failed:", error.response?.data || error.message);
-    }else{
-      console.error('error payment')
-    }
-  }
-};
+  };
 
-  
+
 
   return (
     <div
@@ -439,7 +451,18 @@ const handlePayment = async () => {
                         </li>
                       ))}
                     </ul>
+
+                    {/* RSVP button */}
+                    <Button
+                      bgColor="bg-accent-500"
+                      textColor="text-accent-btn-text"
+                      onClick={openRsvpModal}
+                      className="w-full mt-6 bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300"
+                    >
+                      Send RSVP invitations
+                    </Button>
                   </div>
+
                   <div className="mt-6 bg-[rgba(255,132,0,0.2)] p-4 rounded-lg">
                     <div className="flex items-start">
                       <Info className="w-5 h-5 mr-2 text-accent-text-500 mt-1" />
@@ -504,6 +527,7 @@ const handlePayment = async () => {
                 modalContentType={modalContentType}
                 feedbacks={mappedFeedbacks}
               />
+              <RsvpModal isOpen={isRsvpModalOpen} onClose={() => setIsRsvpModalOpen(false)}/>
             </div>
           </div>
         </div>
