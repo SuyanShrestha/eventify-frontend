@@ -360,15 +360,6 @@ export const bookingsData = [
   },
 ];
 
-export const categoriesData = [
-  { id: "c1", name: "Educational" },
-  { id: "c2", name: "Career" },
-  { id: "c3", name: "Exhibition" },
-  { id: "c4", name: "Entertainment" },
-  { id: "c5", name: "Traditional" },
-  { id: "c6", name: "Others" },
-];
-
 export const notificationsData = [
   {
     id: 1,

@@ -1,14 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { Search } from "../../assets/icons";
 import { useDebounce } from "../../hooks";
-import { clearFilters, setEvents, setSearchTerm } from "../../store/eventSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { useLocation } from "react-router-dom";
 import EmptyLottie from "../ui/EmptyLottie";
-import { Event, Messages, eventsData } from "../../constants";
+import { Messages } from "../../constants";
 import { EventCard } from "./EventCard";
 import { cn } from "../../lib/utils";
+import axios from "axios";
+
+// API Event interface to match the response format
+interface ApiEvent {
+  id: number;
+  banner: string;
+  title: string;
+  subtitle: string;
+  event_type: string;
+  is_free: boolean;
+  ticket_price: string;
+  start_date: string;
+  end_date: string;
+  booking_deadline: string;
+  venue: string | null;
+  category_details: {
+    id: number;
+    name: string;
+  };
+  tickets_available: number;
+  created_at: string;
+  updated_at: string;
+  organizer: {
+    id: number;
+    profile_picture: string | null;
+    username: string;
+  };
+  is_upcoming: boolean;
+  is_active: boolean;
+  is_expired: boolean;
+  attendees_count: number;
+  is_saved: boolean;
+}
 
 interface EventsListProps {
   isDashboard?: boolean;
@@ -20,64 +50,66 @@ const EventsList: React.FC<EventsListProps> = ({
   isBooking = false,
 }) => {
   const [searchText, setSearchText] = useState<string>("");
+  const [events, setEvents] = useState<ApiEvent[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<ApiEvent[]>([]);
   const debouncedSearchText = useDebounce<string>(searchText, 300);
   const location = useLocation();
-
-  const dispatch = useDispatch();
-  const { filteredEvents } = useSelector((state: RootState) => state.events);
-  const { user: currentUser } = useSelector((state: RootState) => state.auth);
-  const { users } = useSelector((state: RootState) => state.users);
-  const { bookings } = useSelector((state: RootState) => state.bookings);
-
-  const mappedBookings = bookings.map(
-    ({ bookingId, eventId, userId, bookingCreated }) => {
-      const user = users.find((user) => user.id === userId);
-      const event = eventsData.find((event) => event.id === eventId);
-
-      return {
-        bookingId,
-        eventId: event?.id,
-        eventTitle: event?.title,
-        eventSubtitle: event?.subtitle,
-        eventImage: event?.imgSrc,
-        userId: user?.id,
-        userName: user?.username,
-        bookingCreated,
-      };
-    }
-  );
-
-  const currentUserBookings = mappedBookings.filter(
-    (item) => item.userId === currentUser?.id
-  );
+  const currentUser = JSON.parse(localStorage.getItem('eventify-user') || '{}');
 
   useEffect(() => {
-    if (isBooking && currentUser) {
-      const bookedEvents = currentUserBookings
-        .map((booking) =>
-          eventsData.find((event) => event.id === booking.eventId)
+    const fetchEvents = async () => {
+      try {
+        if(isDashboard){
+          const response = await axios.get(
+            'http://localhost:8000/api/events/my-events/', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
+            }
+          });
+          setEvents(response.data);
+          return;
+        }
+        if(isBooking){
+          const response = await axios.get(
+            'http://localhost:8000/api/events/my-bookings/', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
+            }
+          });
+          setEvents(response.data);
+          return;
+        }
+        const response = await axios.get(
+          'http://localhost:8000/api/events/'
         )
-        .filter((event) => event !== undefined);
-      dispatch(setEvents(bookedEvents as Event[]));
-    } else if (isDashboard && currentUser) {
-      const eventsFilteredByUser = eventsData.filter(
-        (event: Event) => event.organizerId === currentUser.id
-      );
-      dispatch(setEvents(eventsFilteredByUser));
-    } else {
-      dispatch(setEvents(eventsData));
-    }
-  }, [dispatch, isDashboard, isBooking, currentUser]);
-
-  useEffect(() => {
-    dispatch(setSearchTerm(debouncedSearchText));
-  }, [debouncedSearchText, dispatch]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(clearFilters());
+        setEvents(response.data);
+      } catch (err) {
+        console.log(err);
+      }
     };
-  }, [location.pathname]);
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    let filtered = [...events];
+    
+    if (debouncedSearchText) {
+      filtered = filtered.filter(event => 
+        event.title.toLowerCase().includes(debouncedSearchText.toLowerCase()) ||
+        event.subtitle.toLowerCase().includes(debouncedSearchText.toLowerCase())
+      );
+    }
+    
+    // Filter for dashboard (my events)
+    if (isDashboard && currentUser && currentUser.id) {
+      filtered = filtered.filter(event => event.organizer.id === currentUser.id);
+    }
+    
+    if (isBooking && currentUser && currentUser.id) {
+    }
+    
+    setFilteredEvents(filtered);
+  }, [events, debouncedSearchText]);
 
   return (
     <div
@@ -86,7 +118,6 @@ const EventsList: React.FC<EventsListProps> = ({
         !isDashboard && !isBooking && "ml-0 md:ml-[20rem] flex-grow "
       )}
     >
-      {/* <div className="bg-secondary-500 shadow-md p-4 fixed top-16 left-[5rem] md:left-[20rem] right-0 z-10 "> */}
       <div
         className={cn(
           "bg-secondary-500 shadow-md p-4 fixed top-16 z-10",
@@ -127,18 +158,18 @@ const EventsList: React.FC<EventsListProps> = ({
               <EventCard
                 key={event.id}
                 eventId={event.id.toString()}
-                organizerId={event.organizerId}
+                organizerId={event.organizer.id.toString()}
                 title={event.title}
                 subtitle={event.subtitle}
-                startDate={event.startDate}
-                endDate={event.endDate}
-                bookingDeadline={event.bookingDeadline}
-                ticketPrice={event.ticketPrice}
-                eventType={event.eventType}
-                venue={event.venue}
-                imgSrc={event.imgSrc}
-                attendees={event.attendees}
-                isSaved={event.isSaved}
+                startDate={event.start_date}
+                endDate={event.end_date}
+                bookingDeadline={event.booking_deadline}
+                ticketPrice={parseFloat(event.ticket_price)}
+                eventType={event.event_type}
+                venue={event.venue || ""}
+                imgSrc={isBooking ? `http://localhost:8000/`+event.banner :event.banner}
+                attendees={event.attendees_count}
+                isSaved={event.is_saved}
               />
             ))
           )}

@@ -1,14 +1,18 @@
+import React from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { Event } from "../../constants";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { ModalSheet } from "../ui";
+
+interface EventItem {
+  id: number;
+  title: string;
+  // Add other relevant properties
+}
 
 interface QrCodeModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedBookingId: string | null;
-  eventItem: Event;
+  eventItem: EventItem;
 }
 
 const QrCodeModal: React.FC<QrCodeModalProps> = ({
@@ -17,14 +21,13 @@ const QrCodeModal: React.FC<QrCodeModalProps> = ({
   selectedBookingId,
   eventItem,
 }) => {
-  const { user: currentUser } = useSelector((state: RootState) => state.auth);
-  const { bookings } = useSelector((state: RootState) => state.bookings);
+  // Get current user ID from local storage or context
+  const currentUserId = 1; // This would be retrieved from auth context in real app
+  
+  // In a real app, you'd fetch this from API or local state
+  const bookingTimestamp = new Date().toISOString();
 
-  const bookingTimestamp =
-    bookings.find((booking) => booking.bookingId === selectedBookingId)
-      ?.bookingCreated || "N/A";
-
-  const qrCodeData = `booking_id:${selectedBookingId}|event_id:${eventItem.id}|user_id:${currentUser?.id}|bookingTimestamp:${bookingTimestamp}`;
+  const qrCodeData = `booking_id:${selectedBookingId}|event_id:${eventItem.id}|user_id:${currentUserId}|bookingTimestamp:${bookingTimestamp}`;
 
   return (
     <ModalSheet isOpen={isOpen} onClose={onClose}>

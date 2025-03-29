@@ -13,14 +13,11 @@ import {
 import { Badge } from "../ui";
 import { useNavigate } from "react-router-dom";
 import {
-  Attendee,
   getEditEventRoute,
   getEventDetailRoute,
 } from "../../constants";
 import { checkExpired, formatDateTime, truncateText } from "../../helpers";
 import ShareModal from "./ShareModal";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 
 interface EventCardProps {
   eventId: string;
@@ -34,7 +31,7 @@ interface EventCardProps {
   eventType: string;
   venue: string;
   imgSrc: string | undefined;
-  attendees: Attendee[];
+  attendees: number;
   isSaved?: boolean;
 }
 
@@ -55,9 +52,9 @@ export const EventCard: FC<EventCardProps> = ({
 }) => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const navigate = useNavigate();
-  const { user: currentUser } = useSelector((state: RootState) => state.auth);
+  const currentUser = JSON.parse(localStorage.getItem('eventify-user') || '{}');
 
-  const isOwnEvent = organizerId === currentUser?.id;
+  const isOwnEvent = organizerId === (currentUser?.id?.toString() || '');
 
   const { date: formattedStartDate, time: formattedStartTime } =
     formatDateTime(startDate);
@@ -71,8 +68,8 @@ export const EventCard: FC<EventCardProps> = ({
 
   const toggleSavedItems = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    // API integration for saving/unsaving events would go here
   };
-
 
   const openShareModal = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -86,6 +83,7 @@ export const EventCard: FC<EventCardProps> = ({
 
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    // API integration for deleting events would go here
   };
 
   const isExpired = checkExpired(endDate, bookingDeadline);
@@ -94,7 +92,7 @@ export const EventCard: FC<EventCardProps> = ({
     <div
       className="p-4 bg-secondary-500 border border-gray-200 rounded-lg w-full xl:w-full flex flex-col xl:flex-col xl:justify-center xl:items-start gap-4 hover:cursor-pointer"
       style={{ boxShadow: "0 0 10px rgba(85, 60, 154, 0.4)" }}
-      onClick={handleDetailsClick}
+      onClick={()=>navigate(`/events/${eventId}`)}
     >
       <div className="flex flex-col gap-2 xl:gap-3">
         <img
@@ -133,7 +131,6 @@ export const EventCard: FC<EventCardProps> = ({
       </div>
 
       <div className="flex justify-between items-center w-full">
-        {/* Top Section: Badge + Price */}
         {!isOwnEvent ? (
           <div className="flex items-center justify-start gap-4 h-full text-lg font-semibold">
             {ticketPrice === 0 ? (
@@ -149,7 +146,7 @@ export const EventCard: FC<EventCardProps> = ({
           <div className="flex gap-2 text-accent-text-500">
             <Users className="h-5 w-5" />
             <span className="flex gap-1 justify-center items-center font-medium">
-              <span>{attendees.length ? attendees.length : "No"}</span>
+              <span>{attendees || "No"}</span>
               <span>Attendees</span>
             </span>
           </div>
@@ -201,7 +198,6 @@ export const EventCard: FC<EventCardProps> = ({
           isOpen={isShareModalOpen}
           onClose={() => setIsShareModalOpen(false)}
           shareUrl={`${window.location.href}/${eventId}`}
-          // shareUrl="https://lucide.dev/icons/circle-x"
         />
       </div>
     </div>

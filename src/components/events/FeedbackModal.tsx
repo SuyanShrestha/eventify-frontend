@@ -1,6 +1,13 @@
-import { Feedback } from "../../constants";
+import React, { useState } from "react";
 import { Button, ModalSheet } from "../ui";
-import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+interface Feedback {
+  feedbackId: string;
+  username: string;
+  feedbackContent: string;
+}
 
 interface FeedbackModalProps {
   isOpen: boolean;
@@ -16,15 +23,37 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   feedbacks = [],
 }) => {
   const [comment, setComment] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
   
-  const handleSubmitFeedback = () => {
-    console.log("comment submitted: ", comment);
-    setComment("");
-    onClose();
+  const handleSubmitFeedback = async () => {
+    if (!comment.trim()) {
+      toast.error("Please enter a feedback");
+      return;
+    }
+    
+    setSubmitting(true);
+    
+    try {
+      // In a real app, you'd submit the feedback to your API
+      // const response = await axios.post('/api/feedback', {
+      //   content: comment,
+      //   eventId: eventId // You'd need to pass eventId to this component
+      // });
+      
+      // Mock successful submission
+      toast.success("Feedback submitted successfully");
+      setComment("");
+      onClose();
+    } catch (error) {
+      toast.error("Failed to submit feedback");
+      console.error("Error submitting feedback:", error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -66,7 +95,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 className="min-w-48 bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-400 transition duration-300"
                 onClick={handleSubmitFeedback}
               >
-                Submit
+                {submitting ? "Submitting..." : "Submit"}
               </Button>
             </div>
           </>

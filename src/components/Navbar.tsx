@@ -2,12 +2,37 @@ import type React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { RoutingLinks } from "../constants";
 import { AuthModal, NotificationModal } from "./home";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bell, User } from "../assets/icons";
+import axios from "axios";
 
 const Navbar: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificaitonModalOpen] = useState(false);
+  const [isOrganizer,setIsOrganizer] = useState(false)
+
+  
+  const fetchUser = async()=>{
+    if(typeof window === undefined) return
+    try{
+      const response = await axios.get('http://localhost:8000/api/user/profile/',{
+        headers:{
+          Authorization:`Bearer ${localStorage.getItem('eventify-token')}`
+        }
+      })
+      if(response.data){
+        setIsOrganizer(response.data.is_organizer)
+      }
+    }
+    catch(err){
+      console.log(err)
+      setIsOrganizer(false)
+    }
+  }
+
+  useEffect(()=>{
+    fetchUser()
+  },[localStorage.getItem('eventify-token')])
 
   const location = useLocation();
 
@@ -20,6 +45,7 @@ const Navbar: React.FC = () => {
     e.stopPropagation();
     setIsNotificaitonModalOpen(true);
   };
+
 
   return (
     <header className="bg-secondary-500 shadow-md">
@@ -66,7 +92,8 @@ const Navbar: React.FC = () => {
               >
                 Bookings
               </Link>
-
+            
+            {isOrganizer && 
               <Link
                 to={RoutingLinks.CreateEvent}
                 className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
@@ -76,7 +103,7 @@ const Navbar: React.FC = () => {
                 }`}
               >
                 Create
-              </Link>
+              </Link>}
 
               <Link
                 to={RoutingLinks.Dashboard}

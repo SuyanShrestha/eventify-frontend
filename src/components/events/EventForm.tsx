@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useNavigate, useParams } from "react-router-dom";
 import { RoutingLinks, eventsData } from "../../constants";
+import axios from "axios";
 // import MarkdownEditor from "../../components/MarkdownEditor";
 // import Delta from "quill-delta";
 
@@ -28,6 +29,11 @@ interface EventState {
 
 interface EventFormProps {
   isEditing?: boolean;
+}
+
+interface CategoryType{
+  id:number,
+  name:string
 }
 
 const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
@@ -58,7 +64,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
   // const [isFree, setIsFree] = useState(false);
   const [isFree, setIsFree] = useState(() => eventItem?.ticketPrice === 0);
 
-  const { categories } = useSelector((state: RootState) => state.categories);
+  const [categories,setCategories ] = useState<CategoryType[]>([]);
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -94,39 +100,85 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
   //   setEvent((prev) => ({ ...prev, details: markdown }));
   // };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const errors = validateEventForm(event);
-
+  
     if (errors.length > 0) {
       showToast(errors, "error");
       return;
     }
-
-    console.log("Form submitted:", event);
-
-    setEvent({
-      title: "",
-      subtitle: "",
-      startDate: "",
-      endDate: "",
-      bookingDeadline: "",
-      eventType: "physical",
-      eventCategoryId: "c1",
-      venue: "",
-      ticketPrice: 0,
-      availableTickets: undefined,
-      details: "",
-      imgSrc: null,
-    });
-
-    showToast(["Event submitted successfully!"], "success");
-
-    if (isEditing) {
-      navigate(RoutingLinks.Dashboard);
+  
+    const formData = new FormData();
+    console.log(event.eventCategoryId);
+    
+    formData.append("title", event.title);
+    formData.append("subtitle", event.subtitle);
+    formData.append("start_date", event.startDate);
+    formData.append("end_date", event.endDate);
+    formData.append("booking_deadline", event.bookingDeadline);
+    formData.append("event_type", event.eventType);
+    formData.append("category", event.eventCategoryId);
+    formData.append("venue", event.venue);
+    formData.append("ticket_price", event.ticketPrice.toString());
+    formData.append("total_tickets", event.availableTickets?.toString() || "");
+    formData.append("details", event.details);
+    formData.append("is_free", isFree.toString());
+    formData.append("is_approved", "false");
+    
+    if (event.imgSrc) {
+      const blob = await fetch(event.imgSrc).then((res) => res.blob());
+      formData.append("banner", blob, "banner.png");
+    }
+    
+    try {
+      const response = await axios.post('http://localhost:8000/api/events/', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
+        }
+      });
+      if(response.data){
+        showToast(["Event submitted successfully!"], "success");
+      }
+      
+      if (isEditing) {
+        navigate(RoutingLinks.Dashboard);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const { data } = error.response;
+        
+        if (data.detail) {
+          showToast([data.detail], "error");
+        } else {
+          const errorMessages = [];
+          
+          for (const field in data) {
+            if (Array.isArray(data[field])) {
+              errorMessages.push(`${field.replace('_', ' ')}: ${data[field][0]}`);
+            }
+          }
+          
+          if (errorMessages.length > 0) {
+            showToast(errorMessages, "error");
+          } else {
+            showToast(["An error occurred while submitting the event."], "error");
+          }
+        }
+      } else {
+        showToast(["An unexpected error occurred."], "error");
+      }
     }
   };
+
+  useEffect(()=>{
+    const fetchEventCategories = async()=>{
+      const response = await axios.get('http://localhost:8000/api/events/categories/')
+      setCategories(response.data)
+    }
+    fetchEventCategories()
+  },[])
 
   return (
     <main className="py-12 px-4 sm:px-6 lg:px-8">
@@ -328,8 +380,8 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                   size={18}
                 />
                 <select
-                  id="eventCategory"
-                  name="eventCategory"
+                  id="eventCategoryId"
+                  name="eventCategoryId"
                   value={event.eventCategoryId}
                   onChange={handleInputChange}
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 appearance-none cursor-pointer"

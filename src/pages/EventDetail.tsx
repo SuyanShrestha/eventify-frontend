@@ -1,7 +1,6 @@
-import type React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { eventsData, getEditEventRoute } from "../constants";
+import { getEditEventRoute } from "../constants";
 import {
   Calendar,
   Info,
@@ -20,19 +19,82 @@ import {
   UserRoundCheck,
 } from "../assets/icons";
 import { formatDateTime, roundToTwo } from "../helpers";
-import {loadStripe} from '@stripe/stripe-js'
 import { Button, CountBadge } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import {
-  FeedbackModal,
-  QrCodeModal,
-  QrScanModal,
-  ShareModal,
-} from "../components/events";
-import axios, { AxiosError } from 'axios'
+import { QrCodeModal, QrScanModal, ShareModal, FeedbackModal } from "../components/events";
+import axios, { AxiosError } from 'axios';
+import { toast } from "react-toastify";
+
+// Define interfaces for the event data structure
+interface CategoryDetails {
+  id: number;
+  name: string;
+}
+
+interface OrganizerDetails {
+  id: number;
+  profile_picture: string | null;
+  username: string;
+}
+
+interface Attendee {
+  id: number;
+  username: string;
+  isCheckedIn: boolean;
+}
+
+interface Feedback {
+  feedbackId: string;
+  username: string;
+  feedbackContent: string;
+}
+
+interface Booking {
+  bookingId: string;
+  eventId: number;
+  userId: number;
+  bookingCreated: string;
+}
+
+interface AttendeeData {
+  attendees_count: number;
+  attendees_detail: any[];
+}
+
+interface EventData {
+  id: number;
+  banner: string;
+  title: string;
+  subtitle: string;
+  details: string;
+  event_type: string;
+  is_free: boolean;
+  ticket_price: string;
+  start_date: string;
+  end_date: string;
+  booking_deadline: string;
+  venue: string;
+  category_details: CategoryDetails;
+  total_tickets: number;
+  tickets_available: number;
+  created_at: string;
+  updated_at: string;
+  organizer: OrganizerDetails;
+  is_upcoming: boolean;
+  is_active: boolean;
+  is_expired: boolean;
+  attendees: AttendeeData;
+  is_saved: boolean;
+  feedbacks: Feedback[];
+  bookings: Booking[];
+}
+
+// Define the current user interface
+interface CurrentUser {
+  id: number;
+  username: string;
+}
 
 const EventDetail: React.FC = () => {
   const { eventId } = useParams();
@@ -41,53 +103,66 @@ const EventDetail: React.FC = () => {
   const [isQrScanOpen, setIsQrScanOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [ticketCount, setTicketCount] = useState(1);
-
-  const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
-    null
-  );
-  const [modalContentType, setModalContentType] = useState<"write" | "view">(
-    "write"
-  );
+  const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
+  const [modalContentType, setModalContentType] = useState<"write" | "view">("write");
+  const [eventData, setEventData] = useState<EventData | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  // Mocked current user - in a real app, you'd get this from auth context or localStorage
+  const currentUser: CurrentUser = {
+    id: 1, // Assuming this is your user ID
+    username: "user"
+  };
 
   const navigate = useNavigate();
-  const { users } = useSelector((state: RootState) => state.users);
-  const { user: currentUser } = useSelector((state: RootState) => state.auth);
-  const { categories } = useSelector((state: RootState) => state.categories);
-  const { bookings } = useSelector((state: RootState) => state.bookings);
 
-  const eventItem = eventsData.find((e) => e.id.toString() === eventId);
-  const organizer = users.find((user) => user.id === eventItem?.organizerId);
-  const isOwnEvent = eventItem?.organizerId === currentUser?.id;
-  const eventCategory = categories.find(
-    (category) => category.id === eventItem?.eventCategoryId
-  );
-
-  const mappedAttendees = eventItem?.attendees.map(
-    ({ attendeeId, isCheckedIn }) => {
-      const user = users.find((user) => user.id === attendeeId);
-      return {
-        name: user?.username || "Unknown",
-        isCheckedIn,
-      };
+  // Use the sample bookings for now - in a real app, these would come from the event data
+  const mappedBookings: Booking[] = [
+    {
+      bookingId: "booking-123",
+      eventId: Number(eventId),
+      userId: currentUser.id,
+      bookingCreated: new Date().toISOString()
     }
-  );
+  ];
 
-  const mappedFeedbacks = eventItem?.feedbacks;
+  const isOwnEvent = eventData?.organizer.id === currentUser.id;
 
-  // get bookings which match current eventID and current user's id
-  const mappedBookings = bookings
-    .filter(
-      (booking) =>
-        booking.eventId === eventItem?.id && booking.userId === currentUser?.id
-    )
-    .map((booking) => ({
-      bookingId: booking.bookingId,
-      eventId: booking.eventId,
-      userId: booking.userId,
-      bookingCreated: booking.bookingCreated,
-    }));
+  // Format the attendees data
+  const mappedAttendees = eventData?.attendees.attendees_detail.map(attendee => ({
+    name: attendee.username || "Unknown",
+    isCheckedIn: attendee.is_checked_in || false
+  })) || [];
 
-  if (!eventItem) {
+  // Extract feedbacks
+  const mappedFeedbacks = eventData?.feedbacks || [];
+
+  useEffect(() => {
+    if(typeof window === undefined) return;
+    const fetchEvent = async() => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:8000/api/events/${eventId}/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
+          }
+        });
+        setEventData(response.data);
+      } catch(err) {
+        toast("Failed to fetch event");
+        navigate('/');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvent();
+  }, [eventId, navigate]);
+
+  if (loading) {
+    return <div className="text-center mt-10 text-xl">Loading...</div>;
+  }
+
+  if (!eventData) {
     return (
       <div className="text-center mt-10 text-xl text-red-500">
         Event not found!
@@ -96,10 +171,10 @@ const EventDetail: React.FC = () => {
   }
 
   const { date: formattedStartDate, time: formattedStartTime } = formatDateTime(
-    eventItem.startDate
+    eventData.start_date
   );
   const { date: formattedEndDate, time: formattedEndTime } = formatDateTime(
-    eventItem.endDate
+    eventData.end_date
   );
 
   const openShareModal = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -132,57 +207,55 @@ const EventDetail: React.FC = () => {
 
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    navigate(getEditEventRoute(eventItem.id));
+    navigate(getEditEventRoute(eventData.id));
   };
 
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    // Implement delete functionality
+    toast("Delete functionality not implemented");
   };
 
   const handleIncrease = () => setTicketCount((prev) => prev + 1);
   const handleDecrease = () =>
     setTicketCount((prev) => (prev > 1 ? prev - 1 : 1));
 
-  
-const handlePayment = async () => {
-  if(typeof window === undefined) return
-  const accessToken = localStorage.getItem('eventify-token');
+  const handlePayment = async () => {
+    if(typeof window === undefined) return;
+    const accessToken = localStorage.getItem('eventify-token');
 
-  try {
-    const { data } = await axios.post(
-      "http://127.0.0.1:8000/api/payments/create-payment-intent/",
-      {
-        event_id: 2,
-        quantity: ticketCount,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+    try {
+      const { data } = await axios.post(
+        "http://127.0.0.1:8000/api/payments/create-payment-intent/",
+        {
+          event_id: eventData.id,
+          quantity: ticketCount,
         },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        console.error("Checkout URL not found in response", data);
       }
-    );
-
-    if (data.checkout_url) {
-      window.location.href = data.checkout_url;
-    } else {
-      console.error("Checkout URL not found in response", data);
+    } catch (error) {
+      if(error instanceof AxiosError){
+        console.error("Payment request failed:", error.response?.data || error.message);
+      } else {
+        console.error('error payment');
+      }
     }
-  } catch (error) {
-    if(error instanceof AxiosError){
-      console.error("Payment request failed:", error.response?.data || error.message);
-    }else{
-      console.error('error payment')
-    }
-  }
-};
-
-  
+  };
 
   return (
     <div
-      className="mt-[4rem] flex flex-col  bg-primary-500 min-h-[calc(100vh-4rem)]
-    "
+      className="mt-[4rem] flex flex-col bg-primary-500 min-h-[calc(100vh-4rem)]"
     >
       {/* heading */}
       <div
@@ -192,10 +265,10 @@ const handlePayment = async () => {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:justify-between sm:items-end gap-8">
           <div>
             <h1 className="text-4xl sm:text-5xl font-bold text-secondary-text-500 mb-2">
-              {eventItem.title}
+              {eventData.title}
             </h1>
             <p className="text-xl sm:text-2xl text-secondary-text-400 mb-4">
-              {eventItem.subtitle}
+              {eventData.subtitle}
             </p>
             <div className="text-sm sm:text-lg flex items-center text-[#423e33] mb-2">
               <Calendar className="w-5 h-5 mr-2" />
@@ -222,7 +295,7 @@ const handlePayment = async () => {
             </div>
             <div className="text-sm sm:text-lg flex items-center text-[#423e33]">
               <MapPin className="w-5 h-5 mr-2" />
-              <span>{eventItem.venue}</span>
+              <span>{eventData.venue}</span>
             </div>
           </div>
 
@@ -263,7 +336,6 @@ const handlePayment = async () => {
               isOpen={isShareModalOpen}
               onClose={() => setIsShareModalOpen(false)}
               shareUrl={window.location.href}
-              // shareUrl="https://lucide.dev/icons/circle-x"
             />
           </div>
         </div>
@@ -279,13 +351,13 @@ const handlePayment = async () => {
                   Event Overview
                 </h2>
                 <img
-                  src={eventItem.imgSrc}
-                  alt={eventItem.title}
+                  src={eventData.banner}
+                  alt={eventData.title}
                   className="rounded-lg w-4xl h-96 object-cover shadow-md border border-gray-200 mb-4"
                 />
                 <div className="prose text-primary-text-400 mb-6">
                   <Markdown remarkPlugins={[remarkGfm]}>
-                    {eventItem.details}
+                    {eventData.details}
                   </Markdown>
                 </div>
               </div>
@@ -298,20 +370,19 @@ const handlePayment = async () => {
                   <div className="flex items-center">
                     <User className="w-5 h-5 mr-3 text-accent-text-500" />
                     <span className="text-primary-text-500">
-                      Hosted by :{" "}
-                      {organizer ? organizer.username : "Unknown Organizer"}
+                      Hosted by : {eventData.organizer.username}
                     </span>
                   </div>
                   <div className="flex items-center">
                     <LayoutList className="w-5 h-5 mr-3 text-accent-text-500" />
                     <span className="text-primary-text-500 capitalize">
-                      Category : {eventCategory?.name}
+                      Category : {eventData.category_details.name}
                     </span>
                   </div>
                   <div className="flex items-center">
                     <Tag className="w-5 h-5 mr-3 text-accent-text-500" />
                     <span className="text-primary-text-500 capitalize">
-                      {eventItem.eventType} Event
+                      {eventData.event_type} Event
                     </span>
                   </div>
                 </div>
@@ -327,17 +398,17 @@ const handlePayment = async () => {
                       Ticket Information
                     </h3>
                     <div className="flex items-center justify-between gap-4">
-                      {eventItem.ticketPrice === 0 ? (
+                      {eventData.is_free ? (
                         <p className="text-2xl font-bold text-accent-text-500 mb-4">
                           FREE
                         </p>
                       ) : (
                         <p className="text-2xl font-bold text-accent-text-500 mb-4">
-                          Rs {eventItem.ticketPrice.toFixed(2)}
+                          Rs {parseFloat(eventData.ticket_price).toFixed(2)}
                         </p>
                       )}
                       {/* Ticket Counter */}
-                      {eventItem.ticketPrice !== 0 && (
+                      {!eventData.is_free && (
                         <div className="flex items-center gap-4 mb-5">
                           <button
                             onClick={handleDecrease}
@@ -358,7 +429,7 @@ const handlePayment = async () => {
                       )}
                     </div>
 
-                    {eventItem.ticketPrice !== 0 && (
+                    {!eventData.is_free && (
                       <div className="flex flex-col gap-4 mb-4 justify-center">
                         <span className="w-full flex gap-2 items-center justify-between text-gray-700">
                           Total Tickets:
@@ -370,7 +441,7 @@ const handlePayment = async () => {
                         <span className="w-full flex gap-2 items-center justify-between text-gray-700">
                           Total Price:
                           <span>
-                            {roundToTwo(ticketCount * eventItem.ticketPrice)}
+                            {roundToTwo(ticketCount * parseFloat(eventData.ticket_price))}
                           </span>
                         </span>
                       </div>
@@ -381,9 +452,7 @@ const handlePayment = async () => {
                       onClick={handlePayment}
                       className="w-full bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300"
                     >
-                      {eventItem.ticketPrice === 0
-                        ? "Get Ticket"
-                        : "Buy Ticket"}
+                      {eventData.is_free ? "Get Ticket" : "Buy Ticket"}
                       <ShoppingCart className="w-5 h-5 ml-2" />
                     </Button>
                   </div>
@@ -402,8 +471,8 @@ const handlePayment = async () => {
                   <div className="bg-white p-6 rounded-lg shadow-md">
                     <div className="flex justify-between items-center gap-2 text-secondary-text-500 mb-4">
                       <h3 className="text-xl font-semibold">
-                        {eventItem.attendees.length > 0
-                          ? `Attendees [${eventItem.attendees.length}]`
+                        {eventData.attendees.attendees_count > 0
+                          ? `Attendees [${eventData.attendees.attendees_count}]`
                           : "No attendees yet"}
                       </h3>
                       <div className="flex gap-4">
@@ -412,8 +481,8 @@ const handlePayment = async () => {
                           onClick={(e) => openFeedbackModal(e, "view")}
                         >
                           <MessageSquareText className="h-6 w-6" />
-                          {mappedFeedbacks?.length ? (
-                            <CountBadge count={mappedFeedbacks?.length || 0} />
+                          {eventData.feedbacks.length ? (
+                            <CountBadge count={eventData.feedbacks.length} />
                           ) : null}
                         </button>
                         <button
@@ -425,7 +494,7 @@ const handlePayment = async () => {
                       </div>
                     </div>
                     <ul className="mt-4 space-y-2">
-                      {mappedAttendees?.map(({ name, isCheckedIn }, index) => (
+                      {mappedAttendees.map(({ name, isCheckedIn }, index) => (
                         <li
                           key={index}
                           className="flex items-center justify-start gap-2 text-secondary-text-500"
@@ -489,7 +558,10 @@ const handlePayment = async () => {
                     isOpen={isQrModalOpen}
                     onClose={() => setIsQrModalOpen(false)}
                     selectedBookingId={selectedBookingId}
-                    eventItem={eventItem}
+                    eventItem={{
+                      id: eventData.id,
+                      title: eventData.title,
+                    }}
                   />
                 </div>
               )}
