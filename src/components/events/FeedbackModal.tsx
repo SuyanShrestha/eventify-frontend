@@ -1,29 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, ModalSheet } from "../ui";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 interface Feedback {
-  feedbackId: string;
-  username: string;
-  feedbackContent: string;
+  id: number;
+  event: number;
+  user: {
+    id: number;
+    profile_picture: string | null;
+    username: string;
+  };
+  message: string;
+  created_at: string;
 }
 
 interface FeedbackModalProps {
   isOpen: boolean;
   onClose: () => void;
-  modalContentType: "write" | "view";
-  feedbacks?: Feedback[];
+  id?: string;
 }
 
 const FeedbackModal: React.FC<FeedbackModalProps> = ({
   isOpen,
   onClose,
-  modalContentType,
-  feedbacks = [],
+  id
 }) => {
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [modalContentType,setModalContentType] = useState('write')
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
@@ -38,13 +45,12 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     setSubmitting(true);
     
     try {
-      // In a real app, you'd submit the feedback to your API
-      // const response = await axios.post('/api/feedback', {
-      //   content: comment,
-      //   eventId: eventId // You'd need to pass eventId to this component
-      // });
-      
-      // Mock successful submission
+      const response = await axios.post(`http://localhost:8000/api/feedback/event/${id}/`, {message: comment}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
+        }
+      });
+      setFeedbacks(response.data);
       toast.success("Feedback submitted successfully");
       setComment("");
       onClose();
@@ -55,6 +61,32 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
       setSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:8000/api/feedback/event/${id}/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
+          }
+        });
+        setModalContentType('view')
+        setFeedbacks(response.data);
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+        setModalContentType('write')
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    if (isOpen) {
+      fetchFeedback();
+    }
+  }, [isOpen, id]);
 
   return (
     <ModalSheet
@@ -101,15 +133,17 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
           </>
         ) : (
           <div className="space-y-3">
-            {feedbacks.length > 0 ? (
+            {loading ? (
+              <p className="text-center text-gray-500">Loading feedbacks...</p>
+            ) : feedbacks.length > 0 ? (
               feedbacks.map((feedback) => (
                 <div
-                  key={feedback.feedbackId}
+                  key={feedback.id}
                   className="p-3 border border-gray-300 rounded-md text-gray-700"
                 >
-                  <p className="text-lg font-semibold">{feedback.username}</p>
+                  <p className="text-lg font-semibold">{feedback.user.username}</p>
                   <p className="text-sm text-gray-600">
-                    {feedback.feedbackContent}
+                    {feedback.message}
                   </p>
                 </div>
               ))

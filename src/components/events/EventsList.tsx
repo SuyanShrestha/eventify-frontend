@@ -8,7 +8,6 @@ import { EventCard } from "./EventCard";
 import { cn } from "../../lib/utils";
 import axios from "axios";
 
-// API Event interface to match the response format
 interface ApiEvent {
   id: number;
   banner: string;
@@ -40,14 +39,25 @@ interface ApiEvent {
   is_saved: boolean;
 }
 
+interface FilterState {
+  price?: string | null;
+  date?: string | null;
+  type?: string | null;
+  expirationStatus?: string | null;
+  eventCategoryId?: string | null;
+  isSavedFilter?: boolean;
+}
+
 interface EventsListProps {
   isDashboard?: boolean;
   isBooking?: boolean;
+  filters?: FilterState;
 }
 
 const EventsList: React.FC<EventsListProps> = ({
   isDashboard = false,
   isBooking = false,
+  filters = {}
 }) => {
   const [searchText, setSearchText] = useState<string>("");
   const [events, setEvents] = useState<ApiEvent[]>([]);
@@ -88,29 +98,141 @@ const EventsList: React.FC<EventsListProps> = ({
       }
     };
     fetchEvents();
-  }, []);
+  }, [isDashboard, isBooking]);
+
+  // useEffect(() => {
+  //   let filtered = [...events];
+    
+  //   if (debouncedSearchText) {
+  //     filtered = filtered.filter(event => 
+  //       event.title.toLowerCase().includes(debouncedSearchText.toLowerCase()) ||
+  //       event.subtitle.toLowerCase().includes(debouncedSearchText.toLowerCase())
+  //     );
+  //   }
+    
+  //   if (filters) {
+  //     if (filters.price) {
+  //       filtered = filtered.filter(event => 
+  //         (filters.price === 'free' && event.is_free) || 
+  //         (filters.price === 'paid' && !event.is_free)
+  //       );
+  //     }
+      
+  //     if (filters.type) {
+  //       filtered = filtered.filter(event => event.event_type === filters.type);
+  //     }
+      
+  //     if (filters.expirationStatus) {
+  //       if (filters.expirationStatus === 'upcoming') {
+  //         filtered = filtered.filter(event => event.is_upcoming);
+  //       } else if (filters.expirationStatus === 'expired') {
+  //         filtered = filtered.filter(event => event.is_expired);
+  //       }
+  //     }
+      
+  //     if (filters.eventCategoryId) {
+  //       filtered = filtered.filter(event => 
+  //         event.category_details.id.toString() === filters.eventCategoryId
+  //       );
+  //     }
+      
+  //     if (filters.isSavedFilter) {
+  //       filtered = filtered.filter(event => event.is_saved);
+  //     }
+      
+  //     if (filters.date) {
+  //       const today = new Date();
+  //       const tomorrow = new Date(today);
+  //       tomorrow.setDate(tomorrow.getDate() + 1);
+        
+  //       switch(filters.date) {
+  //         case 'today':
+  //           filtered = filtered.filter(event => {
+  //             const eventDate = new Date(event.start_date);
+  //             return eventDate.toDateString() === today.toDateString();
+  //           });
+  //           break;
+  //         case 'tomorrow':
+  //           filtered = filtered.filter(event => {
+  //             const eventDate = new Date(event.start_date);
+  //             return eventDate.toDateString() === tomorrow.toDateString();
+  //           });
+  //           break;
+  //         case 'this-week':
+  //           const weekEnd = new Date(today);
+  //           weekEnd.setDate(today.getDate() + (7 - today.getDay()));
+            
+  //           filtered = filtered.filter(event => {
+  //             const eventDate = new Date(event.start_date);
+  //             return eventDate >= today && eventDate <= weekEnd;
+  //           });
+  //           break;
+  //         case 'this-month':
+  //           const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            
+  //           filtered = filtered.filter(event => {
+  //             const eventDate = new Date(event.start_date);
+  //             return eventDate.getMonth() === today.getMonth() && 
+  //                    eventDate.getFullYear() === today.getFullYear();
+  //           });
+  //           break;
+  //       }
+  //     }
+  //   }
+    
+  //   if (isDashboard && currentUser && currentUser.id) {
+  //     filtered = filtered.filter(event => event.organizer.id === currentUser.id);
+  //   }
+    
+  //   setFilteredEvents(filtered);
+  // }, [events, debouncedSearchText, filters]);
 
   useEffect(() => {
+    if (!events.length) return; // Prevent unnecessary re-renders
+  
     let filtered = [...events];
-    
+  
     if (debouncedSearchText) {
-      filtered = filtered.filter(event => 
+      filtered = filtered.filter(event =>
         event.title.toLowerCase().includes(debouncedSearchText.toLowerCase()) ||
         event.subtitle.toLowerCase().includes(debouncedSearchText.toLowerCase())
       );
     }
-    
-    // Filter for dashboard (my events)
-    if (isDashboard && currentUser && currentUser.id) {
-      filtered = filtered.filter(event => event.organizer.id === currentUser.id);
+  
+    if (filters && Object.keys(filters).length > 0) {
+      if (filters.price) {
+        filtered = filtered.filter(event =>
+          (filters.price === "free" && event.is_free) ||
+          (filters.price === "paid" && !event.is_free)
+        );
+      }
+  
+      if (filters.type) {
+        filtered = filtered.filter(event => event.event_type === filters.type);
+      }
+  
+      if (filters.expirationStatus) {
+        filtered = filtered.filter(event =>
+          filters.expirationStatus === "upcoming"
+            ? event.is_upcoming
+            : event.is_expired
+        );
+      }
+  
+      if (filters.eventCategoryId) {
+        filtered = filtered.filter(
+          event => event.category_details.id.toString() === filters.eventCategoryId
+        );
+      }
+  
+      if (filters.isSavedFilter) {
+        filtered = filtered.filter(event => event.is_saved);
+      }
     }
-    
-    if (isBooking && currentUser && currentUser.id) {
-    }
-    
+  
     setFilteredEvents(filtered);
-  }, [events, debouncedSearchText]);
-
+  }, [events, debouncedSearchText, JSON.stringify(filters)]);
+  
   return (
     <div
       className={cn(

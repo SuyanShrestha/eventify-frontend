@@ -1,16 +1,32 @@
-import React from "react";
-import { EventsList, Sidebar } from "../components/events";
+import React, { useState } from "react";
+import { EventsList } from "../components/events";
+import Sidebar from "../components/events/Sidebar";
+
+interface FilterState {
+  price?: string | null;
+  date?: string | null;
+  type?: string | null;
+  expirationStatus?: string | null;
+  eventCategoryId?: string | null;
+  isSavedFilter?: boolean;
+}
 
 const ExplorePage: React.FC = () => {
+  const [filters, setFilters] = useState<FilterState>({});
+
+  const handleFilterChange = (newFilters: FilterState) => {
+    setFilters(newFilters);
+  };
+
   return (
     <div className="flex mt-[4rem] ">
       <div className="hidden md:block w-[20rem] h-full bg-gray-100 fixed left-0 top-16 bottom-16 border-r border-r-gray-300">
         <div className="w-[98%] bg-primary-500 h-full">
-          <Sidebar />
+          <Sidebar onFilterChange={handleFilterChange} />
         </div>
       </div>
 
-      <EventsList isDashboard={false} />
+      <EventsList isDashboard={false} filters={filters} />
     </div>
   );
 };

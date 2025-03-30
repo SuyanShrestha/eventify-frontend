@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, Dispatch, SetStateAction } from "react";
 import {
   Ticket,
   Option,
@@ -8,12 +8,19 @@ import {
   Tag,
   LayoutList,
 } from "../../assets/icons";
-import { useDispatch, useSelector } from "react-redux";
-import { setFilters } from "../../store/eventSlice";
-import { RootState } from "../../store";
 import { Tabs } from "../ui";
 
-interface SidebarProps {}
+interface SidebarProps {
+  onFilterChange?: (filters: any) => void;
+}
+
+interface FilterState {
+  price: string | null;
+  date: string | null;
+  type: string | null;
+  expirationStatus: string | null;
+  eventCategoryId: string | null;
+}
 
 const SIDEBAR_CATEGORIES = [
   {
@@ -24,16 +31,16 @@ const SIDEBAR_CATEGORIES = [
       { label: "Paid", value: "paid" },
     ],
   },
-  {
-    label: "Date",
-    icon: <Calendar className="w-6 h-6 text-secondary-text-500" />,
-    options: [
-      { label: "Today", value: "today" },
-      { label: "Tomorrow", value: "tomorrow" },
-      { label: "This week", value: "this-week" },
-      { label: "This month", value: "this-month" },
-    ],
-  },
+  // {
+  //   label: "Date",
+  //   icon: <Calendar className="w-6 h-6 text-secondary-text-500" />,
+  //   options: [
+  //     { label: "Today", value: "today" },
+  //     { label: "Tomorrow", value: "tomorrow" },
+  //     { label: "This week", value: "this-week" },
+  //     { label: "This month", value: "this-month" },
+  //   ],
+  // },
   {
     label: "Platform",
     icon: <Tag className="w-6 h-6 text-secondary-text-500" />,
@@ -52,7 +59,8 @@ const SIDEBAR_CATEGORIES = [
   },
 ];
 
-const CATEGORY_MAPPER: Record<string, string> = {
+// Map category labels to filter state keys
+const CATEGORY_MAPPER: Record<string, keyof FilterState> = {
   Price: "price",
   Date: "date",
   Platform: "type",
@@ -62,20 +70,21 @@ const CATEGORY_MAPPER: Record<string, string> = {
 
 const eventScopeOptions = ["All", "Saved"];
 
-const Sidebar: React.FC<SidebarProps> = () => {
-  const [selectedFilters, setSelectedFilters] = useState({
-    ticketType: null as string | null,
-    eventDate: null as string | null,
-    platform: null as string | null,
-    expirationStatus: null as string | null,
-    eventCategoryId: null as string | null,
+const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
+  const [selectedFilters, setSelectedFilters] = useState<FilterState>({
+    price: null,
+    date: null,
+    type: null,
+    expirationStatus: null,
+    eventCategoryId: null,
   });
   const [activeScope, setActiveScope] = useState<string>("All");
-
-  const dispatch = useDispatch();
-  const { categories: eventCategories } = useSelector(
-    (state: RootState) => state.categories
-  );
+  
+  // Mock event categories from the provided API response
+  const eventCategories = [
+    { id: 1, name: "Tech" },
+    { id: 2, name: "Music" }
+  ];
 
   const sidebarCategories = [
     ...SIDEBAR_CATEGORIES,
@@ -93,13 +102,20 @@ const Sidebar: React.FC<SidebarProps> = () => {
       : []),
   ];
 
-  const handleClearFilter = (category: string) => {
+  const handleClearFilter = (category: keyof FilterState) => {
     setSelectedFilters((prevState) => ({
       ...prevState,
       [category]: null,
     }));
-
-    dispatch(setFilters({ [category]: "" }));
+    
+    if (onFilterChange) {
+      const updatedFilters = { 
+        ...selectedFilters, 
+        [category]: null,
+        isSavedFilter: activeScope === "Saved" 
+      };
+      onFilterChange(updatedFilters);
+    }
   };
 
   const OptionItem = ({
@@ -110,12 +126,12 @@ const Sidebar: React.FC<SidebarProps> = () => {
     onClear,
   }: {
     label: string;
-    value: string;
+    value: string | number;
     selectedValue: string | null;
-    onSelect: (value: string) => void;
+    onSelect: (value: string | number) => void;
     onClear: () => void;
   }) => {
-    const isSelected = selectedValue === value;
+    const isSelected = selectedValue === value.toString();
 
     return (
       <div className="flex justify-between items-center">
@@ -148,18 +164,39 @@ const Sidebar: React.FC<SidebarProps> = () => {
     );
   };
 
-  const handleSelectFilter = (category: string, value: string) => {
+  const handleSelectFilter = (category: keyof FilterState, value: string | number) => {
     setSelectedFilters((prevState) => ({
       ...prevState,
-      [category]: value,
+      [category]: value.toString(),
     }));
-    console.log("selected category is: ", category);
-    dispatch(setFilters({ [category]: value }));
+    
+    // Notify parent component of filter changes if callback provided
+    if (onFilterChange) {
+      const updatedFilters = { 
+        ...selectedFilters, 
+        [category]: value.toString(),
+        isSavedFilter: activeScope === "Saved" 
+      };
+      onFilterChange(updatedFilters);
+    }
   };
 
-  useEffect(() => {
-    dispatch(setFilters({ isSavedFilter: activeScope === "Saved" }));
-  }, [activeScope, dispatch]);
+  // Wrapper function to match expected type for Tabs component
+  const handleScopeChangeWrapper: Dispatch<SetStateAction<string>> = (value) => {
+    // Handle both function and direct value updates
+    const newScope = typeof value === 'function' ? value(activeScope) : value;
+    
+    setActiveScope(newScope);
+    
+    // Notify parent component of saved filter change if callback provided
+    if (onFilterChange) {
+      const updatedFilters = { 
+        ...selectedFilters, 
+        isSavedFilter: newScope === "Saved" 
+      };
+      onFilterChange(updatedFilters);
+    }
+  };
 
   return (
     <div className="mx-4 py-2 h-[calc(100vh-4rem)] flex flex-col gap-4 overflow-y-auto custom-scrollbar">
@@ -171,37 +208,41 @@ const Sidebar: React.FC<SidebarProps> = () => {
         <Tabs
           options={eventScopeOptions}
           activeTab={activeScope}
-          setActiveTab={setActiveScope}
+          setActiveTab={handleScopeChangeWrapper}
         />
       </div>
 
-      {sidebarCategories.map((category) => (
-        <div className="p-4 flex flex-col gap-4" key={category.label}>
-          <div className="flex gap-4 justify-start items-center">
-            {category.icon}
-            <h3 className="text-xl text-secondary-text-500 font-semibold">
-              {category.label}
-            </h3>
-          </div>
+      {sidebarCategories.map((category) => {
+        const categoryKey = CATEGORY_MAPPER[category.label];
+        
+        return (
+          <div className="p-4 flex flex-col gap-4" key={category.label}>
+            <div className="flex gap-4 justify-start items-center">
+              {category.icon}
+              <h3 className="text-xl text-secondary-text-500 font-semibold">
+                {category.label}
+              </h3>
+            </div>
 
-          <div className="flex flex-col pl-8 gap-4">
-            {category.options.map((option) => (
-              <OptionItem
-                key={option.value}
-                label={option.label}
-                value={option.value}
-                selectedValue={selectedFilters[CATEGORY_MAPPER[category.label]]}
-                onSelect={(value) =>
-                  handleSelectFilter(CATEGORY_MAPPER[category.label], value)
-                }
-                onClear={() =>
-                  handleClearFilter(CATEGORY_MAPPER[category.label])
-                }
-              />
-            ))}
+            <div className="flex flex-col pl-8 gap-4">
+              {category.options.map((option) => (
+                <OptionItem
+                  key={option.value.toString()}
+                  label={option.label}
+                  value={option.value}
+                  selectedValue={categoryKey ? selectedFilters[categoryKey] : null}
+                  onSelect={(value) =>
+                    categoryKey && handleSelectFilter(categoryKey, value)
+                  }
+                  onClear={() =>
+                    categoryKey && handleClearFilter(categoryKey)
+                  }
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

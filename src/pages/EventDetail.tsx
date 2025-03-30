@@ -134,9 +134,6 @@ const EventDetail: React.FC = () => {
     isCheckedIn: attendee.is_checked_in || false
   })) || [];
 
-  // Extract feedbacks
-  const mappedFeedbacks = eventData?.feedbacks || [];
-
   useEffect(() => {
     if(typeof window === undefined) return;
     const fetchEvent = async() => {
@@ -573,8 +570,9 @@ const EventDetail: React.FC = () => {
               <FeedbackModal
                 isOpen={isFeedbackModalOpen}
                 onClose={() => setIsFeedbackModalOpen(false)}
-                modalContentType={modalContentType}
-                feedbacks={mappedFeedbacks}
+                // modalContentType={modalContentType}
+                id={eventId}
+                // feedbacks={mappedFeedbacks}
               />
             </div>
           </div>
