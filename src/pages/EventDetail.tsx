@@ -108,11 +108,37 @@ const EventDetail: React.FC = () => {
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
   const [modalContentType, setModalContentType] = useState<"write" | "view">("write");
   const [eventData, setEventData] = useState<EventData | null>(null);
+  const [isOwnEvent,setIsOwnEvent] = useState(false)
   const [loading, setLoading] = useState(true);
   
-  // Mocked current user - in a real app, you'd get this from auth context or localStorage
+
+  
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      if (!eventId) return;
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:8000/api/feedback/event/${eventId}/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
+          }
+        });
+        if(response.data){
+          setIsOwnEvent(true)
+        }
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+        setIsOwnEvent(false)
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchFeedback()
+  }, []);
+
   const currentUser: CurrentUser = {
-    id: 1, // Assuming this is your user ID
+    id: 1,
     username: "user"
   };
 
@@ -130,7 +156,6 @@ const EventDetail: React.FC = () => {
     }
   ];
 
-  const isOwnEvent = eventData?.organizer.id === currentUser.id;
 
   // Format the attendees data
   const mappedAttendees = eventData?.attendees.attendees_detail.map(attendee => ({
@@ -213,6 +238,7 @@ const EventDetail: React.FC = () => {
 
 
 
+
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     navigate(getEditEventRoute(eventData.id));
@@ -220,7 +246,6 @@ const EventDetail: React.FC = () => {
 
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    // Implement delete functionality
     toast("Delete functionality not implemented");
   };
 
@@ -261,6 +286,7 @@ const EventDetail: React.FC = () => {
     }
   };
 
+
   return (
     <div
       className="mt-[4rem] flex flex-col bg-primary-500 min-h-[calc(100vh-4rem)]"
@@ -289,7 +315,6 @@ const EventDetail: React.FC = () => {
                   </span>
                 </>
               ) : (
-                // Multi-day event
                 <>
                   <span className="mr-2">
                     {formattedStartDate} ({formattedStartTime})
@@ -399,7 +424,7 @@ const EventDetail: React.FC = () => {
 
             {/* Right Column */}
             <div className="flex flex-col gap-6">
-              {isOwnEvent ? (
+              {!isOwnEvent ? (
                 <div>
                   <div className="bg-white p-6 rounded-lg shadow-md">
                     <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
@@ -596,7 +621,7 @@ const EventDetail: React.FC = () => {
                 id={eventId}
                 // feedbacks={mappedFeedbacks}
               />
-              <RsvpModal isOpen={isRsvpModalOpen} onClose={() => setIsRsvpModalOpen(false)}/>
+              <RsvpModal isOpen={isRsvpModalOpen} onClose={() => setIsRsvpModalOpen(false)} event_id={Number(eventId)}/>
             </div>
           </div>
         </div>

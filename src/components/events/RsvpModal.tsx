@@ -3,13 +3,15 @@ import { cn } from "../../lib/utils";
 import { CircleX } from "../../assets/icons";
 import { Badge, Button } from "../ui";
 import { useToast } from "../../hooks";
+import axios from "axios";
 
 interface RsvpModalProps {
   isOpen: boolean;
   onClose: () => void;
+  event_id:number;
 }
 
-const RsvpModal: React.FC<RsvpModalProps> = ({ isOpen, onClose }) => {
+const RsvpModal: React.FC<RsvpModalProps> = ({ isOpen, onClose, event_id }) => {
   const [emailInput, setEmailInput] = useState("");
   const [emails, setEmails] = useState<string[]>([]);
 
@@ -19,7 +21,6 @@ const RsvpModal: React.FC<RsvpModalProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     if (!emailInput.trim()) return;
 
-    // Split by commas, spaces, or new lines and filter empty strings
     const newEmails = emailInput
       .split(/[,\s]+/)
       .map((email) => email.trim())
@@ -35,18 +36,29 @@ const RsvpModal: React.FC<RsvpModalProps> = ({ isOpen, onClose }) => {
     setEmails(emails.filter((email) => email !== emailToRemove));
   };
 
-  const handleSendInvites = () => {
+  const handleSendInvites = async() => {
     if (emailInput.trim()) {
-      // if there's any text in emailInput, add it to emails before sending
       const trimmedEmail = emailInput.trim();
       if (!emails.includes(trimmedEmail)) {
         setEmails((prevEmails) => [...prevEmails, trimmedEmail]);
       }
     }
-    showToast(["Invitations sent successfully!"], "success");
-    setEmails([]);
-    setEmailInput("");
-    onClose();
+    try{
+      await axios.post(`http://localhost:8000/api/events/send-invitation/`,{
+        event_id,
+        email:emails
+      },{
+        headers:{
+          Authorization:`Bearer ${localStorage.getItem('eventify-token')}`
+        }
+      })
+      showToast(["Invitations sent successfully!"], "success");
+      setEmails([]);
+      setEmailInput("");
+      onClose();
+    }catch(err){
+      showToast(["Error sending invitation"], "error");
+    }
   };
 
   return (
