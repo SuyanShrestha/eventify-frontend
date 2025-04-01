@@ -62,8 +62,10 @@ interface Feedback {
 interface Booking {
   bookingId: string;
   eventId: number;
+  qr_code_data:string;
   userId: number;
   bookingCreated: string;
+  booked_at:string
 }
 
 interface AttendeeData {
@@ -152,18 +154,6 @@ const EventDetail: React.FC = () => {
   };
 
   const navigate = useNavigate();
-
-  
-
-  // Use the sample bookings for now - in a real app, these would come from the event data
-  const mappedBookings: Booking[] = [
-    {
-      bookingId: "booking-123",
-      eventId: Number(eventId),
-      userId: currentUser.id,
-      bookingCreated: new Date().toISOString()
-    }
-  ];
 
 
   // Format the attendees data
@@ -599,9 +589,9 @@ const EventDetail: React.FC = () => {
                 <div className="bg-white p-6 rounded-lg shadow-md">
                   <div className="flex items-center justify-between mb-4 text-secondary-text-500">
                     <h3 className="text-xl font-semibold text-secondary-text-500 ">
-                      Your Bookings [{mappedBookings.length}]
+                      Your Bookings [{eventData?.bookings?.length}]
                     </h3>
-                    {mappedBookings.length ? (
+                    {eventData?.bookings?.length ? (
                       <button
                         className="cursor-pointer"
                         onClick={(e) => openFeedbackModal(e, "write")}
@@ -611,18 +601,18 @@ const EventDetail: React.FC = () => {
                     ) : null}
                   </div>
                   <ul>
-                    {mappedBookings.map((booking) => (
+                    {eventData?.bookings.map((booking) => (
                       <li key={booking.bookingId} className="booking-item">
                         <div className="flex gap-4 items-center">
                           <button
                             onClick={(e) =>
-                              openQrReadModal(e, booking.bookingId)
+                              openQrReadModal(e, booking.qr_code_data)
                             }
                           >
                             <QrCode className="h-8 w-8 cursor-pointer text-secondary-text-500" />
                           </button>
                           <span className="text-md text-gray-700">
-                            {new Date(booking.bookingCreated).toLocaleString()}
+                            {new Date(booking?.booked_at).toLocaleString()}
                           </span>
                         </div>
                       </li>

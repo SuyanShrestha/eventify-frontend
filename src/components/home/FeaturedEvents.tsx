@@ -49,7 +49,7 @@ const FeaturedEvents: React.FC = () => {
     const fetchEvents = async () => {
       try {
           const response = await axios.get(
-            'http://localhost:8000/api/events/my-events/', {
+            'http://localhost:8000/api/events/', {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
             }

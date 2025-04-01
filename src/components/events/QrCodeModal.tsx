@@ -5,7 +5,6 @@ import { ModalSheet } from "../ui";
 interface EventItem {
   id: number;
   title: string;
-  // Add other relevant properties
 }
 
 interface QrCodeModalProps {
@@ -21,10 +20,8 @@ const QrCodeModal: React.FC<QrCodeModalProps> = ({
   selectedBookingId,
   eventItem,
 }) => {
-  // Get current user ID from local storage or context
-  const currentUserId = 1; // This would be retrieved from auth context in real app
+  const currentUserId = 1;
   
-  // In a real app, you'd fetch this from API or local state
   const bookingTimestamp = new Date().toISOString();
 
   const qrCodeData = `booking_id:${selectedBookingId}|event_id:${eventItem.id}|user_id:${currentUserId}|bookingTimestamp:${bookingTimestamp}`;

@@ -107,6 +107,7 @@ const Navbar: React.FC = () => {
                 Create
               </Link>}
 
+              {isOrganizer && 
               <Link
                 to={RoutingLinks.Dashboard}
                 className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
@@ -116,7 +117,7 @@ const Navbar: React.FC = () => {
                 }`}
               >
                 Dashboard
-              </Link>
+              </Link>}
             </div>
           </div>
           <div className="flex gap-4 ml-4 h-full items-center justify-center">
