@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ModalSheet } from "../ui";
-import { RootState } from "../../store";
-import { useSelector } from "react-redux";
 import NotificationCard from "./NotificationCard";
+import axios from "axios";
+
+interface NotificationType {
+  id:number;
+  event:number;
+  message:string;
+  is_read:boolean;
+  created_at:string;
+  event_details:{
+    banner:string;
+    title:string;
+  }
+}
 
 interface NotificationModalProps {
   isOpen: boolean;
@@ -13,20 +24,21 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { notifications } = useSelector(
-    (state: RootState) => state.notifications
-  );
-  const { user: currentUser } = useSelector((state: RootState) => state.auth);
-  const { bookings } = useSelector((state: RootState) => state.bookings);
+  const [notification,setNotification] = useState<NotificationType[]>([])
 
-  const mappedBookings = bookings.filter(
-    (booking) => booking.userId === currentUser?.id
-  );
-  const userEventIds = mappedBookings.map((booking) => booking.eventId);
 
-  const mappedNotifications = notifications.filter((notification) =>
-    userEventIds.includes(notification.event)
-  );
+
+  useEffect(()=>{
+    const fetchNotifications = async()=>{
+      const response = await axios.get('http://localhost:8000/api/notifications/',{
+        headers:{
+          Authorization:`Bearer ${localStorage.getItem('eventify-token')}`
+        }
+      })
+      setNotification(response.data)
+    }
+    fetchNotifications()
+  },[isOpen,onClose])
 
   return (
     <ModalSheet
@@ -46,20 +58,23 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
         <p className="text-lg text-primary-text-500 mb-6 text-center">
           Here are the notifications for events you have subscribed to.
         </p>
-        {mappedNotifications.length === 0 ? (
+        {notification.length === 0 ? (
           <p className="text-gray-500 text-center">
             No new updates for your bookings.
           </p>
         ) : (
           <ul className="space-y-4">
-            {mappedNotifications.map((notification) => {
+            {notification.map((notification) => {
               return (
                 <NotificationCard
-                  key={notification.id}
-                  eventId={notification.event}
-                  message={notification.message}
-                  createdAt={notification.created_at}
-                  isRead={notification.is_read}
+                  key={notification?.id}
+                  eventId={notification?.event}
+                  message={notification?.message}
+                  createdAt={notification?.created_at}
+                  isRead={notification?.is_read}
+                  banner={notification?.event_details?.banner}
+                  title={notification?.event_details?.title}
+                  id={notification?.id}
                   onClose={onClose}
                 />
               );
