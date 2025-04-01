@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { CircleX } from "../../assets/icons";
 
@@ -43,6 +43,11 @@ const ImageDragDrop: React.FC<ImageDragDropProps> = ({ dataUrl, onChange }) => {
     maxFiles: 1,
   });
 
+  useEffect(() => {
+    setPreview(dataUrl);
+  }, [dataUrl]);
+  
+
   return (
     <div
       {...getRootProps()}
@@ -51,7 +56,7 @@ const ImageDragDrop: React.FC<ImageDragDropProps> = ({ dataUrl, onChange }) => {
       <input {...getInputProps()} />
       {preview ? (
         isDragActive ? (
-          <div className="w-[100%s]">
+          <div className="w-[100%]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

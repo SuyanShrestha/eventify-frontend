@@ -24,13 +24,21 @@ import { Button, CountBadge } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { QrCodeModal, QrScanModal, ShareModal, FeedbackModal,RsvpModal } from "../components/events";
-import axios, { AxiosError } from 'axios';
+import axios, { Axios, AxiosError } from 'axios';
 import { toast } from "react-toastify";
+import { AlertTriangle } from "lucide-react";
 
 // Define interfaces for the event data structure
 interface CategoryDetails {
   id: number;
   name: string;
+}
+
+interface DeleteConfirmationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title?: string;
 }
 
 interface OrganizerDetails {
@@ -110,6 +118,7 @@ const EventDetail: React.FC = () => {
   const [eventData, setEventData] = useState<EventData | null>(null);
   const [isOwnEvent,setIsOwnEvent] = useState(false)
   const [loading, setLoading] = useState(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   
 
   
@@ -246,7 +255,28 @@ const EventDetail: React.FC = () => {
 
   const handleDeleteEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    toast("Delete functionality not implemented");
+    setIsDeleteModalOpen(true);
+  };
+  
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:8000/api/events/${eventId}/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
+        }
+      });
+      toast.success('Event has been deleted');
+      navigate('/dashboard');
+    } catch (err) {
+      if(err instanceof AxiosError){
+        toast.error(err?.response?.data?.error)
+      }else{
+        toast.error('Error deleting event');
+        console.log(err);
+      }
+    } finally {
+      setIsDeleteModalOpen(false);
+    }
   };
 
   const handleIncrease = () => setTicketCount((prev) => prev + 1);
@@ -626,8 +656,61 @@ const EventDetail: React.FC = () => {
           </div>
         </div>
       </div>
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 };
 
 export default EventDetail;
+
+
+const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title = "Delete Event"
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full mx-4 z-10">
+        <div className="flex flex-col items-center mb-6">
+          <div className="bg-red-100 p-3 rounded-full mb-4">
+            <AlertTriangle className="h-8 w-8 text-red-500" />
+          </div>
+          <h3 className="text-xl font-semibold text-secondary-text-500 mb-2">
+            {title}
+          </h3>
+          <p className="text-center text-primary-text-400">
+            Are you sure you want to delete this event? This action cannot be undone.
+          </p>
+        </div>
+        
+        <div className="flex justify-between gap-4">
+          <Button
+            bgColor="bg-gray-200"
+            textColor="text-gray-700"
+            className="flex-1 py-2 px-4 rounded-md hover:bg-gray-300 transition duration-300"
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            bgColor="bg-red-500"
+            textColor="text-white"
+            className="flex-1 py-2 px-4 rounded-md hover:bg-red-600 transition duration-300"
+            onClick={onConfirm}
+          >
+            Delete
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};

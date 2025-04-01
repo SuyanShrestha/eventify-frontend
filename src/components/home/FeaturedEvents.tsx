@@ -1,23 +1,67 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { setEvents } from "../../store/eventSlice";
-import { Messages, eventsData } from "../../constants";
+'use client'
+
+import React, { useEffect, useState } from "react";
+import { Messages } from "../../constants";
 import { EmptyLottie } from "../ui";
 import { EventCard } from "../events";
 import { CircleChevronRight } from "../../assets/icons";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
+interface ApiEvent {
+  id: number;
+  banner: string;
+  title: string;
+  subtitle: string;
+  event_type: string;
+  is_free: boolean;
+  ticket_price: string;
+  start_date: string;
+  end_date: string;
+  booking_deadline: string;
+  venue: string | null;
+  category_details: {
+    id: number;
+    name: string;
+  };
+  tickets_available: number;
+  created_at: string;
+  updated_at: string;
+  organizer: {
+    id: number;
+    profile_picture: string | null;
+    username: string;
+  };
+  is_upcoming: boolean;
+  is_active: boolean;
+  is_expired: boolean;
+  attendees_count: number;
+  is_saved: boolean;
+}
 
 const FeaturedEvents: React.FC = () => {
-  const { events } = useSelector((state: RootState) => state.events);
-  const dispatch = useDispatch();
+  
+    const [events, setEvents] = useState<ApiEvent[]>([]);
 
   const limitedEvents = events.slice(0, 3);
 
   useEffect(() => {
-    dispatch(setEvents(eventsData));
-  }, [dispatch]);
-  console.log("helloo filtered evetns: ", events);
+    const fetchEvents = async () => {
+      try {
+          const response = await axios.get(
+            'http://localhost:8000/api/events/my-events/', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
+            }
+          });
+          setEvents(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchEvents();
+  }, []);
+
 
   return (
     <div className="w-full mx-auto flex justify-center ">
@@ -42,19 +86,20 @@ const FeaturedEvents: React.FC = () => {
             ) : (
               limitedEvents.map((event) => (
                 <EventCard
-                  key={event.id}
-                  eventId={event.id.toString()}
-                  organizerId={event.organizerId}
-                  title={event.title}
-                  subtitle={event.subtitle}
-                  startDate={event.startDate}
-                  endDate={event.endDate}
-                  bookingDeadline={event.bookingDeadline}
-                  ticketPrice={event.ticketPrice}
-                  eventType={event.eventType}
-                  venue={event.venue}
-                  imgSrc={event.imgSrc}
-                  attendees={event.attendees}
+                key={event?.id}
+                eventId={event?.id.toString()}
+                organizerId={event?.organizer?.id.toString()}
+                title={event?.title}
+                subtitle={event?.subtitle}
+                startDate={event?.start_date}
+                endDate={event?.end_date}
+                bookingDeadline={event?.booking_deadline}
+                ticketPrice={parseFloat(event?.ticket_price)}
+                eventType={event?.event_type}
+                venue={event?.venue || ""}
+                imgSrc={event?.banner}
+                attendees={event?.attendees_count}
+                isSaved={event?.is_saved}
                 />
               ))
             )}
