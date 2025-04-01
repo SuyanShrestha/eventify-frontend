@@ -5,6 +5,7 @@ import QrCodeModal from "./QrCodeModal";
 import QrScanModal from "./QrScanModal";
 import ShareModal from "./ShareModal";
 import FeedbackModal from "./FeedbackModal";
+import RsvpModal from "./RsvpModal";
 import Sidebar from "./Sidebar";
 
 export {
@@ -15,5 +16,6 @@ export {
   EventsList,
   QrScanModal,
   EventForm,
-  FeedbackModal
+  FeedbackModal,
+  RsvpModal
 };

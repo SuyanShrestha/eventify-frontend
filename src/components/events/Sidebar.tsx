@@ -7,8 +7,10 @@ import {
   Timer,
   Tag,
   LayoutList,
+  X,
 } from "../../assets/icons";
 import { Tabs } from "../ui";
+import { useMediaQuery } from "react-responsive";
 
 interface SidebarProps {
   onFilterChange?: (filters: any) => void;
@@ -200,9 +202,19 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
 
   return (
     <div className="mx-4 py-2 h-[calc(100vh-4rem)] flex flex-col gap-4 overflow-y-auto custom-scrollbar">
-      <h1 className="text-2xl p-4 text-secondary-text-500 font-bold">
-        Events Category
-      </h1>
+      <div className="w-full flex justify-between items-center ">
+        <h1 className="text-2xl py-4 text-secondary-text-500 font-bold">
+          Events Category
+        </h1>
+        {/* {isSmallScreen && (
+          <button
+            className="cursor-pointer"
+            onClick={() => setIsSidebarOpen?.(false)}
+          >
+            <X className="h-6 w-6 text-secondary-text-500" />
+          </button>
+        )} */}
+      </div>
 
       <div>
         <Tabs

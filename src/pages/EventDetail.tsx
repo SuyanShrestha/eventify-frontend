@@ -19,10 +19,11 @@ import {
   UserRoundCheck,
 } from "../assets/icons";
 import { formatDateTime, roundToTwo } from "../helpers";
+import { loadStripe } from "@stripe/stripe-js";
 import { Button, CountBadge } from "../components/ui";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { QrCodeModal, QrScanModal, ShareModal, FeedbackModal } from "../components/events";
+import { QrCodeModal, QrScanModal, ShareModal, FeedbackModal,RsvpModal } from "../components/events";
 import axios, { AxiosError } from 'axios';
 import { toast } from "react-toastify";
 
@@ -102,6 +103,7 @@ const EventDetail: React.FC = () => {
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [isQrScanOpen, setIsQrScanOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [isRsvpModalOpen, setIsRsvpModalOpen] = useState(false);
   const [ticketCount, setTicketCount] = useState(1);
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
   const [modalContentType, setModalContentType] = useState<"write" | "view">("write");
@@ -115,6 +117,8 @@ const EventDetail: React.FC = () => {
   };
 
   const navigate = useNavigate();
+
+  
 
   // Use the sample bookings for now - in a real app, these would come from the event data
   const mappedBookings: Booking[] = [
@@ -193,6 +197,11 @@ const EventDetail: React.FC = () => {
     setIsQrScanOpen(true);
   };
 
+  const openRsvpModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsRsvpModalOpen(true);
+  };
+
   const openFeedbackModal = (
     e: React.MouseEvent<HTMLButtonElement>,
     type: "write" | "view"
@@ -201,6 +210,8 @@ const EventDetail: React.FC = () => {
     setModalContentType(type);
     setIsFeedbackModalOpen(true);
   };
+
+
 
   const handleEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -388,7 +399,7 @@ const EventDetail: React.FC = () => {
 
             {/* Right Column */}
             <div className="flex flex-col gap-6">
-              {!isOwnEvent ? (
+              {isOwnEvent ? (
                 <div>
                   <div className="bg-white p-6 rounded-lg shadow-md">
                     <h3 className="text-xl font-semibold text-secondary-text-500 mb-4">
@@ -505,7 +516,18 @@ const EventDetail: React.FC = () => {
                         </li>
                       ))}
                     </ul>
+
+                    {/* RSVP button */}
+                    <Button
+                      bgColor="bg-accent-500"
+                      textColor="text-accent-btn-text"
+                      onClick={openRsvpModal}
+                      className="w-full mt-6 bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300"
+                    >
+                      Send RSVP invitations
+                    </Button>
                   </div>
+
                   <div className="mt-6 bg-[rgba(255,132,0,0.2)] p-4 rounded-lg">
                     <div className="flex items-start">
                       <Info className="w-5 h-5 mr-2 text-accent-text-500 mt-1" />
@@ -574,6 +596,7 @@ const EventDetail: React.FC = () => {
                 id={eventId}
                 // feedbacks={mappedFeedbacks}
               />
+              <RsvpModal isOpen={isRsvpModalOpen} onClose={() => setIsRsvpModalOpen(false)}/>
             </div>
           </div>
         </div>

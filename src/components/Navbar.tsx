@@ -1,3 +1,5 @@
+'use client'
+
 import type React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { RoutingLinks } from "../constants";
