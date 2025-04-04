@@ -27,6 +27,7 @@ import { QrCodeModal, QrScanModal, ShareModal, FeedbackModal,RsvpModal } from ".
 import axios, { Axios, AxiosError } from 'axios';
 import { toast } from "react-toastify";
 import { AlertTriangle } from "lucide-react";
+import { set } from "lodash";
 
 // Define interfaces for the event data structure
 interface CategoryDetails {
@@ -121,6 +122,7 @@ const EventDetail: React.FC = () => {
   const [isOwnEvent,setIsOwnEvent] = useState(false)
   const [loading, setLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isPaying,setIsPaying] = useState(false)
   
 
   
@@ -276,7 +278,7 @@ const EventDetail: React.FC = () => {
   const handlePayment = async () => {
     if(typeof window === undefined) return;
     const accessToken = localStorage.getItem('eventify-token');
-
+    setIsPaying(true)
     try {
       const { data } = await axios.post(
         "http://127.0.0.1:8000/api/payments/create-payment-intent/",
@@ -291,7 +293,7 @@ const EventDetail: React.FC = () => {
           },
         }
       );
-
+      toast.success(data.detail)
       if (data.checkout_url) {
         window.location.href = data.checkout_url;
       } else {
@@ -303,6 +305,9 @@ const EventDetail: React.FC = () => {
       } else {
         console.error('error payment');
       }
+      setIsPaying(true)
+    } finally{
+      setIsPaying(false)
     }
   };
 
@@ -503,9 +508,9 @@ const EventDetail: React.FC = () => {
                       bgColor="bg-accent-500"
                       textColor="text-accent-btn-text"
                       onClick={handlePayment}
-                      className="w-full bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300"
+                      className={`w-full bg-accent-500 text-accent-btn-text py-2 px-4 rounded-md hover:bg-accent-300 transition duration-300 ${isPaying && 'cursor-not-allowed bg-accent-500/40'}`}
                     >
-                      {eventData.is_free ? "Get Ticket" : "Buy Ticket"}
+                      {isPaying ? 'Processing' : eventData.is_free ? "Get Ticket" : "Buy Ticket"}
                       <ShoppingCart className="w-5 h-5 ml-2" />
                     </Button>
                   </div>
