@@ -301,9 +301,10 @@ const EventDetail: React.FC = () => {
       }
     } catch (error) {
       if(error instanceof AxiosError){
-        console.error("Payment request failed:", error.response?.data || error.message);
+        toast.error(error?.response?.data?.error)
       } else {
-        console.error('error payment');
+        toast.error("Error initializing payment. Please try again later")
+        
       }
       setIsPaying(true)
     } finally{
