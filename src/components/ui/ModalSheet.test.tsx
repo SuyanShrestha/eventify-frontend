@@ -56,4 +56,18 @@ describe('ModalSheet', () => {
   
     expect(onCloseMock).toHaveBeenCalledTimes(0);
   });
+
+  it('should not call onClose when isOpen is false', () => {
+    useMediaQuery.mockReturnValueOnce(true);
+  
+    render(
+      <ModalSheet isOpen={false} onClose={onCloseMock} showCrossIcon={true}>
+        Content
+      </ModalSheet>
+    );
+
+    expect(onCloseMock).toHaveBeenCalledTimes(0);
+  });
+  
+  
 });
