@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import type React from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -11,30 +11,41 @@ import axios from "axios";
 const Navbar: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificaitonModalOpen] = useState(false);
-  const [isOrganizer,setIsOrganizer] = useState(false)
+  const [isOrganizer, setIsOrganizer] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  
-  const fetchUser = async()=>{
-    if(typeof window === undefined) return
-    try{
-      const response = await axios.get('http://localhost:8000/api/user/profile/',{
-        headers:{
-          Authorization:`Bearer ${localStorage.getItem('eventify-token')}`
+  const fetchUser = async () => {
+    if (typeof window === undefined) return;
+
+    const token = localStorage.getItem("eventify-token");
+    if (!token) {
+      setIsLoggedIn(false);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/user/profile/",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      })
-      if(response.data){
-        setIsOrganizer(response.data.is_organizer)
+      );
+      if (response.data) {
+        setIsLoggedIn(true);
+        setIsOrganizer(response.data.is_organizer);
       }
+    } catch (err) {
+      console.log(err);
+      setIsLoggedIn(false);
+      setIsOrganizer(false);
     }
-    catch(err){
-      console.log(err)
-      setIsOrganizer(false)
-    }
-  }
+  };
 
-  useEffect(()=>{
-    fetchUser()
-  },[localStorage.getItem('eventify-token')])
+  useEffect(() => {
+    fetchUser();
+  }, [localStorage.getItem("eventify-token")]);
 
   const location = useLocation();
 
@@ -47,7 +58,6 @@ const Navbar: React.FC = () => {
     e.stopPropagation();
     setIsNotificaitonModalOpen(true);
   };
-
 
   return (
     <header className="bg-secondary-500 shadow-md">
@@ -84,40 +94,44 @@ const Navbar: React.FC = () => {
                 Explore
               </Link>
 
-              <Link
-                to={RoutingLinks.Bookings}
-                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
-                  location.pathname === RoutingLinks.Bookings
-                    ? "text-accent-500"
-                    : "text-primary-text-500 hover:text-secondary-text-500"
-                }`}
-              >
-                Bookings
-              </Link>
-            
-            {isOrganizer && 
-              <Link
-                to={RoutingLinks.CreateEvent}
-                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
-                  location.pathname === RoutingLinks.CreateEvent
-                    ? "text-accent-500"
-                    : "text-primary-text-500 hover:text-secondary-text-500"
-                }`}
-              >
-                Create
-              </Link>}
+              {isLoggedIn && (
+                <Link
+                  to={RoutingLinks.Bookings}
+                  className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
+                    location.pathname === RoutingLinks.Bookings
+                      ? "text-accent-500"
+                      : "text-primary-text-500 hover:text-secondary-text-500"
+                  }`}
+                >
+                  Bookings
+                </Link>
+              )}
 
-              {isOrganizer && 
-              <Link
-                to={RoutingLinks.Dashboard}
-                className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
-                  location.pathname === RoutingLinks.Dashboard
-                    ? "text-accent-500"
-                    : "text-primary-text-500 hover:text-secondary-text-500"
-                }`}
-              >
-                Dashboard
-              </Link>}
+              {isLoggedIn && isOrganizer && (
+                <Link
+                  to={RoutingLinks.CreateEvent}
+                  className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
+                    location.pathname === RoutingLinks.CreateEvent
+                      ? "text-accent-500"
+                      : "text-primary-text-500 hover:text-secondary-text-500"
+                  }`}
+                >
+                  Create
+                </Link>
+              )}
+
+              {isLoggedIn && isOrganizer && (
+                <Link
+                  to={RoutingLinks.Dashboard}
+                  className={`lg:px-3 py-2 text-lg transition-colors duration-300 ${
+                    location.pathname === RoutingLinks.Dashboard
+                      ? "text-accent-500"
+                      : "text-primary-text-500 hover:text-secondary-text-500"
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              )}
             </div>
           </div>
           <div className="flex gap-4 ml-4 h-full items-center justify-center">
