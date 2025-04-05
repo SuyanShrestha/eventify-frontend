@@ -1,6 +1,5 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import CarouselComponent from './Carousel';
-// import '@testing-library/vi-dom';
 import { waitFor } from '@testing-library/react';
 
 const mockCards = [
@@ -19,7 +18,6 @@ describe('CarouselComponent', () => {
       />
     );
 
-    // Check if the content of the first card is rendered
     expect(screen.getByText('Card 1')).toBeInTheDocument();
   });
 
