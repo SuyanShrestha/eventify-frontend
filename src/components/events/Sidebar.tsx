@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from "react";
+import React, { useState, Dispatch, SetStateAction, useEffect } from "react";
 import {
   Ticket,
   Option,
@@ -11,6 +11,7 @@ import {
 } from "../../assets/icons";
 import { Tabs } from "../ui";
 import { useMediaQuery } from "react-responsive";
+import axios from "axios";
 
 interface SidebarProps {
   onFilterChange?: (filters: any) => void;
@@ -81,12 +82,24 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
     eventCategoryId: null,
   });
   const [activeScope, setActiveScope] = useState<string>("All");
-  
+
   // Mock event categories from the provided API response
-  const eventCategories = [
-    { id: 1, name: "Tech" },
-    { id: 2, name: "Music" }
-  ];
+  const [eventCategories, setEventCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchEventCategories = async () => {
+      const response = await axios.get(
+        "http://localhost:8000/api/events/categories/",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("eventify-token")}`,
+          },
+        }
+      );
+      setEventCategories(response.data);
+    };
+    fetchEventCategories();
+  }, []);
 
   const sidebarCategories = [
     ...SIDEBAR_CATEGORIES,
@@ -109,12 +122,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
       ...prevState,
       [category]: null,
     }));
-    
+
     if (onFilterChange) {
-      const updatedFilters = { 
-        ...selectedFilters, 
+      const updatedFilters = {
+        ...selectedFilters,
         [category]: null,
-        isSavedFilter: activeScope === "Saved" 
+        isSavedFilter: activeScope === "Saved",
       };
       onFilterChange(updatedFilters);
     }
@@ -166,35 +179,40 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
     );
   };
 
-  const handleSelectFilter = (category: keyof FilterState, value: string | number) => {
+  const handleSelectFilter = (
+    category: keyof FilterState,
+    value: string | number
+  ) => {
     setSelectedFilters((prevState) => ({
       ...prevState,
       [category]: value.toString(),
     }));
-    
+
     // Notify parent component of filter changes if callback provided
     if (onFilterChange) {
-      const updatedFilters = { 
-        ...selectedFilters, 
+      const updatedFilters = {
+        ...selectedFilters,
         [category]: value.toString(),
-        isSavedFilter: activeScope === "Saved" 
+        isSavedFilter: activeScope === "Saved",
       };
       onFilterChange(updatedFilters);
     }
   };
 
   // Wrapper function to match expected type for Tabs component
-  const handleScopeChangeWrapper: Dispatch<SetStateAction<string>> = (value) => {
+  const handleScopeChangeWrapper: Dispatch<SetStateAction<string>> = (
+    value
+  ) => {
     // Handle both function and direct value updates
-    const newScope = typeof value === 'function' ? value(activeScope) : value;
-    
+    const newScope = typeof value === "function" ? value(activeScope) : value;
+
     setActiveScope(newScope);
-    
+
     // Notify parent component of saved filter change if callback provided
     if (onFilterChange) {
-      const updatedFilters = { 
-        ...selectedFilters, 
-        isSavedFilter: newScope === "Saved" 
+      const updatedFilters = {
+        ...selectedFilters,
+        isSavedFilter: newScope === "Saved",
       };
       onFilterChange(updatedFilters);
     }
@@ -226,7 +244,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
 
       {sidebarCategories.map((category) => {
         const categoryKey = CATEGORY_MAPPER[category.label];
-        
+
         return (
           <div className="p-4 flex flex-col gap-4" key={category.label}>
             <div className="flex gap-4 justify-start items-center">
@@ -242,13 +260,13 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
                   key={option.value.toString()}
                   label={option.label}
                   value={option.value}
-                  selectedValue={categoryKey ? selectedFilters[categoryKey] : null}
+                  selectedValue={
+                    categoryKey ? selectedFilters[categoryKey] : null
+                  }
                   onSelect={(value) =>
                     categoryKey && handleSelectFilter(categoryKey, value)
                   }
-                  onClear={() =>
-                    categoryKey && handleClearFilter(categoryKey)
-                  }
+                  onClear={() => categoryKey && handleClearFilter(categoryKey)}
                 />
               ))}
             </div>
