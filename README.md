@@ -25,6 +25,10 @@ Eventify is an event management platform that allows users to create, manage, an
 
 3. **Run development server**
   npm run dev
+
+4. **Run test**
+  npm run test
+  npm run test-ui
   
 ## 🤝 Contributing
 
