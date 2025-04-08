@@ -135,9 +135,14 @@ const Navbar: React.FC = () => {
             </div>
           </div>
           <div className="flex gap-4 ml-4 h-full items-center justify-center">
-            <button className="cursor-pointer" onClick={openNotificationModal}>
-              <Bell className="h-6 w-6 text-accent-500" />
-            </button>
+            {isLoggedIn && (
+              <button
+                className="cursor-pointer"
+                onClick={openNotificationModal}
+              >
+                <Bell className="h-6 w-6 text-accent-500" />
+              </button>
+            )}
             <button className="cursor-pointer" onClick={openAuthModal}>
               <User className="h-6 w-6 text-accent-500" />
             </button>
