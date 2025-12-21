@@ -37,7 +37,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
 
   const handleNotificationClick = async() => {
     navigate(getEventDetailRoute(eventId));
-    await axios.put(`http://localhost:8090/api/notifications/mark-as-read/${id}/`,{},{headers:{
+    await axios.put(`http://localhost:8080/api/notifications/mark-as-read/${id}/`,{},{headers:{
       Authorization:`Bearer ${localStorage.getItem('eventify-token')}`
     }})
     onClose();

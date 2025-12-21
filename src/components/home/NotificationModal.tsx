@@ -30,7 +30,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 
   useEffect(()=>{
     const fetchNotifications = async()=>{
-      const response = await axios.get('http://localhost:8090/api/notifications/',{
+      const response = await axios.get('http://localhost:8080/api/notifications/',{
         headers:{
           Authorization:`Bearer ${localStorage.getItem('eventify-token')}`
         }

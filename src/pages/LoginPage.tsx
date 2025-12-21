@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
     setIsSubmitting(true);
     
     try{
-      const response = await axios.post('http://localhost:8090/api/user/login/',{email,password})
+      const response = await axios.post('http://localhost:8080/api/user/login/',{email,password})
       toast.success(response.data.detail)
       localStorage.setItem('eventify-token',response.data.access_token)
       localStorage.setItem('eventify-refresh',response.data.refresh_token)

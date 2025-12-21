@@ -71,7 +71,7 @@ const EventsList: React.FC<EventsListProps> = ({
       try {
         if(isDashboard){
           const response = await axios.get(
-            'http://localhost:8090/api/events/my-events/', {
+            'http://localhost:8080/api/events/my-events/', {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
             }
@@ -81,7 +81,7 @@ const EventsList: React.FC<EventsListProps> = ({
         }
         if(isBooking){
           const response = await axios.get(
-            'http://localhost:8090/api/events/my-bookings/', {
+            'http://localhost:8080/api/events/my-bookings/', {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
             }
@@ -90,7 +90,7 @@ const EventsList: React.FC<EventsListProps> = ({
           return;
         }
         const response = await axios.get(
-          'http://localhost:8090/api/events/'
+          'http://localhost:8080/api/events/'
         )
         setEvents(response.data);
       } catch (err) {

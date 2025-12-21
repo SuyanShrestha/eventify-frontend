@@ -44,7 +44,7 @@ const QrScanModal: React.FC<QrScanModalProps> = ({ isOpen, onClose }) => {
         console.log("Processing QR data:", result);
         
         const response = await axios.post(
-          'http://localhost:8090/api/tickets/booking/check-in/',
+          'http://localhost:8080/api/tickets/booking/check-in/',
           {
             qr_code_data: result
           },

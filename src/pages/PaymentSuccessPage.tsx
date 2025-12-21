@@ -29,7 +29,7 @@ const SuccessPage = () => {
         }
 
         const response = await axios.post(
-          'http://localhost:8090/api/payments/verify/',
+          'http://localhost:8080/api/payments/verify/',
           { session_id, ticket_id },
           { headers: { Authorization: `Bearer ${token}` } }
         );

@@ -89,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
   useEffect(() => {
     const fetchEventCategories = async () => {
       const response = await axios.get(
-        "http://localhost:8090/api/events/categories/",
+        "http://localhost:8080/api/events/categories/",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("eventify-token")}`,
