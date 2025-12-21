@@ -44,7 +44,7 @@ const RsvpModal: React.FC<RsvpModalProps> = ({ isOpen, onClose, event_id }) => {
       }
     }
     try{
-      await axios.post(`http://localhost:8000/api/events/send-invitation/`,{
+      await axios.post(`http://localhost:8090/api/events/send-invitation/`,{
         event_id,
         email:emails
       },{

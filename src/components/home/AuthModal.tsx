@@ -21,7 +21,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const fetchUser = async()=>{
     if(typeof window === undefined) return
     try{
-      const response = await axios.get('http://localhost:8000/api/user/profile/',{
+      const response = await axios.get('http://localhost:8090/api/user/profile/',{
         headers:{
           Authorization:`Bearer ${localStorage.getItem('eventify-token')}`
         }

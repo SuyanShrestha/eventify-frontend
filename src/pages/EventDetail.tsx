@@ -131,7 +131,7 @@ const EventDetail: React.FC = () => {
       if (!eventId) return;
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/feedback/event/${eventId}/`, {
+        const response = await axios.get(`http://localhost:8090/api/feedback/event/${eventId}/`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
           }
@@ -169,7 +169,7 @@ const EventDetail: React.FC = () => {
     const fetchEvent = async() => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/events/${eventId}/`, {
+        const response = await axios.get(`http://localhost:8090/api/events/${eventId}/`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
           }
@@ -252,7 +252,7 @@ const EventDetail: React.FC = () => {
   
   const confirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8000/api/events/${eventId}/`, {
+      await axios.delete(`http://localhost:8090/api/events/${eventId}/`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
         }

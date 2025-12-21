@@ -72,7 +72,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
     if (isEditing) {
       const fetchEvent = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/api/events/${eventId}/`, {
+          const response = await axios.get(`http://localhost:8090/api/events/${eventId}/`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
             }
@@ -163,7 +163,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
   //   }
     
   //   try {
-  //     const response = await axios.post('http://localhost:8000/api/events/', formData, {
+  //     const response = await axios.post('http://localhost:8090/api/events/', formData, {
   //       headers: {
   //         Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
   //       }
@@ -237,14 +237,14 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
     try {
       let response;
       if (isEditing) {
-        response = await axios.put(`http://localhost:8000/api/events/${eventId}/`, formData, {
+        response = await axios.put(`http://localhost:8090/api/events/${eventId}/`, formData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
           }
         });
         showToast(["Event updated successfully!"], "success");
       } else {
-        response = await axios.post('http://localhost:8000/api/events/', formData, {
+        response = await axios.post('http://localhost:8090/api/events/', formData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
           }
@@ -284,7 +284,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
 
   useEffect(()=>{
     const fetchEventCategories = async()=>{
-      const response = await axios.get('http://localhost:8000/api/events/categories/')
+      const response = await axios.get('http://localhost:8090/api/events/categories/')
       setCategories(response.data)
     }
     fetchEventCategories()

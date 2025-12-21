@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/user/profile/",
+        "http://localhost:8090/api/user/profile/",
         {
           headers: {
             Authorization: `Bearer ${token}`,

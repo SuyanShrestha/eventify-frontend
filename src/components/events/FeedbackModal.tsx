@@ -45,7 +45,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     setSubmitting(true);
     
     try {
-      const response = await axios.post(`http://localhost:8000/api/feedback/event/${id}/`, {message: comment}, {
+      const response = await axios.post(`http://localhost:8090/api/feedback/event/${id}/`, {message: comment}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
         }
@@ -68,7 +68,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
       
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/feedback/event/${id}/`, {
+        const response = await axios.get(`http://localhost:8090/api/feedback/event/${id}/`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('eventify-token')}`
           }
