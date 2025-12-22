@@ -48,8 +48,8 @@ const SIDEBAR_CATEGORIES = [
     label: "Platform",
     icon: <Tag className="w-6 h-6 text-secondary-text-500" />,
     options: [
-      { label: "Physical", value: "physical" },
-      { label: "Remote", value: "remote" },
+      { label: "Physical", value: "PHYSICAL" },
+      { label: "Remote", value: "REMOTE" },
     ],
   },
   {
