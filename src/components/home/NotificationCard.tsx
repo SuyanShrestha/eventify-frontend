@@ -53,7 +53,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
       <div className="flex items-start space-x-4">
         {/* {!isRead && <span className="w-3 h-3 bg-blue-500 rounded-full mt-1" />} */}
           <img
-            src={banner}
+            src={`http://localhost:8080${banner}`}
             alt={truncatedEventTitle}
             className="w-12 h-12 rounded-md object-cover"
           />

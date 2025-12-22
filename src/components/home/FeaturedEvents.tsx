@@ -97,7 +97,7 @@ const FeaturedEvents: React.FC = () => {
                 ticketPrice={parseFloat(event?.ticket_price)}
                 eventType={event?.event_type}
                 venue={event?.venue || ""}
-                imgSrc={event?.banner}
+                imgSrc={`http://localhost:8080${event.banner}`}
                 attendees={event?.attendees_count}
                 isSaved={event?.is_saved}
                 />

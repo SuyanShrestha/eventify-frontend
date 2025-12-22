@@ -50,7 +50,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
     bookingDeadline: eventItem?.bookingDeadline
       ? formatDateToInputFormat(eventItem.bookingDeadline)
       : "",
-    eventType: eventItem?.eventType || "physical",
+    eventType: eventItem?.eventType || "PHYSICAL",
     eventCategoryId: eventItem?.eventCategoryId || "c1",
     venue: eventItem?.venue || "",
     ticketPrice: eventItem?.ticketPrice || 0,
@@ -217,21 +217,21 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
     
     formData.append("title", event.title);
     formData.append("subtitle", event.subtitle);
-    formData.append("start_date", event.startDate);
-    formData.append("end_date", event.endDate);
-    formData.append("booking_deadline", event.bookingDeadline);
-    formData.append("event_type", event.eventType);
-    formData.append("category", event.eventCategoryId);
+    formData.append("startDate", event.startDate);           // camelCase
+    formData.append("endDate", event.endDate);               // camelCase
+    formData.append("bookingDeadline", event.bookingDeadline); // camelCase
+    formData.append("eventType", event.eventType);           // camelCase
+    formData.append("categoryId", event.eventCategoryId);    // camelCase + Integer
     formData.append("venue", event.venue);
-    formData.append("ticket_price", event.ticketPrice.toString());
-    formData.append("total_tickets", event.availableTickets?.toString() || "");
+    formData.append("ticketPrice", event.ticketPrice.toString());
+    formData.append("totalTickets", event.availableTickets?.toString() || "");
     formData.append("details", event.details);
-    formData.append("is_free", isFree.toString());
-    formData.append("is_approved", "false");
+    formData.append("isFree", isFree.toString());            // matches backend field 'freeEvent'
+    formData.append("isApproved", "false");  
     
     if (event.imgSrc) {
       const blob = await fetch(event.imgSrc).then((res) => res.blob());
-      formData.append("banner", blob, "banner.png");
+      formData.append("bannerFile", blob, "banner.png");
     }
     
     try {
@@ -477,8 +477,8 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent-400 appearance-none cursor-pointer"
                   required
                 >
-                  <option value="physical">Physical</option>
-                  <option value="remote">Remote</option>
+                  <option value="PHYSICAL">Physical</option>
+                  <option value="REMOTE">Remote</option>
                 </select>
               </div>
             </div>

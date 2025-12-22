@@ -289,7 +289,7 @@ const EventsList: React.FC<EventsListProps> = ({
                 ticketPrice={parseFloat(event.ticket_price)}
                 eventType={event.event_type}
                 venue={event.venue || ""}
-                imgSrc={isBooking ? `http://localhost:8000/`+event.banner :event.banner}
+                imgSrc={`http://localhost:8080${event.banner}`}
                 attendees={event.attendees_count}
                 isSaved={event.is_saved}
               />

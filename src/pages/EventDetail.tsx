@@ -410,7 +410,7 @@ const EventDetail: React.FC = () => {
                   Event Overview
                 </h2>
                 <img
-                  src={eventData.banner}
+                  src={eventData.banner ? `http://localhost:8080${eventData.banner}` : undefined}
                   alt={eventData.title}
                   className="rounded-lg w-4xl h-96 object-cover shadow-md border border-gray-200 mb-4"
                 />
