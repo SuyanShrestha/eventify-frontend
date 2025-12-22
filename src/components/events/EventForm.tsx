@@ -622,7 +622,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
               </label>
               <div className="bg-gray-100 w-full h-60 flex justify-center items-center rounded-md">
                 <ImageDragDrop
-                  dataUrl={event.imgSrc}
+                  dataUrl={`http://localhost:8080${event.imgSrc}`}
                   onChange={handleImageChange}
                 />
               </div>
