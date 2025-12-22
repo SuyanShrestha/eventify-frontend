@@ -28,6 +28,7 @@ import axios, { Axios, AxiosError } from 'axios';
 import { toast } from "react-toastify";
 import { AlertTriangle } from "lucide-react";
 import { set } from "lodash";
+import { capitalizeFirst } from "../lib/utils";
 
 // Define interfaces for the event data structure
 interface CategoryDetails {
@@ -441,7 +442,7 @@ const EventDetail: React.FC = () => {
                   <div className="flex items-center">
                     <Tag className="w-5 h-5 mr-3 text-accent-text-500" />
                     <span className="text-primary-text-500 capitalize">
-                      {eventData.event_type} Event
+                      {capitalizeFirst(eventData.event_type)} Event
                     </span>
                   </div>
                 </div>
