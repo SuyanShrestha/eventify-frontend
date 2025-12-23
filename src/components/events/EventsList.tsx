@@ -14,7 +14,7 @@ interface ApiEvent {
   title: string;
   subtitle: string;
   event_type: string;
-  is_free: boolean;
+  free_event: boolean;
   ticket_price: string;
   start_date: string;
   end_date: string;
@@ -32,9 +32,9 @@ interface ApiEvent {
     profile_picture: string | null;
     username: string;
   };
-  is_upcoming: boolean;
+  upcoming: boolean;
   is_active: boolean;
-  is_expired: boolean;
+  expired: boolean;
   attendees_count: number;
   is_saved: boolean;
 }
@@ -202,8 +202,8 @@ const EventsList: React.FC<EventsListProps> = ({
     if (filters && Object.keys(filters).length > 0) {
       if (filters.price) {
         filtered = filtered.filter(event =>
-          (filters.price === "free" && event.is_free) ||
-          (filters.price === "paid" && !event.is_free)
+          (filters.price === "free" && event.free_event) ||
+          (filters.price === "paid" && !event.free_event)
         );
       }
   
@@ -214,8 +214,8 @@ const EventsList: React.FC<EventsListProps> = ({
       if (filters.expirationStatus) {
         filtered = filtered.filter(event =>
           filters.expirationStatus === "upcoming"
-            ? event.is_upcoming
-            : event.is_expired
+            ? event.upcoming
+            : event.expired
         );
       }
   

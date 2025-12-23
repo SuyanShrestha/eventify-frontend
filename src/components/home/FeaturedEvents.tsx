@@ -14,7 +14,7 @@ interface ApiEvent {
   title: string;
   subtitle: string;
   event_type: string;
-  is_free: boolean;
+  free_event: boolean;
   ticket_price: string;
   start_date: string;
   end_date: string;
