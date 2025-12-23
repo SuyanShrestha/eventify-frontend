@@ -63,6 +63,8 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
   const [isFree, setIsFree] = useState(() => eventItem?.ticketPrice === 0);
 
   const [categories,setCategories ] = useState<CategoryType[]>([]);
+  const [hasNewImage, setHasNewImage] = useState(false);
+  
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -114,6 +116,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
 
   const handleImageChange = (newDataUrl: string) => {
     setEvent((prev) => ({ ...prev, imgSrc: newDataUrl }));
+    setHasNewImage(true);
   };
 
   const toggleFreeEvent = () => {
@@ -229,7 +232,7 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
     formData.append("isFree", isFree.toString());            // matches backend field 'freeEvent'
     formData.append("isApproved", "false");  
     
-    if (event.imgSrc) {
+    if (hasNewImage && event.imgSrc) {
       const blob = await fetch(event.imgSrc).then((res) => res.blob());
       formData.append("bannerFile", blob, "banner.png");
     }
@@ -622,7 +625,11 @@ const EventForm: React.FC<EventFormProps> = ({ isEditing = false }) => {
               </label>
               <div className="bg-gray-100 w-full h-60 flex justify-center items-center rounded-md">
                 <ImageDragDrop
-                  dataUrl={event.imgSrc ? `http://localhost:8080${event.imgSrc}` : null}
+                  dataUrl={
+                    hasNewImage 
+                      ? event.imgSrc 
+                      : (event.imgSrc ? `http://localhost:8080${event.imgSrc}` : null)
+                  }
                   onChange={handleImageChange}
                 />
               </div>
