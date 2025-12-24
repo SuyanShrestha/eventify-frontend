@@ -1,35 +1,81 @@
-# Eventify - Frontend
+# Eventify Frontend
 
-Eventify is an event management platform that allows users to create, manage, and attend events with ease. This repository contains the frontend code built with **React**.
+Eventify is an Event Management System with a React frontend that connects to the Spring Boot backend. The frontend provides users with a responsive interface to browse events, book tickets, submit feedback, and manage notifications.
 
-## 🚀 Features
+## Base URL
 
-- Event creation with details like date, time, location, and ticket pricing
-- Secure **ticket selling** and **payment gateway integration**
-- **QR code check-in** for fast event access
-- RSVP system with reminders
-- Event **listing and filtering**
-- **Social media sharing** for event promotion
-- **User profiles** with ticket history
-- **Event analytics** for organizers
+`http://127.0.0.1:5173/`
 
-## 🛠️ Installation & Setup
+---
 
-1. **Clone the repository**  
-   ```sh
-   git clone https://github.com/your-username/eventify-frontend.git
+## Repository
+
+Frontend source code is available at: [Eventify Frontend](https://github.com/SuyanShrestha/eventify-frontend)
+
+Backend is required for API data and is available at: [Eventify Backend](https://github.com/SuyanShrestha/eventify-backend-django)
+
+---
+
+## Running the Frontend
+
+### Prerequisites
+
+* Node.js and npm/yarn installed
+* Backend running at `http://127.0.0.1:8080/`
+
+### Steps
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/SuyanShrestha/eventify-frontend.git
    cd eventify-frontend
+   ```
+2. Install dependencies:
 
-2. **Install dependencies**
-  npm install
+   ```bash
+   npm install
+   ```
 
-3. **Run development server**
-  npm run dev
-  
-## 🤝 Contributing
+   or
 
-Contributions are welcome! Please open an issue or submit a pull request.
+   ```bash
+   yarn install
+   ```
+3. Start the development server:
 
-## 📝 License
-This project is licensed under the MIT License.
+   ```bash
+   npm run dev
+   ```
 
+   or
+
+   ```bash
+   yarn dev
+   ```
+4. Open your browser at `http://127.0.0.1:5173/`
+
+---
+
+## Configuration
+
+* The frontend communicates with the backend APIs available at `http://127.0.0.1:8080/`.
+* Any API endpoints required by the frontend should be accessible from the running backend.
+
+---
+
+## Features
+
+* Browse and search events
+* Book tickets (temporary direct booking before Stripe integration)
+* Submit and view feedback for events
+* View notifications and mark them as read
+* Organizer functionalities: Check-in users with QR code based tickets
+* Admin functionalities (SUPERUSER only): Access via backend APIs
+
+---
+
+## Notes
+
+* Ensure backend is running before starting the frontend.
+* All API responses are in snake_case, and frontend expects the same format.
