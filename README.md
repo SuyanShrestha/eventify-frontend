@@ -12,7 +12,7 @@ Eventify is an Event Management System with a React frontend that connects to th
 
 Frontend source code is available at: [Eventify Frontend](https://github.com/SuyanShrestha/eventify-frontend)
 
-Backend is required for API data and is available at: [Eventify Backend](https://github.com/SuyanShrestha/eventify-backend-django)
+Backend is required for API data and is available at: [Eventify Backend](https://github.com/SuyanShrestha/eventify-spring-backend)
 
 ---
 
@@ -66,12 +66,53 @@ Backend is required for API data and is available at: [Eventify Backend](https:/
 
 ## Features
 
-* Browse and search events
-* Book tickets (temporary direct booking before Stripe integration)
-* Submit and view feedback for events
-* View notifications and mark them as read
-* Organizer functionalities: Check-in users with QR code based tickets
-* Admin functionalities (SUPERUSER only): Access via backend APIs
+### Events
+
+* Explore/search events with category and status filters (sidebar-driven)
+* Event detail page with full description (Markdown-rendered)
+* Create and edit events, with drag-and-drop image upload and a Markdown editor for descriptions
+* Share events via `react-share` (social/link sharing modal)
+
+### Bookings & Tickets
+
+* RSVP/book events (direct booking flow, with Stripe.js wired in for payment)
+* Payment success page for post-checkout confirmation
+* QR-code ticket generation for confirmed bookings
+* Organizer check-in via in-browser QR code scanning
+
+### Feedback
+
+* Submit, view, edit, and delete feedback for events
+* Restriction: users cannot leave feedback on their own events
+
+### Notifications
+
+* View unread/read notifications
+* Mark a single notification, or all notifications, as read
+
+### User & Dashboard
+
+* Authentication (login/register) with persisted session state (Redux + redux-persist)
+* User profile management
+* Personal dashboard and bookings page to track registered/created events
+* Role-aware UI for regular users and organizers
+
+### Admin (SUPERUSER)
+
+* Category management and event approval are exposed via backend APIs (`/api/admin/**`)
+* Dedicated admin UI is scaffolded in the frontend and still in progress
+
+---
+
+## Tech Stack
+
+* **Build tool:** Vite + TypeScript
+* **UI:** React 18, Tailwind CSS, Lucide/React Icons, GSAP & Motion for animation, Lottie for illustrations
+* **State:** Redux Toolkit with redux-persist
+* **Routing:** React Router
+* **Forms & content:** React Quill / Markdown editor, react-markdown, react-dropzone
+* **Payments & QR:** Stripe.js, qrcode.react, @yudiel/react-qr-scanner
+* **Networking:** Axios
 
 ---
 
