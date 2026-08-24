@@ -1,0 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"); */
+
+@theme {
+  /* --color-primary-500: #f5e6d3;
+  --color-secondary-500: #d96941;
+  --color-accent-500: #8e3b46; */
+
+  --color-primary-500: #faf9f6;
+  --color-primary-400: rgba(255, 132, 0, 0.2);
+
+  --color-secondary-500: #ffffff;
+  --color-secondary-400: #fff5d6;
+
+  --color-accent-500: #cf4307;
+  --color-accent-400: #7c6f50;
+  --color-accent-300: #ff8400;
+
+  --color-primary-text-500: #130e01; /* Descriptions black */
+  --color-primary-text-400: #423e33;
+  --color-secondary-text-500: #553c9a; /* Headings blue*/
+  --color-secondary-text-400: #998ac2;
+  --color-accent-text-500: #cf4307; /* Links orange*/
+  --color-accent-btn-text: #fffaeb;
+}
+
+/* hidden scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari */
+}
+
+.custom-scrollbar {
+  -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+/* background image */
+.bg-background-image {
+  @apply bg-cover bg-center bg-no-repeat;
+  background-image: url('../flower-bg-2.png');
+}
+
+body {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.preloader {
+  height: 100vh;
+  width: 100%;
+  /* background: #F5E6D3; */
+  opacity: 0.94;
+  color: #d96941;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 55;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: hidden;
+}
+
+.preloader .text-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: 480px;
+  font-size: 28px;
+  font-weight: 600;
+  overflow-y: hidden;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  width: 100%;
+  height: 4rem;
+  box-shadow: 0 0.4rem 2rem rgba(0, 0, 0, 0.1);
+}

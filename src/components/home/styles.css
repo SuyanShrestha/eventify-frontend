@@ -1,0 +1,49 @@
+/* styles for the testimonial swiper */
+.testimonial-swiper {
+    width: 100%;
+    padding-bottom: 60px; 
+  }
+  
+  .testimonial-swiper .swiper-slide {
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+  
+  .testimonial-swiper .swiper-slide-active {
+    opacity: 1;
+  }
+  
+  .testimonial-swiper .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: #d4d4d8;
+    opacity: 0.5;
+  }
+  
+  .testimonial-swiper .swiper-pagination-bullet-active {
+    background: #553c9a;
+    opacity: 1;
+  }
+  
+  .testimonial-swiper .swiper-button-next,
+  .testimonial-swiper .swiper-button-prev {
+    color: #553c9a;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .testimonial-swiper .swiper-button-next:after,
+  .testimonial-swiper .swiper-button-prev:after {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 640px) {
+    .testimonial-swiper .swiper-button-next,
+    .testimonial-swiper .swiper-button-prev {
+      display: none;
+    }
+  }
